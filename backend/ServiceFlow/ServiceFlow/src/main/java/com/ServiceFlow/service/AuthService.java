@@ -39,13 +39,23 @@ public LoginResponse login(LoginRequest request) {
                     )
             );
 
-    if (usuario.getStatus() != StatusUsuario.ATIVO) {
+if (usuario.getStatus() == StatusUsuario.PENDENTE) {
+    throw new IllegalStateException(
+            "Seu cadastro ainda está aguardando aprovação."
+    );
+}
 
-        throw new RuntimeException(
-                "Este usuário ainda não está ativo."
-        );
+if (usuario.getStatus() == StatusUsuario.REJEITADO) {
+    throw new IllegalStateException(
+            "Sua solicitação de cadastro foi rejeitada."
+    );
+}
 
-    }
+if (usuario.getStatus() == StatusUsuario.INATIVO) {
+    throw new IllegalStateException(
+            "Seu usuário está inativo. Procure o administrador da empresa."
+    );
+}
 
     if (
             !passwordEncoder.matches(

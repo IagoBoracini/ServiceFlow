@@ -4,6 +4,7 @@ import com.serviceflow.dto.LoginRequest;
 import com.serviceflow.dto.LoginResponse;
 import com.serviceflow.service.AuthService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/login")
@@ -19,7 +20,7 @@ public class AuthController {
 
     @PostMapping
     public LoginResponse login(
-            @RequestBody LoginRequest request){
+           @Valid @RequestBody LoginRequest request){
 
         return service.login(request);
 

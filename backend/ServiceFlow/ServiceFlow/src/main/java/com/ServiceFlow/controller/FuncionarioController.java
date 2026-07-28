@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -27,7 +28,7 @@ public class FuncionarioController {
     @PostMapping("/solicitacoes")
     @ResponseStatus(HttpStatus.CREATED)
     public MensagemResponse solicitarEntrada(
-            @RequestBody SolicitacaoFuncionarioRequest request
+           @Valid @RequestBody SolicitacaoFuncionarioRequest request
     ) {
 
         return funcionarioService.solicitarEntrada(request);
