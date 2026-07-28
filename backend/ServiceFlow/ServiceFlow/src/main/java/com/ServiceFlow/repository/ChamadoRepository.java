@@ -11,12 +11,17 @@ import java.util.Optional;
 public interface ChamadoRepository
         extends JpaRepository<Chamado, Long> {
 
-    List<Chamado> findByEmpresaIdOrderByDataAberturaDesc(
-            Long empresaId
+    long countByEmpresaIdAndStatus(
+            Long empresaId,
+            StatusChamado status
     );
 
     Optional<Chamado> findByIdAndEmpresaId(
             Long chamadoId,
+            Long empresaId
+    );
+
+    List<Chamado> findByEmpresaIdOrderByDataAberturaDesc(
             Long empresaId
     );
 
@@ -30,27 +35,32 @@ public interface ChamadoRepository
             PrioridadeChamado prioridade
     );
 
-    List<Chamado> findByEmpresaIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+    List<Chamado>
+    findByEmpresaIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
             Long empresaId,
             StatusChamado status,
             PrioridadeChamado prioridade
     );
 
-    List<Chamado> findByTecnicoResponsavelIdOrderByDataAberturaDesc(
+    List<Chamado>
+    findByTecnicoResponsavelIdOrderByDataAberturaDesc(
             Long tecnicoId
     );
 
-    List<Chamado> findByTecnicoResponsavelIdAndStatusOrderByDataAberturaDesc(
+    List<Chamado>
+    findByTecnicoResponsavelIdAndStatusOrderByDataAberturaDesc(
             Long tecnicoId,
             StatusChamado status
     );
 
-    List<Chamado> findByTecnicoResponsavelIdAndPrioridadeOrderByDataAberturaDesc(
+    List<Chamado>
+    findByTecnicoResponsavelIdAndPrioridadeOrderByDataAberturaDesc(
             Long tecnicoId,
             PrioridadeChamado prioridade
     );
 
-    List<Chamado> findByTecnicoResponsavelIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+    List<Chamado>
+    findByTecnicoResponsavelIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
             Long tecnicoId,
             StatusChamado status,
             PrioridadeChamado prioridade

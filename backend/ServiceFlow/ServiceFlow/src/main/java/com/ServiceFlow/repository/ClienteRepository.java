@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+public interface ClienteRepository
+        extends JpaRepository<Cliente, Long> {
 
-    boolean existsByDocumentoAndEmpresaId(
-            String documento,
+    long countByEmpresaId(Long empresaId);
+
+    Optional<Cliente> findByIdAndEmpresaId(
+            Long clienteId,
             Long empresaId
     );
 
@@ -17,13 +20,13 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
             Long empresaId
     );
 
-    Optional<Cliente> findByIdAndEmpresaId(
-            Long clienteId,
-            Long empresaId
-    );
-
     List<Cliente> findByEmpresaIdAndNomeContainingIgnoreCaseOrderByNomeAsc(
             Long empresaId,
             String nome
+    );
+
+    boolean existsByDocumentoAndEmpresaId(
+            String documento,
+            Long empresaId
     );
 }
