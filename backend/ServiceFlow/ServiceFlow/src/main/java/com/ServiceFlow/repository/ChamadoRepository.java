@@ -16,8 +16,17 @@ public interface ChamadoRepository
             StatusChamado status
     );
 
+    long countByEmpresaIdAndPrioridade(
+            Long empresaId,
+            PrioridadeChamado prioridade
+    );
+
     Optional<Chamado> findByIdAndEmpresaId(
             Long chamadoId,
+            Long empresaId
+    );
+
+    List<Chamado> findTop5ByEmpresaIdOrderByDataAberturaDesc(
             Long empresaId
     );
 

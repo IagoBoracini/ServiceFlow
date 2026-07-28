@@ -23,7 +23,6 @@ public class DashboardController {
     public DashboardResponse buscarDashboard(
             Authentication authentication
     ) {
-
         return dashboardService.buscarDashboard(
                 authentication
         );

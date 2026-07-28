@@ -24,23 +24,24 @@ public interface OrdemServicoRepository
             Long empresaId
     );
 
+    List<OrdemServico> findTop5ByEmpresaIdOrderByDataCriacaoDesc(
+            Long empresaId
+    );
+
     List<OrdemServico> findByEmpresaIdOrderByDataCriacaoDesc(
             Long empresaId
     );
 
-    List<OrdemServico>
-    findByEmpresaIdAndStatusOrderByDataCriacaoDesc(
+    List<OrdemServico> findByEmpresaIdAndStatusOrderByDataCriacaoDesc(
             Long empresaId,
             StatusOrdemServico status
     );
 
-    List<OrdemServico>
-    findByTecnicoIdOrderByDataCriacaoDesc(
+    List<OrdemServico> findByTecnicoIdOrderByDataCriacaoDesc(
             Long tecnicoId
     );
 
-    List<OrdemServico>
-    findByTecnicoIdAndStatusOrderByDataCriacaoDesc(
+    List<OrdemServico> findByTecnicoIdAndStatusOrderByDataCriacaoDesc(
             Long tecnicoId,
             StatusOrdemServico status
     );

@@ -1,5 +1,7 @@
 package com.serviceflow.dto;
 
+import java.util.List;
+
 public class DashboardResponse {
 
     private long clientes;
@@ -12,10 +14,18 @@ public class DashboardResponse {
     private long chamadosConcluidos;
     private long chamadosCancelados;
 
+    private long chamadosPrioridadeBaixa;
+    private long chamadosPrioridadeMedia;
+    private long chamadosPrioridadeAlta;
+    private long chamadosPrioridadeUrgente;
+
     private long ordensAbertas;
     private long ordensEmExecucao;
     private long ordensFinalizadas;
     private long ordensCanceladas;
+
+    private List<ChamadoResumoDashboardResponse> ultimosChamados;
+    private List<OrdemServicoResumoDashboardResponse> ultimasOrdens;
 
     public DashboardResponse(
             long clientes,
@@ -26,10 +36,16 @@ public class DashboardResponse {
             long chamadosAguardandoCliente,
             long chamadosConcluidos,
             long chamadosCancelados,
+            long chamadosPrioridadeBaixa,
+            long chamadosPrioridadeMedia,
+            long chamadosPrioridadeAlta,
+            long chamadosPrioridadeUrgente,
             long ordensAbertas,
             long ordensEmExecucao,
             long ordensFinalizadas,
-            long ordensCanceladas
+            long ordensCanceladas,
+            List<ChamadoResumoDashboardResponse> ultimosChamados,
+            List<OrdemServicoResumoDashboardResponse> ultimasOrdens
     ) {
         this.clientes = clientes;
         this.funcionarios = funcionarios;
@@ -39,10 +55,16 @@ public class DashboardResponse {
         this.chamadosAguardandoCliente = chamadosAguardandoCliente;
         this.chamadosConcluidos = chamadosConcluidos;
         this.chamadosCancelados = chamadosCancelados;
+        this.chamadosPrioridadeBaixa = chamadosPrioridadeBaixa;
+        this.chamadosPrioridadeMedia = chamadosPrioridadeMedia;
+        this.chamadosPrioridadeAlta = chamadosPrioridadeAlta;
+        this.chamadosPrioridadeUrgente = chamadosPrioridadeUrgente;
         this.ordensAbertas = ordensAbertas;
         this.ordensEmExecucao = ordensEmExecucao;
         this.ordensFinalizadas = ordensFinalizadas;
         this.ordensCanceladas = ordensCanceladas;
+        this.ultimosChamados = ultimosChamados;
+        this.ultimasOrdens = ultimasOrdens;
     }
 
     public long getClientes() {
@@ -77,6 +99,22 @@ public class DashboardResponse {
         return chamadosCancelados;
     }
 
+    public long getChamadosPrioridadeBaixa() {
+        return chamadosPrioridadeBaixa;
+    }
+
+    public long getChamadosPrioridadeMedia() {
+        return chamadosPrioridadeMedia;
+    }
+
+    public long getChamadosPrioridadeAlta() {
+        return chamadosPrioridadeAlta;
+    }
+
+    public long getChamadosPrioridadeUrgente() {
+        return chamadosPrioridadeUrgente;
+    }
+
     public long getOrdensAbertas() {
         return ordensAbertas;
     }
@@ -91,5 +129,13 @@ public class DashboardResponse {
 
     public long getOrdensCanceladas() {
         return ordensCanceladas;
+    }
+
+    public List<ChamadoResumoDashboardResponse> getUltimosChamados() {
+        return ultimosChamados;
+    }
+
+    public List<OrdemServicoResumoDashboardResponse> getUltimasOrdens() {
+        return ultimasOrdens;
     }
 }
