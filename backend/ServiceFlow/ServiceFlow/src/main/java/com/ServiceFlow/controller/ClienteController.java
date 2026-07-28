@@ -3,9 +3,8 @@ package com.serviceflow.controller;
 import com.serviceflow.dto.ClienteRequest;
 import com.serviceflow.dto.ClienteResponse;
 import com.serviceflow.service.ClienteService;
-import com.serviceflow.model.PrioridadeChamado;
-import com.serviceflow.model.StatusChamado;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -40,11 +39,21 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteResponse> listar(
+    public Page<ClienteResponse> listar(
+            @RequestParam(defaultValue = "0")
+            int pagina,
+
+            @RequestParam(defaultValue = "10")
+            int tamanho,
+
             Authentication authentication
     ) {
 
-        return clienteService.listar(authentication);
+        return clienteService.listar(
+                pagina,
+                tamanho,
+                authentication
+        );
     }
 
     @GetMapping("/{id}")
@@ -60,57 +69,55 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-@PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
-public ClienteResponse atualizar(
-        @PathVariable Long id,
-        @Valid @RequestBody ClienteRequest request,
-        Authentication authentication
-) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ClienteResponse atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ClienteRequest request,
+            Authentication authentication
+    ) {
 
-    return clienteService.atualizar(
-            id,
-            request,
-            authentication
-    );
-}
+        return clienteService.atualizar(
+                id,
+                request,
+                authentication
+        );
+    }
 
-@GetMapping("/buscar")
-public List<ClienteResponse> pesquisarPorNome(
-        @RequestParam String nome,
-        Authentication authentication
-) {
+    @GetMapping("/buscar")
+    public List<ClienteResponse> pesquisarPorNome(
+            @RequestParam String nome,
+            Authentication authentication
+    ) {
 
-    return clienteService.pesquisarPorNome(
-            nome,
-            authentication
-    );
-}
+        return clienteService.pesquisarPorNome(
+                nome,
+                authentication
+        );
+    }
 
-@PatchMapping("/{id}/inativar")
-@PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
-public ClienteResponse inativar(
-        @PathVariable Long id,
-        Authentication authentication
-) {
+    @PatchMapping("/{id}/inativar")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ClienteResponse inativar(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
 
-    return clienteService.inativar(
-            id,
-            authentication
-    );
-}
+        return clienteService.inativar(
+                id,
+                authentication
+        );
+    }
 
-@PatchMapping("/{id}/reativar")
-@PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
-public ClienteResponse reativar(
-        @PathVariable Long id,
-        Authentication authentication
-) {
+    @PatchMapping("/{id}/reativar")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ClienteResponse reativar(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
 
-    return clienteService.reativar(
-            id,
-            authentication
-    );
-}
-
-
+        return clienteService.reativar(
+                id,
+                authentication
+        );
+    }
 }

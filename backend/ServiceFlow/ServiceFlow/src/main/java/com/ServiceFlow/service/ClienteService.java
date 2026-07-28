@@ -6,6 +6,10 @@ import com.serviceflow.model.Cliente;
 import com.serviceflow.model.Usuario;
 import com.serviceflow.repository.ClienteRepository;
 import com.serviceflow.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,19 +71,29 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClienteResponse> listar(
+    public Page<ClienteResponse> listar(
+            int pagina,
+            int tamanho,
             Authentication authentication
     ) {
 
         Usuario usuario = buscarUsuarioAutenticado(authentication);
 
-        return clienteRepository
-                .findByEmpresaIdOrderByNomeAsc(
-                        usuario.getEmpresa().getId()
-                )
-                .stream()
-                .map(this::converterParaResponse)
-                .toList();
+        validarPaginacao(pagina, tamanho);
+
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamanho,
+                Sort.by("nome").ascending()
+        );
+
+        Page<Cliente> clientes =
+                clienteRepository.findByEmpresaId(
+                        usuario.getEmpresa().getId(),
+                        pageable
+                );
+
+        return clientes.map(this::converterParaResponse);
     }
 
     @Transactional(readOnly = true)
@@ -247,7 +261,8 @@ public class ClienteService {
 
         if (
                 authentication == null ||
-                authentication.getName() == null
+                authentication.getName() == null ||
+                authentication.getName().isBlank()
         ) {
             throw new IllegalArgumentException(
                     "Usuário não autenticado."
@@ -276,6 +291,24 @@ public class ClienteService {
                 cliente.getEndereco(),
                 cliente.isAtivo()
         );
+    }
+
+    private void validarPaginacao(
+            int pagina,
+            int tamanho
+    ) {
+
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "A página não pode ser negativa."
+            );
+        }
+
+        if (tamanho < 1 || tamanho > 100) {
+            throw new IllegalArgumentException(
+                    "O tamanho da página deve estar entre 1 e 100."
+            );
+        }
     }
 
     private String limparNumero(String valor) {

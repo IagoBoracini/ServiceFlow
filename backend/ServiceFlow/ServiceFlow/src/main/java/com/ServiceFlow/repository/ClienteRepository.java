@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface ClienteRepository
         extends JpaRepository<Cliente, Long> {
 
@@ -16,8 +19,9 @@ public interface ClienteRepository
             Long empresaId
     );
 
-    List<Cliente> findByEmpresaIdOrderByNomeAsc(
-            Long empresaId
+    Page<Cliente> findByEmpresaId(
+        Long empresaId,
+        Pageable pageable
     );
 
     List<Cliente> findByEmpresaIdAndNomeContainingIgnoreCaseOrderByNomeAsc(
