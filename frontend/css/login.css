@@ -1,0 +1,263 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --primary: #2563eb;
+    --secondary: #38bdf8;
+    --white: #ffffff;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    background: linear-gradient(135deg,
+            #08275c 0%,
+            #1457c5 45%,
+            #5592f5 75%,
+            #b9d3ff 100%);
+}
+
+.hero {
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    padding: 70px 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 70px;
+    width: 38%;
+}
+
+.hero .title {
+    font-size: 2rem;
+}
+
+.hero-text p:first-child {
+    font-size: 1.8rem;
+    font-weight: 700;
+    max-width: 380px;
+}
+
+.hero-text p:last-child {
+    margin-top: 16px;
+    max-width: 420px;
+    color: #dbeafe;
+}
+
+.topics {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.topic h3 {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.topic p {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: #dbeafe;
+}
+
+.form {
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #0f172a;
+    width: 62%;
+    align-items: center;
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.28) 0%,
+        rgba(147, 197, 253, 0.18) 42%,
+        transparent 72%
+    );
+    top: -500px;
+    right: -280px;
+}
+
+.container::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: 950px;
+    height: 450px;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.22),
+        rgba(96, 165, 250, 0.18),
+        transparent
+    );
+    bottom: -280px;
+    left: -300px;
+    transform: rotate(-12deg);
+}
+
+.form-container {
+    background: #fff;
+    max-width: 480px;
+    width: 100%;
+    margin: 24px auto;
+    padding: 48px 40px;
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.10);
+    position: relative;
+    z-index: 1;
+}
+
+.form-container .title {
+    text-align: center;
+    font-size: 2rem;
+    color: #0f172a;
+}
+
+.form-header {
+    text-align: center;
+    margin: 28px 0;
+}
+
+.form-header p:first-child {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.form-header p:last-child {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.form-group input {
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #dbe3ef;
+    border-radius: 8px;
+    font: inherit;
+    outline: none;
+    background: #fff;
+    color: #0f172a;
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-group input.error {
+    border-color: #dc2626;
+}
+
+.error-message {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #dc2626;
+}
+
+.form-login {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 28px;
+    font-size: 0.9rem;
+}
+
+.form-login a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-login a:hover {
+    text-decoration: underline;
+}
+
+.sign-up {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sign-up:hover {
+    background: #1d4ed8;
+}
+
+.sign-up:focus-visible,
+.form-login a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .hero,
+    .form {
+        width: 100%;
+    }
+
+    .hero {
+        padding: 50px 8%;
+    }
+}

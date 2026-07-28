@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceFlow</title>
+    <link rel="stylesheet" href="frontend/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="container">
+        <section class="hero">
+            <h1 class="title">⚙️ ServiceFlow</h1>
+            <div class="presentation">
+                <div class="hero-text">
+                    <p>Gestão inteligente para serviços técnicos</p>
+                    <p>Centralize chamados, acompanhe atendimentos e organize sua equipe de forma eficiente</p>
+                </div>
+                <div class="topics">
+                    <div class="topic">
+                        <h3>📋 Organização</h3>
+                        <p>Tenha todos os chamados em um único lugar</p>
+                    </div>
+                    <div class="topic">
+                        <h3>📈 Produtividade</h3>
+                        <p>Acompanhe o desempenho da sua equipe</p>
+                    </div>
+                    <div class="topic">
+                        <h3>🛡️ Controle</h3>
+                        <p>Relatórios e indicadores para melhores decisões</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="form"">
+            <div class="form-container">
+                <h2 class="title">⚙️ ServiceFlow</h2>
+                <div class="form-header">
+                    <p>Criar sua conta</p>
+                    <p>Preencha os dados abaixo para começar</p>
+                </div>
+                <form id="formCadastro">
+                    <div class="form-group">
+                        <label for="usuario">Nome Completo</label>
+                        <input type="text" id="usuario" name="usuario" placeholder="Seu nome" required
+                            autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Digite seu E-mail" required
+                            autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="empresa">Empresa</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa" required>
+                        <div id="sugestoes"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required
+                            minlength="8" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmarsenha">Confirmar Senha</label>
+                        <input type="password" id="confirmarsenha" name="confirmarsenha"
+                            placeholder="Confirme sua senha" required>
+                    </div>
+                    <button class="sign-up" type="submit">Cadastrar</button>
+                </form>
+                <div class="form-login">
+                    <p>Já possui conta?</p><a href="login.html">Faça login</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+ <script src="frontend/js/script.js"></script>
+</html> 
