@@ -5,6 +5,8 @@ import com.serviceflow.dto.ChamadoResponse;
 import com.serviceflow.model.Cargo;
 import com.serviceflow.model.Chamado;
 import com.serviceflow.model.Cliente;
+import com.serviceflow.model.PrioridadeChamado;
+import com.serviceflow.model.StatusChamado;
 import com.serviceflow.model.StatusUsuario;
 import com.serviceflow.model.Usuario;
 import com.serviceflow.repository.ChamadoRepository;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -118,6 +121,204 @@ public class ChamadoService {
                 );
 
         return converterParaResponse(chamado);
+    }
+
+    @Transactional
+    public ChamadoResponse atualizar(
+            Long chamadoId,
+            ChamadoRequest request,
+            Authentication authentication
+    ) {
+
+        Usuario usuario =
+                buscarUsuarioAutenticado(authentication);
+
+        Long empresaId = usuario.getEmpresa().getId();
+
+        Chamado chamado = chamadoRepository
+                .findByIdAndEmpresaId(
+                        chamadoId,
+                        empresaId
+                )
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Chamado não encontrado."
+                        )
+                );
+
+        if (
+                chamado.getStatus() == StatusChamado.CONCLUIDO ||
+                chamado.getStatus() == StatusChamado.CANCELADO
+        ) {
+            throw new IllegalArgumentException(
+                    "Não é possível editar um chamado concluído ou cancelado."
+            );
+        }
+
+        Cliente cliente = clienteRepository
+                .findByIdAndEmpresaId(
+                        request.getClienteId(),
+                        empresaId
+                )
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Cliente não encontrado."
+                        )
+                );
+
+        if (!cliente.isAtivo()) {
+            throw new IllegalArgumentException(
+                    "O cliente selecionado está inativo."
+            );
+        }
+
+        Usuario tecnico = null;
+
+        if (request.getTecnicoResponsavelId() != null) {
+            tecnico = buscarTecnicoDaEmpresa(
+                    request.getTecnicoResponsavelId(),
+                    empresaId
+            );
+        }
+
+        chamado.setTitulo(request.getTitulo().trim());
+        chamado.setDescricao(request.getDescricao().trim());
+        chamado.setPrioridade(request.getPrioridade());
+        chamado.setCliente(cliente);
+        chamado.setTecnicoResponsavel(tecnico);
+
+        Chamado chamadoAtualizado =
+                chamadoRepository.save(chamado);
+
+        return converterParaResponse(chamadoAtualizado);
+    }
+
+    @Transactional
+    public ChamadoResponse atribuirTecnico(
+            Long chamadoId,
+            Long tecnicoId,
+            Authentication authentication
+    ) {
+
+        Usuario usuario =
+                buscarUsuarioAutenticado(authentication);
+
+        Long empresaId = usuario.getEmpresa().getId();
+
+        Chamado chamado = chamadoRepository
+                .findByIdAndEmpresaId(
+                        chamadoId,
+                        empresaId
+                )
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Chamado não encontrado."
+                        )
+                );
+
+        if (
+                chamado.getStatus() == StatusChamado.CONCLUIDO ||
+                chamado.getStatus() == StatusChamado.CANCELADO
+        ) {
+            throw new IllegalArgumentException(
+                    "Não é possível atribuir técnico a um chamado finalizado."
+            );
+        }
+
+        Usuario tecnico =
+                buscarTecnicoDaEmpresa(
+                        tecnicoId,
+                        empresaId
+                );
+
+        chamado.setTecnicoResponsavel(tecnico);
+
+        if (chamado.getStatus() == StatusChamado.ABERTO) {
+            chamado.setStatus(StatusChamado.EM_ANDAMENTO);
+        }
+
+        Chamado chamadoAtualizado =
+                chamadoRepository.save(chamado);
+
+        return converterParaResponse(chamadoAtualizado);
+    }
+
+    @Transactional
+    public ChamadoResponse alterarPrioridade(
+            Long chamadoId,
+            PrioridadeChamado prioridade,
+            Authentication authentication
+    ) {
+
+        Chamado chamado =
+                buscarChamadoDaEmpresa(
+                        chamadoId,
+                        authentication
+                );
+
+        if (
+                chamado.getStatus() == StatusChamado.CONCLUIDO ||
+                chamado.getStatus() == StatusChamado.CANCELADO
+        ) {
+            throw new IllegalArgumentException(
+                    "Não é possível alterar a prioridade de um chamado finalizado."
+            );
+        }
+
+        chamado.setPrioridade(prioridade);
+
+        Chamado chamadoAtualizado =
+                chamadoRepository.save(chamado);
+
+        return converterParaResponse(chamadoAtualizado);
+    }
+
+    @Transactional
+    public ChamadoResponse alterarStatus(
+            Long chamadoId,
+            StatusChamado novoStatus,
+            Authentication authentication
+    ) {
+
+        Chamado chamado =
+                buscarChamadoDaEmpresa(
+                        chamadoId,
+                        authentication
+                );
+
+        if (chamado.getStatus() == StatusChamado.CANCELADO) {
+            throw new IllegalArgumentException(
+                    "Um chamado cancelado não pode ter o status alterado."
+            );
+        }
+
+        if (chamado.getStatus() == StatusChamado.CONCLUIDO) {
+            throw new IllegalArgumentException(
+                    "Um chamado concluído não pode ter o status alterado."
+            );
+        }
+
+        if (
+                novoStatus == StatusChamado.EM_ANDAMENTO &&
+                chamado.getTecnicoResponsavel() == null
+        ) {
+            throw new IllegalArgumentException(
+                    "Defina um técnico antes de iniciar o chamado."
+            );
+        }
+
+        chamado.setStatus(novoStatus);
+
+        if (novoStatus == StatusChamado.CONCLUIDO) {
+            chamado.setDataConclusao(LocalDateTime.now());
+        } else {
+            chamado.setDataConclusao(null);
+        }
+
+        Chamado chamadoAtualizado =
+                chamadoRepository.save(chamado);
+
+        return converterParaResponse(chamadoAtualizado);
     }
 
     private Chamado buscarChamadoDaEmpresa(

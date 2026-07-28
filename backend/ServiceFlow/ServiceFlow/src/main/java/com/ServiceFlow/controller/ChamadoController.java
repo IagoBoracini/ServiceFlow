@@ -1,5 +1,8 @@
 package com.serviceflow.controller;
 
+import com.serviceflow.dto.AtualizarPrioridadeChamadoRequest;
+import com.serviceflow.dto.AtualizarStatusChamadoRequest;
+import com.serviceflow.dto.AtribuirTecnicoRequest;
 import com.serviceflow.dto.ChamadoRequest;
 import com.serviceflow.dto.ChamadoResponse;
 import com.serviceflow.service.ChamadoService;
@@ -53,6 +56,65 @@ public class ChamadoController {
 
         return chamadoService.buscarPorId(
                 id,
+                authentication
+        );
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ChamadoResponse atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ChamadoRequest request,
+            Authentication authentication
+    ) {
+
+        return chamadoService.atualizar(
+                id,
+                request,
+                authentication
+        );
+    }
+
+    @PatchMapping("/{id}/atribuir-tecnico")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ChamadoResponse atribuirTecnico(
+            @PathVariable Long id,
+            @Valid @RequestBody AtribuirTecnicoRequest request,
+            Authentication authentication
+    ) {
+
+        return chamadoService.atribuirTecnico(
+                id,
+                request.getTecnicoId(),
+                authentication
+        );
+    }
+
+    @PatchMapping("/{id}/prioridade")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
+    public ChamadoResponse alterarPrioridade(
+            @PathVariable Long id,
+            @Valid @RequestBody AtualizarPrioridadeChamadoRequest request,
+            Authentication authentication
+    ) {
+
+        return chamadoService.alterarPrioridade(
+                id,
+                request.getPrioridade(),
+                authentication
+        );
+    }
+
+    @PatchMapping("/{id}/status")
+    public ChamadoResponse alterarStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody AtualizarStatusChamadoRequest request,
+            Authentication authentication
+    ) {
+
+        return chamadoService.alterarStatus(
+                id,
+                request.getStatus(),
                 authentication
         );
     }
