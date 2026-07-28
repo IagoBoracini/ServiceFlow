@@ -41,6 +41,9 @@ public class SecurityConfig {
                 "/login",
                 "/empresas/cadastro",
                 "/funcionarios/solicitacoes"
+                "/swagger-ui/**",
+                "/swagger-ui.html",
+                "/v3/api-docs/**"
         ).permitAll()
 
         .requestMatchers(
