@@ -3,6 +3,8 @@ package com.serviceflow.controller;
 import com.serviceflow.dto.ClienteRequest;
 import com.serviceflow.dto.ClienteResponse;
 import com.serviceflow.service.ClienteService;
+import com.serviceflow.model.PrioridadeChamado;
+import com.serviceflow.model.StatusChamado;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

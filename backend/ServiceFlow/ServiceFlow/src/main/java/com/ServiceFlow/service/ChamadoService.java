@@ -93,16 +93,34 @@ public class ChamadoService {
 
     @Transactional(readOnly = true)
     public List<ChamadoResponse> listar(
+            StatusChamado status,
+            PrioridadeChamado prioridade,
             Authentication authentication
     ) {
 
-        Usuario usuarioAutenticado =
+        Usuario usuario =
                 buscarUsuarioAutenticado(authentication);
 
-        return chamadoRepository
-                .findByEmpresaIdOrderByDataAberturaDesc(
-                        usuarioAutenticado.getEmpresa().getId()
-                )
+        List<Chamado> chamados;
+
+        if (usuario.getCargo() == Cargo.TECNICO) {
+
+            chamados = buscarChamadosDoTecnico(
+                    usuario.getId(),
+                    status,
+                    prioridade
+            );
+
+        } else {
+
+            chamados = buscarChamadosDaEmpresa(
+                    usuario.getEmpresa().getId(),
+                    status,
+                    prioridade
+            );
+        }
+
+        return chamados
                 .stream()
                 .map(this::converterParaResponse)
                 .toList();
@@ -114,11 +132,33 @@ public class ChamadoService {
             Authentication authentication
     ) {
 
-        Chamado chamado =
-                buscarChamadoDaEmpresa(
+        Usuario usuario =
+                buscarUsuarioAutenticado(authentication);
+
+        Chamado chamado = chamadoRepository
+                .findByIdAndEmpresaId(
                         chamadoId,
-                        authentication
+                        usuario.getEmpresa().getId()
+                )
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Chamado não encontrado."
+                        )
                 );
+
+        if (usuario.getCargo() == Cargo.TECNICO) {
+
+            if (
+                    chamado.getTecnicoResponsavel() == null ||
+                    !chamado.getTecnicoResponsavel()
+                            .getId()
+                            .equals(usuario.getId())
+            ) {
+                throw new IllegalStateException(
+                        "Você não possui acesso a este chamado."
+                );
+            }
+        }
 
         return converterParaResponse(chamado);
     }
@@ -280,11 +320,42 @@ public class ChamadoService {
             Authentication authentication
     ) {
 
-        Chamado chamado =
-                buscarChamadoDaEmpresa(
+        Usuario usuario =
+                buscarUsuarioAutenticado(authentication);
+
+        Chamado chamado = chamadoRepository
+                .findByIdAndEmpresaId(
                         chamadoId,
-                        authentication
+                        usuario.getEmpresa().getId()
+                )
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Chamado não encontrado."
+                        )
                 );
+
+        if (usuario.getCargo() == Cargo.TECNICO) {
+
+            if (
+                    chamado.getTecnicoResponsavel() == null ||
+                    !chamado.getTecnicoResponsavel()
+                            .getId()
+                            .equals(usuario.getId())
+            ) {
+                throw new IllegalStateException(
+                        "Você só pode alterar seus próprios chamados."
+                );
+            }
+
+            if (
+                    novoStatus == StatusChamado.CANCELADO ||
+                    novoStatus == StatusChamado.ABERTO
+            ) {
+                throw new IllegalStateException(
+                        "O técnico não possui permissão para definir este status."
+                );
+            }
+        }
 
         if (chamado.getStatus() == StatusChamado.CANCELADO) {
             throw new IllegalArgumentException(
@@ -406,6 +477,80 @@ public class ChamadoService {
         }
 
         return usuario;
+    }
+
+    private List<Chamado> buscarChamadosDaEmpresa(
+            Long empresaId,
+            StatusChamado status,
+            PrioridadeChamado prioridade
+    ) {
+
+        if (status != null && prioridade != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+                            empresaId,
+                            status,
+                            prioridade
+                    );
+        }
+
+        if (status != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndStatusOrderByDataAberturaDesc(
+                            empresaId,
+                            status
+                    );
+        }
+
+        if (prioridade != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndPrioridadeOrderByDataAberturaDesc(
+                            empresaId,
+                            prioridade
+                    );
+        }
+
+        return chamadoRepository
+                .findByEmpresaIdOrderByDataAberturaDesc(
+                        empresaId
+                );
+    }
+
+    private List<Chamado> buscarChamadosDoTecnico(
+            Long tecnicoId,
+            StatusChamado status,
+            PrioridadeChamado prioridade
+    ) {
+
+        if (status != null && prioridade != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+                            tecnicoId,
+                            status,
+                            prioridade
+                    );
+        }
+
+        if (status != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndStatusOrderByDataAberturaDesc(
+                            tecnicoId,
+                            status
+                    );
+        }
+
+        if (prioridade != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndPrioridadeOrderByDataAberturaDesc(
+                            tecnicoId,
+                            prioridade
+                    );
+        }
+
+        return chamadoRepository
+                .findByTecnicoResponsavelIdOrderByDataAberturaDesc(
+                        tecnicoId
+                );
     }
 
     private ChamadoResponse converterParaResponse(

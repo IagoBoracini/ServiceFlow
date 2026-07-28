@@ -5,6 +5,8 @@ import com.serviceflow.dto.AtualizarStatusChamadoRequest;
 import com.serviceflow.dto.AtribuirTecnicoRequest;
 import com.serviceflow.dto.ChamadoRequest;
 import com.serviceflow.dto.ChamadoResponse;
+import com.serviceflow.model.PrioridadeChamado;
+import com.serviceflow.model.StatusChamado;
 import com.serviceflow.service.ChamadoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -42,10 +44,20 @@ public class ChamadoController {
 
     @GetMapping
     public List<ChamadoResponse> listar(
+            @RequestParam(required = false)
+            StatusChamado status,
+
+            @RequestParam(required = false)
+            PrioridadeChamado prioridade,
+
             Authentication authentication
     ) {
 
-        return chamadoService.listar(authentication);
+        return chamadoService.listar(
+                status,
+                prioridade,
+                authentication
+        );
     }
 
     @GetMapping("/{id}")
