@@ -1,14 +1,14 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.CadastroEmpresaRequest;
-import com.serviceflow.dto.CadastroEmpresaResponse;
-import com.serviceflow.dto.EmpresaPublicaResponse;
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.Empresa;
-import com.serviceflow.model.StatusUsuario;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.EmpresaRepository;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.dto.CadastroEmpresaRequest;
+import com.ServiceFlow.dto.CadastroEmpresaResponse;
+import com.ServiceFlow.dto.EmpresaPublicaResponse;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.Empresa;
+import com.ServiceFlow.model.StatusUsuario;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.EmpresaRepository;
+import com.ServiceFlow.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

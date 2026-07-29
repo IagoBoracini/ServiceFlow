@@ -1,6 +1,6 @@
-package com.serviceflow.repository;
+package com.ServiceFlow.repository;
 
-import com.serviceflow.model.Cliente;
+import com.ServiceFlow.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.DashboardResponse;
-import com.serviceflow.service.DashboardService;
+import com.ServiceFlow.dto.DashboardResponse;
+import com.ServiceFlow.service.DashboardService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

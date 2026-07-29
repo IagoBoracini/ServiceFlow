@@ -1,7 +1,7 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.StatusUsuario;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.StatusUsuario;
 
 public class FuncionarioResponse {
 

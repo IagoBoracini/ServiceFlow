@@ -1,8 +1,10 @@
-package com.serviceflow.repository;
+package com.ServiceFlow.repository;
 
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.StatusUsuario;
-import com.serviceflow.model.Usuario;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.StatusUsuario;
+import com.ServiceFlow.model.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,11 +13,17 @@ import java.util.Optional;
 public interface UsuarioRepository
         extends JpaRepository<Usuario, Long> {
 
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByEmail(
+            String email
+    );
 
-    boolean existsByEmail(String email);
+    boolean existsByEmail(
+            String email
+    );
 
-    long countByEmpresaId(Long empresaId);
+    long countByEmpresaId(
+            Long empresaId
+    );
 
     long countByEmpresaIdAndCargo(
             Long empresaId,
@@ -29,6 +37,12 @@ public interface UsuarioRepository
 
     List<Usuario> findByEmpresaIdOrderByNomeAsc(
             Long empresaId
+    );
+
+    Page<Usuario> findByEmpresaIdAndCargoNot(
+            Long empresaId,
+            Cargo cargo,
+            Pageable pageable
     );
 
     List<Usuario> findByEmpresaIdAndCargoOrderByNomeAsc(

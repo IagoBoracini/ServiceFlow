@@ -1,9 +1,9 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.CadastroEmpresaRequest;
-import com.serviceflow.dto.CadastroEmpresaResponse;
-import com.serviceflow.dto.EmpresaPublicaResponse;
-import com.serviceflow.service.EmpresaService;
+import com.ServiceFlow.dto.CadastroEmpresaRequest;
+import com.ServiceFlow.dto.CadastroEmpresaResponse;
+import com.ServiceFlow.dto.EmpresaPublicaResponse;
+import com.ServiceFlow.service.EmpresaService;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

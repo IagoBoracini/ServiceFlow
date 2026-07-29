@@ -261,3 +261,52 @@ body {
         padding: 50px 8%;
     }
 }
+
+.login-message {
+    display: none;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.login-message.error {
+    display: block;
+    color: #991b1b;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+}
+
+.login-message.success {
+    display: block;
+    color: #166534;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
+}
+
+.sign-up:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.sign-up:disabled:hover {
+    background: #94a3b8;
+}
+
+@media (max-width: 800px) {
+
+    .hero {
+        display: none;
+    }
+
+    .form {
+        min-height: 100vh;
+        padding: 24px;
+    }
+
+    .form-container {
+        margin: 0;
+        padding: 36px 24px;
+    }
+}

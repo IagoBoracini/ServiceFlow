@@ -1,7 +1,9 @@
-package com.serviceflow.repository;
+package com.ServiceFlow.repository;
 
-import com.serviceflow.model.OrdemServico;
-import com.serviceflow.model.StatusOrdemServico;
+import com.ServiceFlow.model.OrdemServico;
+import com.ServiceFlow.model.StatusOrdemServico;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,9 +12,13 @@ import java.util.Optional;
 public interface OrdemServicoRepository
         extends JpaRepository<OrdemServico, Long> {
 
-    boolean existsByChamadoId(Long chamadoId);
+    boolean existsByChamadoId(
+            Long chamadoId
+    );
 
-    boolean existsByNumero(String numero);
+    boolean existsByNumero(
+            String numero
+    );
 
     long countByEmpresaIdAndStatus(
             Long empresaId,
@@ -28,21 +34,25 @@ public interface OrdemServicoRepository
             Long empresaId
     );
 
-    List<OrdemServico> findByEmpresaIdOrderByDataCriacaoDesc(
-            Long empresaId
-    );
-
-    List<OrdemServico> findByEmpresaIdAndStatusOrderByDataCriacaoDesc(
+    Page<OrdemServico> findByEmpresaId(
             Long empresaId,
-            StatusOrdemServico status
+            Pageable pageable
     );
 
-    List<OrdemServico> findByTecnicoIdOrderByDataCriacaoDesc(
-            Long tecnicoId
+    Page<OrdemServico> findByEmpresaIdAndStatus(
+            Long empresaId,
+            StatusOrdemServico status,
+            Pageable pageable
     );
 
-    List<OrdemServico> findByTecnicoIdAndStatusOrderByDataCriacaoDesc(
+    Page<OrdemServico> findByTecnicoId(
             Long tecnicoId,
-            StatusOrdemServico status
+            Pageable pageable
+    );
+
+    Page<OrdemServico> findByTecnicoIdAndStatus(
+            Long tecnicoId,
+            StatusOrdemServico status,
+            Pageable pageable
     );
 }

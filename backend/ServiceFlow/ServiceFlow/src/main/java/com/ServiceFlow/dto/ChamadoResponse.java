@@ -1,7 +1,7 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.PrioridadeChamado;
-import com.serviceflow.model.StatusChamado;
+import com.ServiceFlow.model.PrioridadeChamado;
+import com.ServiceFlow.model.StatusChamado;
 
 import java.time.LocalDateTime;
 

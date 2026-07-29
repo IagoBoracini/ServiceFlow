@@ -1,6 +1,6 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.PrioridadeChamado;
+import com.ServiceFlow.model.PrioridadeChamado;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

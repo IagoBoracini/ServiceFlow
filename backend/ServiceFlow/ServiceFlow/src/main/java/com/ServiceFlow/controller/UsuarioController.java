@@ -1,7 +1,7 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.model.Usuario;
-import com.serviceflow.service.UsuarioService;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

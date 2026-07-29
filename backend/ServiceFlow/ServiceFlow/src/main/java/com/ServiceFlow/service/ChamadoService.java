@@ -1,23 +1,26 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.ChamadoRequest;
-import com.serviceflow.dto.ChamadoResponse;
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.Chamado;
-import com.serviceflow.model.Cliente;
-import com.serviceflow.model.PrioridadeChamado;
-import com.serviceflow.model.StatusChamado;
-import com.serviceflow.model.StatusUsuario;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.ChamadoRepository;
-import com.serviceflow.repository.ClienteRepository;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.dto.ChamadoRequest;
+import com.ServiceFlow.dto.ChamadoResponse;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.Chamado;
+import com.ServiceFlow.model.Cliente;
+import com.ServiceFlow.model.PrioridadeChamado;
+import com.ServiceFlow.model.StatusChamado;
+import com.ServiceFlow.model.StatusUsuario;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.ChamadoRepository;
+import com.ServiceFlow.repository.ClienteRepository;
+import com.ServiceFlow.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ChamadoService {
@@ -68,11 +71,10 @@ public class ChamadoService {
         Usuario tecnicoResponsavel = null;
 
         if (request.getTecnicoResponsavelId() != null) {
-            tecnicoResponsavel =
-                    buscarTecnicoDaEmpresa(
-                            request.getTecnicoResponsavelId(),
-                            empresaId
-                    );
+            tecnicoResponsavel = buscarTecnicoDaEmpresa(
+                    request.getTecnicoResponsavelId(),
+                    empresaId
+            );
         }
 
         Chamado chamado = new Chamado();
@@ -92,23 +94,34 @@ public class ChamadoService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChamadoResponse> listar(
+    public Page<ChamadoResponse> listar(
             StatusChamado status,
             PrioridadeChamado prioridade,
+            int pagina,
+            int tamanho,
             Authentication authentication
     ) {
 
         Usuario usuario =
                 buscarUsuarioAutenticado(authentication);
 
-        List<Chamado> chamados;
+        validarPaginacao(pagina, tamanho);
+
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamanho,
+                Sort.by("dataAbertura").descending()
+        );
+
+        Page<Chamado> chamados;
 
         if (usuario.getCargo() == Cargo.TECNICO) {
 
             chamados = buscarChamadosDoTecnico(
                     usuario.getId(),
                     status,
-                    prioridade
+                    prioridade,
+                    pageable
             );
 
         } else {
@@ -116,14 +129,12 @@ public class ChamadoService {
             chamados = buscarChamadosDaEmpresa(
                     usuario.getEmpresa().getId(),
                     status,
-                    prioridade
+                    prioridade,
+                    pageable
             );
         }
 
-        return chamados
-                .stream()
-                .map(this::converterParaResponse)
-                .toList();
+        return chamados.map(this::converterParaResponse);
     }
 
     @Transactional(readOnly = true)
@@ -173,7 +184,8 @@ public class ChamadoService {
         Usuario usuario =
                 buscarUsuarioAutenticado(authentication);
 
-        Long empresaId = usuario.getEmpresa().getId();
+        Long empresaId =
+                usuario.getEmpresa().getId();
 
         Chamado chamado = chamadoRepository
                 .findByIdAndEmpresaId(
@@ -243,7 +255,8 @@ public class ChamadoService {
         Usuario usuario =
                 buscarUsuarioAutenticado(authentication);
 
-        Long empresaId = usuario.getEmpresa().getId();
+        Long empresaId =
+                usuario.getEmpresa().getId();
 
         Chamado chamado = chamadoRepository
                 .findByIdAndEmpresaId(
@@ -392,6 +405,89 @@ public class ChamadoService {
         return converterParaResponse(chamadoAtualizado);
     }
 
+    private Page<Chamado> buscarChamadosDaEmpresa(
+            Long empresaId,
+            StatusChamado status,
+            PrioridadeChamado prioridade,
+            Pageable pageable
+    ) {
+
+        if (status != null && prioridade != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndStatusAndPrioridade(
+                            empresaId,
+                            status,
+                            prioridade,
+                            pageable
+                    );
+        }
+
+        if (status != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndStatus(
+                            empresaId,
+                            status,
+                            pageable
+                    );
+        }
+
+        if (prioridade != null) {
+            return chamadoRepository
+                    .findByEmpresaIdAndPrioridade(
+                            empresaId,
+                            prioridade,
+                            pageable
+                    );
+        }
+
+        return chamadoRepository.findByEmpresaId(
+                empresaId,
+                pageable
+        );
+    }
+
+    private Page<Chamado> buscarChamadosDoTecnico(
+            Long tecnicoId,
+            StatusChamado status,
+            PrioridadeChamado prioridade,
+            Pageable pageable
+    ) {
+
+        if (status != null && prioridade != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndStatusAndPrioridade(
+                            tecnicoId,
+                            status,
+                            prioridade,
+                            pageable
+                    );
+        }
+
+        if (status != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndStatus(
+                            tecnicoId,
+                            status,
+                            pageable
+                    );
+        }
+
+        if (prioridade != null) {
+            return chamadoRepository
+                    .findByTecnicoResponsavelIdAndPrioridade(
+                            tecnicoId,
+                            prioridade,
+                            pageable
+                    );
+        }
+
+        return chamadoRepository
+                .findByTecnicoResponsavelId(
+                        tecnicoId,
+                        pageable
+                );
+    }
+
     private Chamado buscarChamadoDaEmpresa(
             Long chamadoId,
             Authentication authentication
@@ -418,21 +514,15 @@ public class ChamadoService {
     ) {
 
         Usuario tecnico = usuarioRepository
-                .findById(tecnicoId)
+                .findByIdAndEmpresaId(
+                        tecnicoId,
+                        empresaId
+                )
                 .orElseThrow(
                         () -> new IllegalArgumentException(
                                 "Técnico responsável não encontrado."
                         )
                 );
-
-        if (
-                tecnico.getEmpresa() == null ||
-                !tecnico.getEmpresa().getId().equals(empresaId)
-        ) {
-            throw new IllegalArgumentException(
-                    "O técnico não pertence à mesma empresa."
-            );
-        }
 
         if (tecnico.getCargo() != Cargo.TECNICO) {
             throw new IllegalArgumentException(
@@ -455,7 +545,8 @@ public class ChamadoService {
 
         if (
                 authentication == null ||
-                authentication.getName() == null
+                authentication.getName() == null ||
+                authentication.getName().isBlank()
         ) {
             throw new IllegalArgumentException(
                     "Usuário não autenticado."
@@ -476,81 +567,13 @@ public class ChamadoService {
             );
         }
 
+        if (usuario.getEmpresa() == null) {
+            throw new IllegalStateException(
+                    "Seu usuário não está vinculado a uma empresa."
+            );
+        }
+
         return usuario;
-    }
-
-    private List<Chamado> buscarChamadosDaEmpresa(
-            Long empresaId,
-            StatusChamado status,
-            PrioridadeChamado prioridade
-    ) {
-
-        if (status != null && prioridade != null) {
-            return chamadoRepository
-                    .findByEmpresaIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
-                            empresaId,
-                            status,
-                            prioridade
-                    );
-        }
-
-        if (status != null) {
-            return chamadoRepository
-                    .findByEmpresaIdAndStatusOrderByDataAberturaDesc(
-                            empresaId,
-                            status
-                    );
-        }
-
-        if (prioridade != null) {
-            return chamadoRepository
-                    .findByEmpresaIdAndPrioridadeOrderByDataAberturaDesc(
-                            empresaId,
-                            prioridade
-                    );
-        }
-
-        return chamadoRepository
-                .findByEmpresaIdOrderByDataAberturaDesc(
-                        empresaId
-                );
-    }
-
-    private List<Chamado> buscarChamadosDoTecnico(
-            Long tecnicoId,
-            StatusChamado status,
-            PrioridadeChamado prioridade
-    ) {
-
-        if (status != null && prioridade != null) {
-            return chamadoRepository
-                    .findByTecnicoResponsavelIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
-                            tecnicoId,
-                            status,
-                            prioridade
-                    );
-        }
-
-        if (status != null) {
-            return chamadoRepository
-                    .findByTecnicoResponsavelIdAndStatusOrderByDataAberturaDesc(
-                            tecnicoId,
-                            status
-                    );
-        }
-
-        if (prioridade != null) {
-            return chamadoRepository
-                    .findByTecnicoResponsavelIdAndPrioridadeOrderByDataAberturaDesc(
-                            tecnicoId,
-                            prioridade
-                    );
-        }
-
-        return chamadoRepository
-                .findByTecnicoResponsavelIdOrderByDataAberturaDesc(
-                        tecnicoId
-                );
     }
 
     private ChamadoResponse converterParaResponse(
@@ -581,5 +604,23 @@ public class ChamadoService {
                 tecnicoId,
                 tecnicoNome
         );
+    }
+
+    private void validarPaginacao(
+            int pagina,
+            int tamanho
+    ) {
+
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "A página não pode ser negativa."
+            );
+        }
+
+        if (tamanho < 1 || tamanho > 100) {
+            throw new IllegalArgumentException(
+                    "O tamanho da página deve estar entre 1 e 100."
+            );
+        }
     }
 }

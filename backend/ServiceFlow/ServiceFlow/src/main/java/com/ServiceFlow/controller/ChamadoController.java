@@ -1,20 +1,19 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.AtualizarPrioridadeChamadoRequest;
-import com.serviceflow.dto.AtualizarStatusChamadoRequest;
-import com.serviceflow.dto.AtribuirTecnicoRequest;
-import com.serviceflow.dto.ChamadoRequest;
-import com.serviceflow.dto.ChamadoResponse;
-import com.serviceflow.model.PrioridadeChamado;
-import com.serviceflow.model.StatusChamado;
-import com.serviceflow.service.ChamadoService;
+import com.ServiceFlow.dto.AtualizarPrioridadeChamadoRequest;
+import com.ServiceFlow.dto.AtualizarStatusChamadoRequest;
+import com.ServiceFlow.dto.AtribuirTecnicoRequest;
+import com.ServiceFlow.dto.ChamadoRequest;
+import com.ServiceFlow.dto.ChamadoResponse;
+import com.ServiceFlow.model.PrioridadeChamado;
+import com.ServiceFlow.model.StatusChamado;
+import com.ServiceFlow.service.ChamadoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/chamados")
@@ -32,7 +31,10 @@ public class ChamadoController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
     public ChamadoResponse cadastrar(
-            @Valid @RequestBody ChamadoRequest request,
+            @Valid
+            @RequestBody
+            ChamadoRequest request,
+
             Authentication authentication
     ) {
 
@@ -43,12 +45,19 @@ public class ChamadoController {
     }
 
     @GetMapping
-    public List<ChamadoResponse> listar(
+    public Page<ChamadoResponse> listar(
+
             @RequestParam(required = false)
             StatusChamado status,
 
             @RequestParam(required = false)
             PrioridadeChamado prioridade,
+
+            @RequestParam(defaultValue = "0")
+            int pagina,
+
+            @RequestParam(defaultValue = "10")
+            int tamanho,
 
             Authentication authentication
     ) {
@@ -56,6 +65,8 @@ public class ChamadoController {
         return chamadoService.listar(
                 status,
                 prioridade,
+                pagina,
+                tamanho,
                 authentication
         );
     }
@@ -76,7 +87,11 @@ public class ChamadoController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
     public ChamadoResponse atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody ChamadoRequest request,
+
+            @Valid
+            @RequestBody
+            ChamadoRequest request,
+
             Authentication authentication
     ) {
 
@@ -91,7 +106,11 @@ public class ChamadoController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
     public ChamadoResponse atribuirTecnico(
             @PathVariable Long id,
-            @Valid @RequestBody AtribuirTecnicoRequest request,
+
+            @Valid
+            @RequestBody
+            AtribuirTecnicoRequest request,
+
             Authentication authentication
     ) {
 
@@ -106,7 +125,11 @@ public class ChamadoController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
     public ChamadoResponse alterarPrioridade(
             @PathVariable Long id,
-            @Valid @RequestBody AtualizarPrioridadeChamadoRequest request,
+
+            @Valid
+            @RequestBody
+            AtualizarPrioridadeChamadoRequest request,
+
             Authentication authentication
     ) {
 
@@ -120,7 +143,11 @@ public class ChamadoController {
     @PatchMapping("/{id}/status")
     public ChamadoResponse alterarStatus(
             @PathVariable Long id,
-            @Valid @RequestBody AtualizarStatusChamadoRequest request,
+
+            @Valid
+            @RequestBody
+            AtualizarStatusChamadoRequest request,
+
             Authentication authentication
     ) {
 

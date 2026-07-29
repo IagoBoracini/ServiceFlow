@@ -1,18 +1,17 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.AtualizarOrdemServicoRequest;
-import com.serviceflow.dto.AtualizarStatusOrdemServicoRequest;
-import com.serviceflow.dto.OrdemServicoRequest;
-import com.serviceflow.dto.OrdemServicoResponse;
-import com.serviceflow.model.StatusOrdemServico;
-import com.serviceflow.service.OrdemServicoService;
+import com.ServiceFlow.dto.AtualizarOrdemServicoRequest;
+import com.ServiceFlow.dto.AtualizarStatusOrdemServicoRequest;
+import com.ServiceFlow.dto.OrdemServicoRequest;
+import com.ServiceFlow.dto.OrdemServicoResponse;
+import com.ServiceFlow.model.StatusOrdemServico;
+import com.ServiceFlow.service.OrdemServicoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/ordens-servico")
@@ -30,7 +29,10 @@ public class OrdemServicoController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ADMIN', 'ATENDENTE')")
     public OrdemServicoResponse criar(
-            @Valid @RequestBody OrdemServicoRequest request,
+            @Valid
+            @RequestBody
+            OrdemServicoRequest request,
+
             Authentication authentication
     ) {
 
@@ -41,15 +43,24 @@ public class OrdemServicoController {
     }
 
     @GetMapping
-    public List<OrdemServicoResponse> listar(
+    public Page<OrdemServicoResponse> listar(
+
             @RequestParam(required = false)
             StatusOrdemServico status,
+
+            @RequestParam(defaultValue = "0")
+            int pagina,
+
+            @RequestParam(defaultValue = "10")
+            int tamanho,
 
             Authentication authentication
     ) {
 
         return ordemServicoService.listar(
                 status,
+                pagina,
+                tamanho,
                 authentication
         );
     }
@@ -69,7 +80,11 @@ public class OrdemServicoController {
     @PutMapping("/{id}")
     public OrdemServicoResponse atualizarAtendimento(
             @PathVariable Long id,
-            @Valid @RequestBody AtualizarOrdemServicoRequest request,
+
+            @Valid
+            @RequestBody
+            AtualizarOrdemServicoRequest request,
+
             Authentication authentication
     ) {
 
@@ -83,7 +98,11 @@ public class OrdemServicoController {
     @PatchMapping("/{id}/status")
     public OrdemServicoResponse alterarStatus(
             @PathVariable Long id,
-            @Valid @RequestBody AtualizarStatusOrdemServicoRequest request,
+
+            @Valid
+            @RequestBody
+            AtualizarStatusOrdemServicoRequest request,
+
             Authentication authentication
     ) {
 

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Clientes | ServiceFlow</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/clientes.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+                <span class="logo-icon">⚙️</span>
+                <span>ServiceFlow</span>
+            </a>
+
+            <nav class="sidebar-menu">
+
+                <a
+                    href="dashboard.html"
+                    class="menu-item"
+                >
+                    <span>▦</span>
+                    Dashboard
+                </a>
+
+                <a
+                    href="clientes.html"
+                    class="menu-item active"
+                >
+                    <span>👥</span>
+                    Clientes
+                </a>
+
+                <a
+                    href="chamados.html"
+                    class="menu-item"
+                >
+                    <span>📞</span>
+                    Chamados
+                </a>
+
+                <a
+                    href="ordens-servico.html"
+                    class="menu-item"
+                >
+                    <span>🛠️</span>
+                    Ordens de serviço
+                </a>
+
+                <a
+                    href="funcionarios.html"
+                    class="menu-item"
+                >
+                    <span>🧑‍💼</span>
+                    Funcionários
+                </a>
+
+            </nav>
+
+            <button
+                type="button"
+                class="logout-button"
+                id="logout-button"
+            >
+                <span>↪</span>
+                Sair
+            </button>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="page-header">
+
+                <div>
+                    <p class="page-subtitle">
+                        Gerenciamento
+                    </p>
+
+                    <h1>Clientes</h1>
+
+                    <p class="page-description">
+                        Cadastre e gerencie os clientes da sua empresa.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="new-client-button"
+                >
+                    <span>+</span>
+                    Novo cliente
+                </button>
+
+            </header>
+
+            <section class="content-card">
+
+                <div class="toolbar">
+
+                    <div class="search-container">
+
+                        <span class="search-icon">
+                            🔎
+                        </span>
+
+                        <input
+                            type="search"
+                            id="search-input"
+                            placeholder="Pesquisar cliente por nome..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="refresh-button"
+                    >
+                        Atualizar
+                    </button>
+
+                </div>
+
+                <div
+                    class="message"
+                    id="page-message"
+                    role="alert"
+                ></div>
+
+                <div
+                    class="loading-container"
+                    id="loading-container"
+                >
+                    <div class="spinner"></div>
+
+                    <p>Carregando clientes...</p>
+                </div>
+
+                <div
+                    class="table-container"
+                    id="table-container"
+                >
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Cliente</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Contato</th>
+                                <th>Endereço</th>
+                                <th>Status</th>
+                                <th class="actions-column">
+                                    Ações
+                                </th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="clients-table-body"></tbody>
+
+                    </table>
+
+                </div>
+
+                <div
+                    class="empty-state"
+                    id="empty-state"
+                >
+                    <div class="empty-icon">
+                        👥
+                    </div>
+
+                    <h2>Nenhum cliente encontrado</h2>
+
+                    <p>
+                        Cadastre um cliente ou altere a pesquisa.
+                    </p>
+                </div>
+
+                <footer
+                    class="pagination"
+                    id="pagination-container"
+                >
+
+                    <p id="pagination-information">
+                        Página 1 de 1
+                    </p>
+
+                    <div class="pagination-actions">
+
+                        <button
+                            type="button"
+                            class="pagination-button"
+                            id="previous-page-button"
+                        >
+                            Anterior
+                        </button>
+
+                        <button
+                            type="button"
+                            class="pagination-button"
+                            id="next-page-button"
+                        >
+                            Próxima
+                        </button>
+
+                    </div>
+
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <div
+        class="modal-overlay"
+        id="client-modal"
+        aria-hidden="true"
+    >
+
+        <section
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+        >
+
+            <header class="modal-header">
+
+                <div>
+                    <h2 id="modal-title">
+                        Novo cliente
+                    </h2>
+
+                    <p>
+                        Preencha os dados do cliente.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="close-modal-button"
+                    id="close-modal-button"
+                    aria-label="Fechar formulário"
+                >
+                    ×
+                </button>
+
+            </header>
+
+            <div
+                class="modal-message"
+                id="modal-message"
+                role="alert"
+            ></div>
+
+            <form
+                id="client-form"
+                class="client-form"
+                novalidate
+            >
+
+                <input
+                    type="hidden"
+                    id="client-id"
+                >
+
+                <div class="form-group full-width">
+
+                    <label for="client-name">
+                        Nome do cliente *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="client-name"
+                        placeholder="Digite o nome do cliente"
+                        autocomplete="name"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="client-name-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="client-document">
+                        CPF ou CNPJ *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="client-document"
+                        placeholder="Digite o CPF ou CNPJ"
+                        inputmode="numeric"
+                        maxlength="18"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="client-document-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="client-phone">
+                        Telefone
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="client-phone"
+                        placeholder="(11) 99999-9999"
+                        maxlength="15"
+                        autocomplete="tel"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="client-phone-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group full-width">
+
+                    <label for="client-email">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="client-email"
+                        placeholder="cliente@email.com"
+                        autocomplete="email"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="client-email-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group full-width">
+
+                    <label for="client-address">
+                        Endereço
+                    </label>
+
+                    <input
+                        type="text"
+                        id="client-address"
+                        placeholder="Rua, número, bairro e cidade"
+                        autocomplete="street-address"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="client-address-error"
+                    ></small>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        id="cancel-button"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                        id="save-button"
+                    >
+                        Salvar cliente
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </section>
+
+    </div>
+
+    <div
+        class="confirmation-overlay"
+        id="confirmation-modal"
+        aria-hidden="true"
+    >
+
+        <section class="confirmation-modal">
+
+            <div
+                class="confirmation-icon"
+                id="confirmation-icon"
+            >
+                ⚠️
+            </div>
+
+            <h2 id="confirmation-title">
+                Inativar cliente
+            </h2>
+
+            <p id="confirmation-text">
+                Tem certeza de que deseja realizar esta ação?
+            </p>
+
+            <div class="confirmation-actions">
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    id="cancel-confirmation-button"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    class="confirm-button"
+                    id="confirm-action-button"
+                >
+                    Confirmar
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <script src="../js/clientes.js"></script>
+
+</body>
+
+</html>

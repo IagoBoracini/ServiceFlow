@@ -1,8 +1,8 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.ClienteRequest;
-import com.serviceflow.dto.ClienteResponse;
-import com.serviceflow.service.ClienteService;
+import com.ServiceFlow.dto.ClienteRequest;
+import com.ServiceFlow.dto.ClienteResponse;
+import com.ServiceFlow.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

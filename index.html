@@ -3,79 +3,295 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ServiceFlow</title>
-    <link rel="stylesheet" href="frontend/css/style.css">
+
+    <title>Cadastro | ServiceFlow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="frontend/css/cadastro.css">
 </head>
 
 <body>
-    <main class="container">
-        <section class="hero">
-            <h1 class="title">⚙️ ServiceFlow</h1>
-            <div class="presentation">
-                <div class="hero-text">
-                    <p>Gestão inteligente para serviços técnicos</p>
-                    <p>Centralize chamados, acompanhe atendimentos e organize sua equipe de forma eficiente</p>
+
+    <main class="register-page">
+
+        <section class="presentation-section">
+
+            <div class="presentation-content">
+
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">⚙️</span>
+                    <span>ServiceFlow</span>
+                </a>
+
+                <div class="presentation-text">
+
+                    <span class="presentation-badge">
+                        Gestão de serviços técnicos
+                    </span>
+
+                    <h1>
+                        Organize sua empresa de forma simples e eficiente
+                    </h1>
+
+                    <p>
+                        Cadastre sua empresa e centralize clientes,
+                        funcionários, chamados e ordens de serviço em
+                        um único sistema.
+                    </p>
+
                 </div>
-                <div class="topics">
-                    <div class="topic">
-                        <h3>📋 Organização</h3>
-                        <p>Tenha todos os chamados em um único lugar</p>
-                    </div>
-                    <div class="topic">
-                        <h3>📈 Produtividade</h3>
-                        <p>Acompanhe o desempenho da sua equipe</p>
-                    </div>
-                    <div class="topic">
-                        <h3>🛡️ Controle</h3>
-                        <p>Relatórios e indicadores para melhores decisões</p>
-                    </div>
+
+                <div class="benefits">
+
+                    <article class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <h2>Organização completa</h2>
+
+                            <p>
+                                Tenha todas as informações da sua empresa
+                                em um só lugar.
+                            </p>
+                        </div>
+
+                    </article>
+
+                    <article class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <h2>Acompanhamento de chamados</h2>
+
+                            <p>
+                                Acompanhe cada atendimento desde a abertura
+                                até a finalização.
+                            </p>
+                        </div>
+
+                    </article>
+
+                    <article class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <h2>Controle da equipe</h2>
+
+                            <p>
+                                Gerencie funcionários, técnicos e ordens
+                                de serviço.
+                            </p>
+                        </div>
+
+                    </article>
+
                 </div>
+
             </div>
+
         </section>
 
-        <section class="form"">
-            <div class="form-container">
-                <h2 class="title">⚙️ ServiceFlow</h2>
-                <div class="form-header">
-                    <p>Criar sua conta</p>
-                    <p>Preencha os dados abaixo para começar</p>
-                </div>
-                <form id="formCadastro">
+        <section class="form-section">
+
+            <div class="register-card">
+
+                <header class="register-header">
+
+                    <h2>Criar sua conta</h2>
+
+                    <p>
+                        Preencha os dados abaixo para começar.
+                    </p>
+
+                </header>
+
+                <div class="register-message" id="register-message" role="alert"></div>
+
+                <form class="register-form" id="register-form" novalidate>
+
                     <div class="form-group">
-                        <label for="usuario">Nome Completo</label>
-                        <input type="text" id="usuario" name="usuario" placeholder="Seu nome" required
+
+                        <label for="nome">
+                            Nome completo
+                        </label>
+
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo"
                             autocomplete="name">
+
+                        <small class="field-error" id="nome-error"></small>
+
                     </div>
+
                     <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="Digite seu E-mail" required
+
+                        <label for="email">
+                            E-mail
+                        </label>
+
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail"
                             autocomplete="email">
+
+                        <small class="field-error" id="email-error"></small>
+
                     </div>
+
                     <div class="form-group">
-                        <label for="empresa">Empresa</label>
-                        <input type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa" required>
-                        <div id="sugestoes"></div>
+
+                        <label for="empresa">
+                            Nome da empresa
+                        </label>
+
+                        <input type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa"
+                            autocomplete="organization">
+
+                        <small class="field-error" id="empresa-error"></small>
+
                     </div>
+
                     <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required
-                            minlength="8" autocomplete="new-password">
+
+                        <label for="cnpj">
+                            CNPJ
+                        </label>
+
+                        <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" inputmode="numeric"
+                            maxlength="18">
+
+                        <small class="field-error" id="cnpj-error"></small>
+
                     </div>
+
                     <div class="form-group">
-                        <label for="confirmarsenha">Confirmar Senha</label>
-                        <input type="password" id="confirmarsenha" name="confirmarsenha"
-                            placeholder="Confirme sua senha" required>
+
+                        <label for="telefone-empresa">
+                            Telefone da empresa
+                            <span class="optional-label">
+                                (opcional)
+                            </span>
+                        </label>
+
+                        <input type="tel" id="telefone-empresa" name="telefoneEmpresa" placeholder="(11) 99999-9999"
+                            autocomplete="tel" maxlength="15">
+
+                        <small class="field-error" id="telefone-empresa-error"></small>
+
                     </div>
-                    <button class="sign-up" type="submit">Cadastrar</button>
+
+                    <div class="form-group">
+
+                        <label for="email-empresa">
+                            E-mail da empresa
+                        </label>
+
+                        <input type="email" id="email-empresa" name="emailEmpresa" placeholder="contato@suaempresa.com"
+                            autocomplete="email">
+
+                        <small class="field-error" id="email-empresa-error"></small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="senha">
+                            Senha
+                        </label>
+
+                        <div class="password-container">
+
+                            <input type="password" id="senha" name="senha" placeholder="Crie uma senha"
+                                autocomplete="new-password">
+
+                            <button type="button" class="show-password" data-input="senha" aria-label="Mostrar senha">
+                                👁
+                            </button>
+
+                        </div>
+
+                        <small class="password-help">
+                            Use pelo menos 6 caracteres.
+                        </small>
+
+                        <small class="field-error" id="senha-error"></small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="confirmar-senha">
+                            Confirmar senha
+                        </label>
+
+                        <div class="password-container">
+
+                            <input type="password" id="confirmar-senha" name="confirmarSenha"
+                                placeholder="Digite a senha novamente" autocomplete="new-password">
+
+                            <button type="button" class="show-password" data-input="confirmar-senha"
+                                aria-label="Mostrar senha">
+                                👁
+                            </button>
+
+                        </div>
+
+                        <small class="field-error" id="confirmar-senha-error"></small>
+
+                    </div>
+
+                    <label class="terms-container">
+
+                        <input type="checkbox" id="termos" name="termos">
+
+                        <span>
+                            Concordo com os termos de uso e com a
+                            política de privacidade.
+                        </span>
+
+                    </label>
+
+                    <small class="field-error" id="termos-error"></small>
+
+                    <button type="submit" class="register-button" id="register-button">
+                        Criar conta
+                    </button>
+
                 </form>
-                <div class="form-login">
-                    <p>Já possui conta?</p><a href="login.html">Faça login</a>
-                </div>
+
+                <footer class="register-footer">
+
+                    <p>
+                        Já possui uma conta?
+
+                        <a href="login.html">
+                            Entrar
+                        </a>
+                    </p>
+
+                </footer>
+
             </div>
+
         </section>
+
     </main>
+
+    <script src="frontend/js/cadastro.js"></script>
+
 </body>
- <script src="frontend/js/script.js"></script>
-</html> 
+
+</html>

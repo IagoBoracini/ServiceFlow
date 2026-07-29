@@ -1,4 +1,4 @@
-package com.serviceflow.model;
+package com.ServiceFlow.model;
 
 import jakarta.persistence.*;
 

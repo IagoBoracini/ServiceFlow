@@ -1,15 +1,19 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.FuncionarioEquipeResponse;
-import com.serviceflow.dto.FuncionarioResponse;
-import com.serviceflow.dto.MensagemResponse;
-import com.serviceflow.dto.SolicitacaoFuncionarioRequest;
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.Empresa;
-import com.serviceflow.model.StatusUsuario;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.EmpresaRepository;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.dto.FuncionarioEquipeResponse;
+import com.ServiceFlow.dto.FuncionarioResponse;
+import com.ServiceFlow.dto.MensagemResponse;
+import com.ServiceFlow.dto.SolicitacaoFuncionarioRequest;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.Empresa;
+import com.ServiceFlow.model.StatusUsuario;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.EmpresaRepository;
+import com.ServiceFlow.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,19 +43,28 @@ public class FuncionarioService {
             SolicitacaoFuncionarioRequest request
     ) {
 
-        if (request.getNome() == null || request.getNome().isBlank()) {
+        if (
+                request.getNome() == null ||
+                request.getNome().isBlank()
+        ) {
             throw new IllegalArgumentException(
                     "O nome é obrigatório."
             );
         }
 
-        if (request.getEmail() == null || request.getEmail().isBlank()) {
+        if (
+                request.getEmail() == null ||
+                request.getEmail().isBlank()
+        ) {
             throw new IllegalArgumentException(
                     "O e-mail é obrigatório."
             );
         }
 
-        if (request.getSenha() == null || request.getSenha().length() < 6) {
+        if (
+                request.getSenha() == null ||
+                request.getSenha().length() < 6
+        ) {
             throw new IllegalArgumentException(
                     "A senha deve possuir pelo menos 6 caracteres."
             );
@@ -73,9 +86,15 @@ public class FuncionarioService {
         }
 
         String emailNormalizado =
-                request.getEmail().trim().toLowerCase();
+                request.getEmail()
+                        .trim()
+                        .toLowerCase();
 
-        if (usuarioRepository.existsByEmail(emailNormalizado)) {
+        if (
+                usuarioRepository.existsByEmail(
+                        emailNormalizado
+                )
+        ) {
             throw new IllegalArgumentException(
                     "Já existe um usuário cadastrado com este e-mail."
             );
@@ -91,18 +110,35 @@ public class FuncionarioService {
 
         Usuario funcionario = new Usuario();
 
-        funcionario.setNome(request.getNome().trim());
-        funcionario.setEmail(emailNormalizado);
-
-        funcionario.setSenha(
-                passwordEncoder.encode(request.getSenha())
+        funcionario.setNome(
+                request.getNome().trim()
         );
 
-        funcionario.setCargo(request.getCargo());
-        funcionario.setStatus(StatusUsuario.PENDENTE);
-        funcionario.setEmpresa(empresa);
+        funcionario.setEmail(
+                emailNormalizado
+        );
 
-        usuarioRepository.save(funcionario);
+        funcionario.setSenha(
+                passwordEncoder.encode(
+                        request.getSenha()
+                )
+        );
+
+        funcionario.setCargo(
+                request.getCargo()
+        );
+
+        funcionario.setStatus(
+                StatusUsuario.PENDENTE
+        );
+
+        funcionario.setEmpresa(
+                empresa
+        );
+
+        usuarioRepository.save(
+                funcionario
+        );
 
         return new MensagemResponse(
                 "Solicitação enviada. Aguarde a aprovação do administrador."
@@ -115,11 +151,15 @@ public class FuncionarioService {
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
         return usuarioRepository
                 .findByEmpresaIdAndStatus(
-                        administrador.getEmpresa().getId(),
+                        administrador
+                                .getEmpresa()
+                                .getId(),
                         StatusUsuario.PENDENTE
                 )
                 .stream()
@@ -128,24 +168,41 @@ public class FuncionarioService {
     }
 
     @Transactional(readOnly = true)
-    public List<FuncionarioEquipeResponse> listarFuncionarios(
+    public Page<FuncionarioEquipeResponse> listarFuncionarios(
+            int pagina,
+            int tamanho,
             Authentication authentication
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
-        Long empresaId =
-                administrador.getEmpresa().getId();
+        validarPaginacao(
+                pagina,
+                tamanho
+        );
 
-        return usuarioRepository
-                .findByEmpresaIdOrderByNomeAsc(empresaId)
-                .stream()
-                .filter(usuario ->
-                        usuario.getCargo() != Cargo.ADMIN
-                )
-                .map(this::converterParaEquipeResponse)
-                .toList();
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamanho,
+                Sort.by("nome").ascending()
+        );
+
+        Page<Usuario> funcionarios =
+                usuarioRepository
+                        .findByEmpresaIdAndCargoNot(
+                                administrador
+                                        .getEmpresa()
+                                        .getId(),
+                                Cargo.ADMIN,
+                                pageable
+                        );
+
+        return funcionarios.map(
+                this::converterParaEquipeResponse
+        );
     }
 
     @Transactional
@@ -155,7 +212,9 @@ public class FuncionarioService {
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
         Usuario funcionario =
                 buscarFuncionarioDaEmpresa(
@@ -163,15 +222,22 @@ public class FuncionarioService {
                         administrador
                 );
 
-        if (funcionario.getStatus() != StatusUsuario.PENDENTE) {
+        if (
+                funcionario.getStatus() !=
+                StatusUsuario.PENDENTE
+        ) {
             throw new IllegalArgumentException(
                     "Este usuário não possui uma solicitação pendente."
             );
         }
 
-        funcionario.setStatus(StatusUsuario.ATIVO);
+        funcionario.setStatus(
+                StatusUsuario.ATIVO
+        );
 
-        usuarioRepository.save(funcionario);
+        usuarioRepository.save(
+                funcionario
+        );
 
         return new MensagemResponse(
                 "Funcionário aprovado com sucesso."
@@ -185,7 +251,9 @@ public class FuncionarioService {
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
         Usuario funcionario =
                 buscarFuncionarioDaEmpresa(
@@ -193,15 +261,22 @@ public class FuncionarioService {
                         administrador
                 );
 
-        if (funcionario.getStatus() != StatusUsuario.PENDENTE) {
+        if (
+                funcionario.getStatus() !=
+                StatusUsuario.PENDENTE
+        ) {
             throw new IllegalArgumentException(
                     "Este usuário não possui uma solicitação pendente."
             );
         }
 
-        funcionario.setStatus(StatusUsuario.REJEITADO);
+        funcionario.setStatus(
+                StatusUsuario.REJEITADO
+        );
 
-        usuarioRepository.save(funcionario);
+        usuarioRepository.save(
+                funcionario
+        );
 
         return new MensagemResponse(
                 "Solicitação rejeitada."
@@ -215,7 +290,9 @@ public class FuncionarioService {
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
         Usuario funcionario =
                 buscarFuncionarioDaEmpresa(
@@ -223,27 +300,40 @@ public class FuncionarioService {
                         administrador
                 );
 
-        if (funcionario.getStatus() == StatusUsuario.INATIVO) {
+        if (
+                funcionario.getStatus() ==
+                StatusUsuario.INATIVO
+        ) {
             throw new IllegalArgumentException(
                     "Este funcionário já está inativo."
             );
         }
 
-        if (funcionario.getStatus() == StatusUsuario.PENDENTE) {
+        if (
+                funcionario.getStatus() ==
+                StatusUsuario.PENDENTE
+        ) {
             throw new IllegalArgumentException(
                     "Uma solicitação pendente deve ser aprovada ou rejeitada."
             );
         }
 
-        if (funcionario.getStatus() == StatusUsuario.REJEITADO) {
+        if (
+                funcionario.getStatus() ==
+                StatusUsuario.REJEITADO
+        ) {
             throw new IllegalArgumentException(
                     "Um usuário rejeitado não pode ser inativado."
             );
         }
 
-        funcionario.setStatus(StatusUsuario.INATIVO);
+        funcionario.setStatus(
+                StatusUsuario.INATIVO
+        );
 
-        usuarioRepository.save(funcionario);
+        usuarioRepository.save(
+                funcionario
+        );
 
         return new MensagemResponse(
                 "Funcionário inativado com sucesso."
@@ -257,7 +347,9 @@ public class FuncionarioService {
     ) {
 
         Usuario administrador =
-                buscarAdministradorAutenticado(authentication);
+                buscarAdministradorAutenticado(
+                        authentication
+                );
 
         Usuario funcionario =
                 buscarFuncionarioDaEmpresa(
@@ -265,15 +357,22 @@ public class FuncionarioService {
                         administrador
                 );
 
-        if (funcionario.getStatus() != StatusUsuario.INATIVO) {
+        if (
+                funcionario.getStatus() !=
+                StatusUsuario.INATIVO
+        ) {
             throw new IllegalArgumentException(
                     "Somente funcionários inativos podem ser reativados."
             );
         }
 
-        funcionario.setStatus(StatusUsuario.ATIVO);
+        funcionario.setStatus(
+                StatusUsuario.ATIVO
+        );
 
-        usuarioRepository.save(funcionario);
+        usuarioRepository.save(
+                funcionario
+        );
 
         return new MensagemResponse(
                 "Funcionário reativado com sucesso."
@@ -286,7 +385,8 @@ public class FuncionarioService {
 
         if (
                 authentication == null ||
-                authentication.getName() == null
+                authentication.getName() == null ||
+                authentication.getName().isBlank()
         ) {
             throw new IllegalArgumentException(
                     "Usuário não autenticado."
@@ -294,22 +394,36 @@ public class FuncionarioService {
         }
 
         Usuario usuario = usuarioRepository
-                .findByEmail(authentication.getName())
+                .findByEmail(
+                        authentication.getName()
+                )
                 .orElseThrow(
                         () -> new IllegalArgumentException(
                                 "Usuário autenticado não encontrado."
                         )
                 );
 
-        if (usuario.getCargo() != Cargo.ADMIN) {
+        if (
+                usuario.getCargo() !=
+                Cargo.ADMIN
+        ) {
             throw new IllegalArgumentException(
                     "Somente administradores podem realizar esta operação."
             );
         }
 
-        if (usuario.getStatus() != StatusUsuario.ATIVO) {
+        if (
+                usuario.getStatus() !=
+                StatusUsuario.ATIVO
+        ) {
             throw new IllegalArgumentException(
                     "O administrador não está ativo."
+            );
+        }
+
+        if (usuario.getEmpresa() == null) {
+            throw new IllegalArgumentException(
+                    "O administrador não está vinculado a uma empresa."
             );
         }
 
@@ -322,26 +436,22 @@ public class FuncionarioService {
     ) {
 
         Usuario funcionario = usuarioRepository
-                .findById(funcionarioId)
+                .findByIdAndEmpresaId(
+                        funcionarioId,
+                        administrador
+                                .getEmpresa()
+                                .getId()
+                )
                 .orElseThrow(
                         () -> new IllegalArgumentException(
                                 "Funcionário não encontrado."
                         )
                 );
 
-        Long empresaDoAdministrador =
-                administrador.getEmpresa().getId();
-
-        Long empresaDoFuncionario =
-                funcionario.getEmpresa().getId();
-
-        if (!empresaDoAdministrador.equals(empresaDoFuncionario)) {
-            throw new IllegalArgumentException(
-                    "Você não pode gerenciar funcionários de outra empresa."
-            );
-        }
-
-        if (funcionario.getCargo() == Cargo.ADMIN) {
+        if (
+                funcionario.getCargo() ==
+                Cargo.ADMIN
+        ) {
             throw new IllegalArgumentException(
                     "Esta operação não pode ser realizada em um administrador."
             );
@@ -376,5 +486,26 @@ public class FuncionarioService {
                 usuario.getEmpresa().getId(),
                 usuario.getEmpresa().getNome()
         );
+    }
+
+    private void validarPaginacao(
+            int pagina,
+            int tamanho
+    ) {
+
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "A página não pode ser negativa."
+            );
+        }
+
+        if (
+                tamanho < 1 ||
+                tamanho > 100
+        ) {
+            throw new IllegalArgumentException(
+                    "O tamanho da página deve estar entre 1 e 100."
+            );
+        }
     }
 }

@@ -1,6 +1,6 @@
-package com.serviceflow.exception;
+package com.ServiceFlow.exception;
 
-import com.serviceflow.dto.ErroResponse;
+import com.ServiceFlow.dto.ErroResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

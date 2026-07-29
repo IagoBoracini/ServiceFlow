@@ -1,11 +1,11 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.ClienteRequest;
-import com.serviceflow.dto.ClienteResponse;
-import com.serviceflow.model.Cliente;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.ClienteRepository;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.dto.ClienteRequest;
+import com.ServiceFlow.dto.ClienteResponse;
+import com.ServiceFlow.model.Cliente;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.ClienteRepository;
+import com.ServiceFlow.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

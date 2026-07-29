@@ -1,6 +1,6 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.Cargo;
+import com.ServiceFlow.model.Cargo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

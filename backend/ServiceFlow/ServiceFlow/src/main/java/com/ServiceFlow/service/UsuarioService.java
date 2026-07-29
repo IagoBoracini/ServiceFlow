@@ -1,7 +1,7 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

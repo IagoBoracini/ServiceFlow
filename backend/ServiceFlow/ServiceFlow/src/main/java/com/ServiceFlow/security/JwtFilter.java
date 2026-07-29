@@ -1,7 +1,7 @@
-package com.serviceflow.security;
+package com.ServiceFlow.security;
 
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

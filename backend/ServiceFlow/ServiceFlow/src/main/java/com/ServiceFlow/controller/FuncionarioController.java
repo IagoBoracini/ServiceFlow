@@ -1,17 +1,18 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.FuncionarioEquipeResponse;
-import com.serviceflow.dto.FuncionarioResponse;
-import com.serviceflow.dto.MensagemResponse;
-import com.serviceflow.dto.SolicitacaoFuncionarioRequest;
-import com.serviceflow.service.FuncionarioService;
+import com.ServiceFlow.dto.FuncionarioEquipeResponse;
+import com.ServiceFlow.dto.FuncionarioResponse;
+import com.ServiceFlow.dto.MensagemResponse;
+import com.ServiceFlow.dto.SolicitacaoFuncionarioRequest;
+import com.ServiceFlow.service.FuncionarioService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -28,11 +29,14 @@ public class FuncionarioController {
     @PostMapping("/solicitacoes")
     @ResponseStatus(HttpStatus.CREATED)
     public MensagemResponse solicitarEntrada(
-           @Valid @RequestBody SolicitacaoFuncionarioRequest request
+            @Valid
+            @RequestBody
+            SolicitacaoFuncionarioRequest request
     ) {
 
-        return funcionarioService.solicitarEntrada(request);
-
+        return funcionarioService.solicitarEntrada(
+                request
+        );
     }
 
     @GetMapping("/pendentes")
@@ -44,19 +48,26 @@ public class FuncionarioController {
         return funcionarioService.listarPendentes(
                 authentication
         );
-
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<FuncionarioEquipeResponse> listarFuncionarios(
+    public Page<FuncionarioEquipeResponse> listarFuncionarios(
+
+            @RequestParam(defaultValue = "0")
+            int pagina,
+
+            @RequestParam(defaultValue = "10")
+            int tamanho,
+
             Authentication authentication
     ) {
 
         return funcionarioService.listarFuncionarios(
+                pagina,
+                tamanho,
                 authentication
         );
-
     }
 
     @PatchMapping("/{id}/aprovar")
@@ -70,7 +81,6 @@ public class FuncionarioController {
                 id,
                 authentication
         );
-
     }
 
     @PatchMapping("/{id}/rejeitar")
@@ -84,7 +94,6 @@ public class FuncionarioController {
                 id,
                 authentication
         );
-
     }
 
     @PatchMapping("/{id}/inativar")
@@ -98,7 +107,6 @@ public class FuncionarioController {
                 id,
                 authentication
         );
-
     }
 
     @PatchMapping("/{id}/reativar")
@@ -112,7 +120,5 @@ public class FuncionarioController {
                 id,
                 authentication
         );
-
     }
-
 }

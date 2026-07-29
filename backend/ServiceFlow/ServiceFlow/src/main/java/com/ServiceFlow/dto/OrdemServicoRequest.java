@@ -1,4 +1,4 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
 import jakarta.validation.constraints.NotNull;
 

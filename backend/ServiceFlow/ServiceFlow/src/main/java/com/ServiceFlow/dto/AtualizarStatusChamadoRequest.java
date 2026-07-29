@@ -1,6 +1,6 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.StatusChamado;
+import com.ServiceFlow.model.StatusChamado;
 import jakarta.validation.constraints.NotNull;
 
 public class AtualizarStatusChamadoRequest {

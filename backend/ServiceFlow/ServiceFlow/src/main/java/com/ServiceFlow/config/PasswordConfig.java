@@ -1,4 +1,4 @@
-package com.serviceflow.config;
+package com.ServiceFlow.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

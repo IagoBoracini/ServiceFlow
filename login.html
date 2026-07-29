@@ -3,68 +3,201 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login ServiceFlow</title>
-    <link rel="stylesheet" href="frontend/css/login.css">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | ServiceFlow</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="frontend/css/login.css"
+    >
 </head>
 
 <body>
+
     <main class="container">
+
         <section class="hero">
-            <h1 class="title">⚙️ ServiceFlow</h1>
+
+            <h1 class="title">
+                ⚙️ ServiceFlow
+            </h1>
+
             <div class="presentation">
+
                 <div class="hero-text">
-                    <p>Bem-vindo de volta ao ServiceFlow</p>
-                    <p>Acesse sua conta e continue gerenciando chamados, clientes e equipes em um só lugar.</p>
+
+                    <p>
+                        Bem-vindo de volta ao ServiceFlow
+                    </p>
+
+                    <p>
+                        Acesse sua conta e continue gerenciando
+                        chamados, clientes e equipes em um só lugar.
+                    </p>
+
                 </div>
+
                 <div class="topics">
+
                     <div class="topic">
+
                         <h3>⚡ Agilidade</h3>
-                        <p>Retome seu trabalho exatamente de onde parou.</p>
+
+                        <p>
+                            Retome seu trabalho exatamente de onde parou.
+                        </p>
+
                     </div>
+
                     <div class="topic">
+
                         <h3>📊 Gestão</h3>
-                        <p>Visualize seus atendimentos e acompanhe cada serviço.</p>
+
+                        <p>
+                            Visualize seus atendimentos e acompanhe
+                            cada serviço.
+                        </p>
+
                     </div>
+
                     <div class="topic">
+
                         <h3>🔒 Segurança</h3>
-                        <p>Seus dados protegidos com acesso seguro.</p>
+
+                        <p>
+                            Seus dados protegidos com acesso seguro.
+                        </p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
         <section class="form">
+
             <div class="form-container">
-                <h2 class="title">⚙️ ServiceFlow</h2>
+
+                <h2 class="title">
+                    ⚙️ ServiceFlow
+                </h2>
+
                 <div class="form-header">
-                    <p>Bem-Vindo de volta!</p>
-                    <p>Faça login para começar</p>
+
+                    <p>Bem-vindo de volta!</p>
+
+                    <p>
+                        Faça login para começar
+                    </p>
+
                 </div>
-                <form>
+
+                <form id="form-login" novalidate>
+
                     <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="Digite seu E-mail" required
-                            autocomplete="email">
+
+                        <label for="email">
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Digite seu e-mail"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <span
+                            class="error-message"
+                            id="erro-email"
+                        ></span>
+
                     </div>
+
                     <div class="form-group">
-                        <label for="empresa">Empresa</label>
-                        <input type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa" required>
-                        <div id="sugestoes"></div>
+
+                        <label for="senha">
+                            Senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <span
+                            class="error-message"
+                            id="erro-senha"
+                        ></span>
+
                     </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required
-                            minlength="8" autocomplete="new-password">
-                    </div>
-                    <button class="sign-up" type="submit">Login</button>
+
+                    <div
+                        id="mensagem-login"
+                        class="login-message"
+                        role="alert"
+                        aria-live="polite"
+                    ></div>
+
+                    <button
+                        class="sign-up"
+                        id="botao-login"
+                        type="submit"
+                    >
+                        Entrar
+                    </button>
+
                     <div class="form-login">
-                        <p>Ainda não possui conta?</p><a href="index.html">Cadastre-se</a>
+
+                        <p>
+                            Ainda não possui conta?
+                        </p>
+
+                        <a href="index.html">
+                            Cadastre-se
+                        </a>
+
                     </div>
+
                 </form>
+
             </div>
+
         </section>
+
     </main>
+
+    <script src="frontend/js/login.js"></script>
+
 </body>
 
 </html>

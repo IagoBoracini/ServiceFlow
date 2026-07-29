@@ -1,8 +1,8 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
-import com.serviceflow.dto.LoginRequest;
-import com.serviceflow.dto.LoginResponse;
-import com.serviceflow.service.AuthService;
+import com.ServiceFlow.dto.LoginRequest;
+import com.ServiceFlow.dto.LoginResponse;
+import com.ServiceFlow.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 

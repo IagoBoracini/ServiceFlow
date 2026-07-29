@@ -1,25 +1,28 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.AtualizarOrdemServicoRequest;
-import com.serviceflow.dto.OrdemServicoRequest;
-import com.serviceflow.dto.OrdemServicoResponse;
-import com.serviceflow.model.Cargo;
-import com.serviceflow.model.Chamado;
-import com.serviceflow.model.OrdemServico;
-import com.serviceflow.model.StatusChamado;
-import com.serviceflow.model.StatusOrdemServico;
-import com.serviceflow.model.StatusUsuario;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.ChamadoRepository;
-import com.serviceflow.repository.OrdemServicoRepository;
-import com.serviceflow.repository.UsuarioRepository;
+import com.ServiceFlow.dto.AtualizarOrdemServicoRequest;
+import com.ServiceFlow.dto.OrdemServicoRequest;
+import com.ServiceFlow.dto.OrdemServicoResponse;
+import com.ServiceFlow.model.Cargo;
+import com.ServiceFlow.model.Chamado;
+import com.ServiceFlow.model.OrdemServico;
+import com.ServiceFlow.model.StatusChamado;
+import com.ServiceFlow.model.StatusOrdemServico;
+import com.ServiceFlow.model.StatusUsuario;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.ChamadoRepository;
+import com.ServiceFlow.repository.OrdemServicoRepository;
+import com.ServiceFlow.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -77,13 +80,16 @@ public class OrdemServicoService {
             );
         }
 
-        if (ordemServicoRepository.existsByChamadoId(chamado.getId())) {
+        if (ordemServicoRepository.existsByChamadoId(
+                chamado.getId()
+        )) {
             throw new IllegalArgumentException(
                     "Este chamado já possui uma ordem de serviço."
             );
         }
 
-        Usuario tecnico = chamado.getTecnicoResponsavel();
+        Usuario tecnico =
+                chamado.getTecnicoResponsavel();
 
         if (tecnico.getStatus() != StatusUsuario.ATIVO) {
             throw new IllegalArgumentException(
@@ -91,71 +97,94 @@ public class OrdemServicoService {
             );
         }
 
-        OrdemServico ordemServico = new OrdemServico();
+        OrdemServico ordemServico =
+                new OrdemServico();
 
-        ordemServico.setNumero(gerarNumero());
-        ordemServico.setEmpresa(usuarioAutenticado.getEmpresa());
-        ordemServico.setChamado(chamado);
-        ordemServico.setTecnico(tecnico);
-        ordemServico.setCriadoPor(usuarioAutenticado);
+        ordemServico.setNumero(
+                gerarNumero()
+        );
+
+        ordemServico.setEmpresa(
+                usuarioAutenticado.getEmpresa()
+        );
+
+        ordemServico.setChamado(
+                chamado
+        );
+
+        ordemServico.setTecnico(
+                tecnico
+        );
+
+        ordemServico.setCriadoPor(
+                usuarioAutenticado
+        );
 
         OrdemServico ordemSalva =
-                ordemServicoRepository.save(ordemServico);
+                ordemServicoRepository.save(
+                        ordemServico
+                );
 
         if (chamado.getStatus() == StatusChamado.ABERTO) {
-            chamado.setStatus(StatusChamado.EM_ANDAMENTO);
-            chamadoRepository.save(chamado);
+
+            chamado.setStatus(
+                    StatusChamado.EM_ANDAMENTO
+            );
+
+            chamadoRepository.save(
+                    chamado
+            );
         }
 
-        return converterParaResponse(ordemSalva);
+        return converterParaResponse(
+                ordemSalva
+        );
     }
 
     @Transactional(readOnly = true)
-    public List<OrdemServicoResponse> listar(
+    public Page<OrdemServicoResponse> listar(
             StatusOrdemServico status,
+            int pagina,
+            int tamanho,
             Authentication authentication
     ) {
 
         Usuario usuario =
                 buscarUsuarioAutenticado(authentication);
 
-        List<OrdemServico> ordens;
+        validarPaginacao(
+                pagina,
+                tamanho
+        );
+
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamanho,
+                Sort.by("dataCriacao").descending()
+        );
+
+        Page<OrdemServico> ordens;
 
         if (usuario.getCargo() == Cargo.TECNICO) {
 
-            if (status != null) {
-                ordens = ordemServicoRepository
-                        .findByTecnicoIdAndStatusOrderByDataCriacaoDesc(
-                                usuario.getId(),
-                                status
-                        );
-            } else {
-                ordens = ordemServicoRepository
-                        .findByTecnicoIdOrderByDataCriacaoDesc(
-                                usuario.getId()
-                        );
-            }
+            ordens = buscarOrdensDoTecnico(
+                    usuario.getId(),
+                    status,
+                    pageable
+            );
 
         } else {
 
-            if (status != null) {
-                ordens = ordemServicoRepository
-                        .findByEmpresaIdAndStatusOrderByDataCriacaoDesc(
-                                usuario.getEmpresa().getId(),
-                                status
-                        );
-            } else {
-                ordens = ordemServicoRepository
-                        .findByEmpresaIdOrderByDataCriacaoDesc(
-                                usuario.getEmpresa().getId()
-                        );
-            }
+            ordens = buscarOrdensDaEmpresa(
+                    usuario.getEmpresa().getId(),
+                    status,
+                    pageable
+            );
         }
 
-        return ordens
-                .stream()
-                .map(this::converterParaResponse)
-                .toList();
+        return ordens.map(
+                this::converterParaResponse
+        );
     }
 
     @Transactional(readOnly = true)
@@ -178,7 +207,9 @@ public class OrdemServicoService {
                 usuario
         );
 
-        return converterParaResponse(ordemServico);
+        return converterParaResponse(
+                ordemServico
+        );
     }
 
     @Transactional
@@ -226,9 +257,13 @@ public class OrdemServicoService {
         );
 
         OrdemServico ordemAtualizada =
-                ordemServicoRepository.save(ordemServico);
+                ordemServicoRepository.save(
+                        ordemServico
+                );
 
-        return converterParaResponse(ordemAtualizada);
+        return converterParaResponse(
+                ordemAtualizada
+        );
     }
 
     @Transactional
@@ -265,6 +300,7 @@ public class OrdemServicoService {
             );
 
             if (ordemServico.getDataInicio() == null) {
+
                 ordemServico.setDataInicio(
                         LocalDateTime.now()
                 );
@@ -273,7 +309,9 @@ public class OrdemServicoService {
 
         if (novoStatus == StatusOrdemServico.FINALIZADA) {
 
-            validarDadosParaFinalizacao(ordemServico);
+            validarDadosParaFinalizacao(
+                    ordemServico
+            );
 
             ordemServico.setStatus(
                     StatusOrdemServico.FINALIZADA
@@ -294,7 +332,9 @@ public class OrdemServicoService {
                     LocalDateTime.now()
             );
 
-            chamadoRepository.save(chamado);
+            chamadoRepository.save(
+                    chamado
+            );
         }
 
         if (novoStatus == StatusOrdemServico.CANCELADA) {
@@ -303,17 +343,27 @@ public class OrdemServicoService {
                     StatusOrdemServico.CANCELADA
             );
 
-            ordemServico.setDataFinalizacao(null);
+            ordemServico.setDataFinalizacao(
+                    null
+            );
 
             Chamado chamado =
                     ordemServico.getChamado();
 
             if (chamado.getStatus() != StatusChamado.CANCELADO) {
-                chamado.setStatus(StatusChamado.ABERTO);
-                chamado.setDataConclusao(null);
+
+                chamado.setStatus(
+                        StatusChamado.ABERTO
+                );
+
+                chamado.setDataConclusao(
+                        null
+                );
             }
 
-            chamadoRepository.save(chamado);
+            chamadoRepository.save(
+                    chamado
+            );
         }
 
         if (novoStatus == StatusOrdemServico.ABERTA) {
@@ -322,14 +372,69 @@ public class OrdemServicoService {
                     StatusOrdemServico.ABERTA
             );
 
-            ordemServico.setDataInicio(null);
-            ordemServico.setDataFinalizacao(null);
+            ordemServico.setDataInicio(
+                    null
+            );
+
+            ordemServico.setDataFinalizacao(
+                    null
+            );
         }
 
         OrdemServico ordemAtualizada =
-                ordemServicoRepository.save(ordemServico);
+                ordemServicoRepository.save(
+                        ordemServico
+                );
 
-        return converterParaResponse(ordemAtualizada);
+        return converterParaResponse(
+                ordemAtualizada
+        );
+    }
+
+    private Page<OrdemServico> buscarOrdensDaEmpresa(
+            Long empresaId,
+            StatusOrdemServico status,
+            Pageable pageable
+    ) {
+
+        if (status != null) {
+
+            return ordemServicoRepository
+                    .findByEmpresaIdAndStatus(
+                            empresaId,
+                            status,
+                            pageable
+                    );
+        }
+
+        return ordemServicoRepository
+                .findByEmpresaId(
+                        empresaId,
+                        pageable
+                );
+    }
+
+    private Page<OrdemServico> buscarOrdensDoTecnico(
+            Long tecnicoId,
+            StatusOrdemServico status,
+            Pageable pageable
+    ) {
+
+        if (status != null) {
+
+            return ordemServicoRepository
+                    .findByTecnicoIdAndStatus(
+                            tecnicoId,
+                            status,
+                            pageable
+                    );
+        }
+
+        return ordemServicoRepository
+                .findByTecnicoId(
+                        tecnicoId,
+                        pageable
+                );
     }
 
     private void validarAlteracaoStatus(
@@ -337,6 +442,12 @@ public class OrdemServicoService {
             StatusOrdemServico novoStatus,
             Usuario usuario
     ) {
+
+        if (novoStatus == null) {
+            throw new IllegalArgumentException(
+                    "O novo status é obrigatório."
+            );
+        }
 
         StatusOrdemServico statusAtual =
                 ordemServico.getStatus();
@@ -380,15 +491,6 @@ public class OrdemServicoService {
         ) {
             throw new IllegalArgumentException(
                     "Somente uma ordem aberta pode ser iniciada."
-            );
-        }
-
-        if (
-                novoStatus == StatusOrdemServico.CANCELADA &&
-                usuario.getCargo() == Cargo.TECNICO
-        ) {
-            throw new IllegalStateException(
-                    "Somente administrador ou atendente pode cancelar uma ordem."
             );
         }
     }
@@ -460,7 +562,8 @@ public class OrdemServicoService {
 
         if (
                 authentication == null ||
-                authentication.getName() == null
+                authentication.getName() == null ||
+                authentication.getName().isBlank()
         ) {
             throw new IllegalArgumentException(
                     "Usuário não autenticado."
@@ -468,7 +571,9 @@ public class OrdemServicoService {
         }
 
         Usuario usuario = usuarioRepository
-                .findByEmail(authentication.getName())
+                .findByEmail(
+                        authentication.getName()
+                )
                 .orElseThrow(
                         () -> new IllegalArgumentException(
                                 "Usuário autenticado não encontrado."
@@ -493,24 +598,30 @@ public class OrdemServicoService {
     private String gerarNumero() {
 
         String ano =
-                String.valueOf(Year.now().getValue());
+                String.valueOf(
+                        Year.now().getValue()
+                );
 
-        String codigo;
+        String numero;
 
         do {
-            codigo = UUID.randomUUID()
+
+            String codigo = UUID.randomUUID()
                     .toString()
                     .replace("-", "")
                     .substring(0, 8)
                     .toUpperCase();
 
+            numero =
+                    "OS-" + ano + "-" + codigo;
+
         } while (
                 ordemServicoRepository.existsByNumero(
-                        "OS-" + ano + "-" + codigo
+                        numero
                 )
         );
 
-        return "OS-" + ano + "-" + codigo;
+        return numero;
     }
 
     private String normalizarTextoOpcional(
@@ -531,6 +642,18 @@ public class OrdemServicoService {
         Chamado chamado =
                 ordemServico.getChamado();
 
+        Long tecnicoId = null;
+        String tecnicoNome = null;
+
+        if (ordemServico.getTecnico() != null) {
+
+            tecnicoId =
+                    ordemServico.getTecnico().getId();
+
+            tecnicoNome =
+                    ordemServico.getTecnico().getNome();
+        }
+
         return new OrdemServicoResponse(
                 ordemServico.getId(),
                 ordemServico.getNumero(),
@@ -545,8 +668,26 @@ public class OrdemServicoService {
                 chamado.getTitulo(),
                 chamado.getCliente().getId(),
                 chamado.getCliente().getNome(),
-                ordemServico.getTecnico().getId(),
-                ordemServico.getTecnico().getNome()
+                tecnicoId,
+                tecnicoNome
         );
+    }
+
+    private void validarPaginacao(
+            int pagina,
+            int tamanho
+    ) {
+
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "A página não pode ser negativa."
+            );
+        }
+
+        if (tamanho < 1 || tamanho > 100) {
+            throw new IllegalArgumentException(
+                    "O tamanho da página deve estar entre 1 e 100."
+            );
+        }
     }
 }

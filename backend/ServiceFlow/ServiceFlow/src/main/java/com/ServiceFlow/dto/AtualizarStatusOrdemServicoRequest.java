@@ -1,6 +1,6 @@
-package com.serviceflow.dto;
+package com.ServiceFlow.dto;
 
-import com.serviceflow.model.StatusOrdemServico;
+import com.ServiceFlow.model.StatusOrdemServico;
 import jakarta.validation.constraints.NotNull;
 
 public class AtualizarStatusOrdemServicoRequest {

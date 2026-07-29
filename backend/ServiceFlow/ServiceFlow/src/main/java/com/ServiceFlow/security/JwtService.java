@@ -1,4 +1,4 @@
-package com.serviceflow.security;
+package com.ServiceFlow.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

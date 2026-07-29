@@ -1,4 +1,4 @@
-package com.serviceflow.controller;
+package com.ServiceFlow.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

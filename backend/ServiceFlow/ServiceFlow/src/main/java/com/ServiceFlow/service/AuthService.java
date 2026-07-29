@@ -1,13 +1,13 @@
-package com.serviceflow.service;
+package com.ServiceFlow.service;
 
-import com.serviceflow.dto.LoginRequest;
-import com.serviceflow.dto.LoginResponse;
-import com.serviceflow.model.Usuario;
-import com.serviceflow.repository.UsuarioRepository;
-import com.serviceflow.security.JwtService;
+import com.ServiceFlow.dto.LoginRequest;
+import com.ServiceFlow.dto.LoginResponse;
+import com.ServiceFlow.model.Usuario;
+import com.ServiceFlow.repository.UsuarioRepository;
+import com.ServiceFlow.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.serviceflow.model.StatusUsuario;
+import com.ServiceFlow.model.StatusUsuario;
 
 @Service
 public class AuthService {

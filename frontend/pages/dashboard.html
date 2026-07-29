@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | ServiceFlow</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-header">
+
+                <a href="dashboard.html" class="logo">
+                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-text">ServiceFlow</span>
+                </a>
+
+                <button
+                    type="button"
+                    class="close-sidebar"
+                    id="close-sidebar"
+                    aria-label="Fechar menu"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a
+                    href="dashboard.html"
+                    class="menu-item active"
+                >
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a
+                    href="clientes.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">👥</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a
+                    href="funcionarios.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">🧑‍💼</span>
+                    <span>Funcionários</span>
+                </a>
+
+                <a
+                    href="chamados.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">🎫</span>
+                    <span>Chamados</span>
+                </a>
+
+                <a
+                    href="ordens-servico.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">🛠️</span>
+                    <span>Ordens de serviço</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logout-button"
+                >
+                    <span>🚪</span>
+                    <span>Sair</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+        <div
+            class="sidebar-overlay"
+            id="sidebar-overlay"
+        ></div>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        type="button"
+                        class="menu-button"
+                        id="menu-button"
+                        aria-label="Abrir menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div>
+
+                        <h1>Dashboard</h1>
+
+                        <p>
+                            Visão geral dos serviços da empresa
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="user-area">
+
+                    <div class="user-information">
+
+                        <strong id="user-name">
+                            Usuário
+                        </strong>
+
+                        <span id="user-role">
+                            Carregando...
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="user-avatar"
+                        id="user-avatar"
+                    >
+                        U
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="welcome-section">
+
+                    <div>
+
+                        <h2 id="welcome-title">
+                            Bem-vindo ao ServiceFlow!
+                        </h2>
+
+                        <p>
+                            Acompanhe os principais dados da sua empresa.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="chamados.html"
+                        class="primary-button"
+                    >
+                        + Novo chamado
+                    </a>
+
+                </div>
+
+                <div
+                    class="dashboard-message"
+                    id="dashboard-message"
+                    role="alert"
+                ></div>
+
+                <section class="summary-grid">
+
+                    <article class="summary-card">
+
+                        <div class="card-icon">
+                            👥
+                        </div>
+
+                        <div class="card-content">
+
+                            <span class="card-label">
+                                Clientes ativos
+                            </span>
+
+                            <strong
+                                class="card-value"
+                                id="total-clientes"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="card-icon">
+                            🎫
+                        </div>
+
+                        <div class="card-content">
+
+                            <span class="card-label">
+                                Chamados abertos
+                            </span>
+
+                            <strong
+                                class="card-value"
+                                id="chamados-abertos"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="card-icon">
+                            ⏳
+                        </div>
+
+                        <div class="card-content">
+
+                            <span class="card-label">
+                                Em andamento
+                            </span>
+
+                            <strong
+                                class="card-value"
+                                id="chamados-andamento"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="card-icon">
+                            ✅
+                        </div>
+
+                        <div class="card-content">
+
+                            <span class="card-label">
+                                Ordens finalizadas
+                            </span>
+
+                            <strong
+                                class="card-value"
+                                id="ordens-finalizadas"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <section class="dashboard-grid">
+
+                    <article class="dashboard-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h2>Chamados recentes</h2>
+
+                                <p>
+                                    Últimos chamados registrados
+                                </p>
+
+                            </div>
+
+                            <a href="chamados.html">
+                                Ver todos
+                            </a>
+
+                        </div>
+
+                        <div class="table-container">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Cliente</th>
+                                        <th>Prioridade</th>
+                                        <th>Status</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="recent-tickets">
+
+                                    <tr>
+
+                                        <td colspan="4" class="empty-table">
+                                            Nenhum chamado encontrado.
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </article>
+
+                    <article class="dashboard-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h2>Ordens recentes</h2>
+
+                                <p>
+                                    Últimas ordens de serviço
+                                </p>
+
+                            </div>
+
+                            <a href="ordens-servico.html">
+                                Ver todas
+                            </a>
+
+                        </div>
+
+                        <div
+                            class="order-list"
+                            id="recent-orders"
+                        >
+
+                            <div class="empty-list">
+                                Nenhuma ordem encontrada.
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,8 +1,10 @@
-package com.serviceflow.repository;
+package com.ServiceFlow.repository;
 
-import com.serviceflow.model.Chamado;
-import com.serviceflow.model.PrioridadeChamado;
-import com.serviceflow.model.StatusChamado;
+import com.ServiceFlow.model.Chamado;
+import com.ServiceFlow.model.PrioridadeChamado;
+import com.ServiceFlow.model.StatusChamado;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -30,48 +32,51 @@ public interface ChamadoRepository
             Long empresaId
     );
 
-    List<Chamado> findByEmpresaIdOrderByDataAberturaDesc(
-            Long empresaId
-    );
-
-    List<Chamado> findByEmpresaIdAndStatusOrderByDataAberturaDesc(
+    Page<Chamado> findByEmpresaId(
             Long empresaId,
-            StatusChamado status
+            Pageable pageable
     );
 
-    List<Chamado> findByEmpresaIdAndPrioridadeOrderByDataAberturaDesc(
-            Long empresaId,
-            PrioridadeChamado prioridade
-    );
-
-    List<Chamado>
-    findByEmpresaIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+    Page<Chamado> findByEmpresaIdAndStatus(
             Long empresaId,
             StatusChamado status,
-            PrioridadeChamado prioridade
+            Pageable pageable
     );
 
-    List<Chamado>
-    findByTecnicoResponsavelIdOrderByDataAberturaDesc(
-            Long tecnicoId
+    Page<Chamado> findByEmpresaIdAndPrioridade(
+            Long empresaId,
+            PrioridadeChamado prioridade,
+            Pageable pageable
     );
 
-    List<Chamado>
-    findByTecnicoResponsavelIdAndStatusOrderByDataAberturaDesc(
+    Page<Chamado> findByEmpresaIdAndStatusAndPrioridade(
+            Long empresaId,
+            StatusChamado status,
+            PrioridadeChamado prioridade,
+            Pageable pageable
+    );
+
+    Page<Chamado> findByTecnicoResponsavelId(
             Long tecnicoId,
-            StatusChamado status
+            Pageable pageable
     );
 
-    List<Chamado>
-    findByTecnicoResponsavelIdAndPrioridadeOrderByDataAberturaDesc(
-            Long tecnicoId,
-            PrioridadeChamado prioridade
-    );
-
-    List<Chamado>
-    findByTecnicoResponsavelIdAndStatusAndPrioridadeOrderByDataAberturaDesc(
+    Page<Chamado> findByTecnicoResponsavelIdAndStatus(
             Long tecnicoId,
             StatusChamado status,
-            PrioridadeChamado prioridade
+            Pageable pageable
+    );
+
+    Page<Chamado> findByTecnicoResponsavelIdAndPrioridade(
+            Long tecnicoId,
+            PrioridadeChamado prioridade,
+            Pageable pageable
+    );
+
+    Page<Chamado> findByTecnicoResponsavelIdAndStatusAndPrioridade(
+            Long tecnicoId,
+            StatusChamado status,
+            PrioridadeChamado prioridade,
+            Pageable pageable
     );
 }
