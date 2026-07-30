@@ -85,7 +85,7 @@ async function realizarLogin(evento) {
         );
 
         setTimeout(() => {
-            window.location.href = "pages/dashboard.html";
+            window.location.href = "./frontend/pages/dashboard.html";
         }, 700);
 
     } catch (erro) {
@@ -192,11 +192,10 @@ async function lerResposta(resposta) {
 }
 
 function verificarUsuarioLogado() {
-    const token =
-        localStorage.getItem("serviceflow_token");
+const token = localStorage.getItem("token");
 
-    if (token) {
-        window.location.href =
-            "pages/dashboard.html";
-    }
+if (token) {
+    window.location.href =
+        "./frontend/pages/dashboard.html";
+}
 }
