@@ -32,32 +32,109 @@ public class EmpresaService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // MÉTODO QUE JÁ EXISTIA
     @Transactional
     public CadastroEmpresaResponse cadastrarEmpresa(
             CadastroEmpresaRequest request
     ) {
 
-        // Aqui continua todo o código do cadastro da empresa...
+        String cnpjLimpo = limparNumero(request.getCnpj());
 
-        return null; // Não coloque isto no seu código.
+        String telefoneLimpo =
+                limparNumero(request.getTelefoneEmpresa());
+
+        String emailEmpresa =
+                request.getEmailEmpresa()
+                        .trim()
+                        .toLowerCase();
+
+        String emailAdministrador =
+                request.getEmailAdministrador()
+                        .trim()
+                        .toLowerCase();
+
+        validarCnpj(cnpjLimpo);
+
+        if (empresaRepository.existsByCnpj(cnpjLimpo)) {
+            throw new IllegalArgumentException(
+                    "Já existe uma empresa cadastrada com este CNPJ."
+            );
+        }
+
+        if (usuarioRepository.existsByEmail(emailAdministrador)) {
+            throw new IllegalArgumentException(
+                    "Já existe um usuário cadastrado com este e-mail."
+            );
+        }
+
+        Empresa empresa = new Empresa();
+
+        empresa.setNome(
+                request.getNomeEmpresa().trim()
+        );
+
+        empresa.setCnpj(cnpjLimpo);
+
+        empresa.setTelefone(telefoneLimpo);
+
+        empresa.setEmail(emailEmpresa);
+
+        Empresa empresaSalva =
+                empresaRepository.save(empresa);
+
+        Usuario administrador = new Usuario();
+
+        administrador.setNome(
+                request.getNomeAdministrador().trim()
+        );
+
+        administrador.setEmail(emailAdministrador);
+
+        administrador.setSenha(
+                passwordEncoder.encode(
+                        request.getSenhaAdministrador()
+                )
+        );
+
+        administrador.setCargo(Cargo.ADMIN);
+
+        administrador.setStatus(StatusUsuario.ATIVO);
+
+        administrador.setEmpresa(empresaSalva);
+
+        Usuario administradorSalvo =
+                usuarioRepository.save(administrador);
+
+        return new CadastroEmpresaResponse(
+                empresaSalva.getId(),
+                administradorSalvo.getId(),
+                "Empresa e administrador cadastrados com sucesso."
+        );
     }
 
-    // PASSO 3: COLOQUE O NOVO MÉTODO AQUI
     @Transactional(readOnly = true)
     public List<EmpresaPublicaResponse> listarEmpresasPublicas() {
 
         return empresaRepository
                 .findAllByOrderByNomeAsc()
                 .stream()
-                .map(empresa -> new EmpresaPublicaResponse(
-                        empresa.getId(),
-                        empresa.getNome()
-                ))
+                .map(empresa ->
+                        new EmpresaPublicaResponse(
+                                empresa.getId(),
+                                empresa.getNome()
+                        )
+                )
                 .toList();
     }
 
-    // MÉTODO QUE JÁ EXISTIA
+    private void validarCnpj(String cnpj) {
+
+        if (cnpj.length() != 14) {
+            throw new IllegalArgumentException(
+                    "O CNPJ deve possuir 14 números."
+            );
+        }
+    }
+
     private String limparNumero(String valor) {
 
         if (valor == null) {
@@ -66,5 +143,4 @@ public class EmpresaService {
 
         return valor.replaceAll("\\D", "");
     }
-
-} // Última chave da classe
+}
