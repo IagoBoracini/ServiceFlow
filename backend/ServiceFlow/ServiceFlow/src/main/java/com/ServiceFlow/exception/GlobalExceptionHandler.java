@@ -98,22 +98,24 @@ public class GlobalExceptionHandler {
                 .body(erro);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErroResponse> tratarErroInterno(
-            Exception exception,
-            HttpServletRequest request
-    ) {
+@ExceptionHandler(Exception.class)
+public ResponseEntity<ErroResponse> tratarErroInterno(
+        Exception exception,
+        HttpServletRequest request
+) {
 
-        ErroResponse erro = new ErroResponse(
-                500,
-                "Erro interno",
-                "Ocorreu um erro inesperado no servidor.",
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+    exception.printStackTrace();
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(erro);
-    }
+    ErroResponse erro = new ErroResponse(
+            500,
+            "Erro interno",
+            "Ocorreu um erro inesperado no servidor.",
+            request.getRequestURI(),
+            LocalDateTime.now()
+    );
+
+    return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(erro);
+}
 }
