@@ -1,4 +1,5 @@
 const API_URL = "https://serviceflow-production-a083.up.railway.app";
+const URL_CADASTRO = `${API_URL}/empresas/cadastro`;
 
 
 const registerForm =
