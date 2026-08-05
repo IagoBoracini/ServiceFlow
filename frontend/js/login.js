@@ -9,7 +9,11 @@ const erroSenha = document.getElementById("erro-senha");
 const mensagemLogin = document.getElementById("mensagem-login");
 const botaoLogin = document.getElementById("botao-login");
 
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
+const API_URL =
+    "https://serviceflow-production-a083.up.railway.app";
+
+const URL_LOGIN =
+    `${API_URL}/login`;
 
 verificarUsuarioLogado();
 
