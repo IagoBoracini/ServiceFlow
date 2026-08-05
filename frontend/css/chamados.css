@@ -53,7 +53,7 @@ a {
     text-decoration: none;
 }
 
-/* LAYOUT PRINCIPAL */
+/* LAYOUT */
 
 .app-container {
     display: flex;
@@ -100,25 +100,10 @@ a {
 
     font-size: 1.25rem;
     font-weight: 700;
-
-    text-decoration: none;
 }
 
 .logo-icon {
     font-size: 1.5rem;
-}
-
-.close-sidebar {
-    display: none;
-
-    border: none;
-
-    background: transparent;
-    color: #ffffff;
-
-    font-size: 1.3rem;
-
-    cursor: pointer;
 }
 
 .sidebar-menu {
@@ -140,8 +125,6 @@ a {
     border-radius: 8px;
 
     color: #cbd5e1;
-
-    text-decoration: none;
 
     transition:
         background 0.2s ease,
@@ -183,17 +166,11 @@ a {
 
     background: transparent;
     color: #cbd5e1;
-
-    cursor: pointer;
 }
 
 .logout-button:hover {
     background: rgba(220, 38, 38, 0.15);
     color: #fecaca;
-}
-
-.sidebar-overlay {
-    display: none;
 }
 
 /* CONTEÚDO PRINCIPAL */
@@ -215,7 +192,6 @@ a {
     padding: 16px 32px;
 
     background: var(--surface);
-
     border-bottom: 1px solid var(--border);
 }
 
@@ -237,19 +213,7 @@ a {
     font-size: 0.9rem;
 }
 
-.menu-button {
-    display: none;
-
-    width: 42px;
-    height: 42px;
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: #ffffff;
-
-    cursor: pointer;
-}
+/* USUÁRIO */
 
 .user-area {
     display: flex;
@@ -262,22 +226,11 @@ a {
 
     border-radius: 10px;
 
-    color: inherit;
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        opacity 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .user-profile-link:hover {
-    background-color: #f1f5f9;
-}
-
-.user-profile-link:focus-visible {
-    outline: 3px solid rgba(37, 99, 235, 0.25);
+    background: #f1f5f9;
 }
 
 .user-information {
@@ -312,7 +265,7 @@ a {
     font-weight: 700;
 }
 
-/* CONTEÚDO DA PÁGINA */
+/* PÁGINA */
 
 .page-content {
     padding: 32px;
@@ -336,10 +289,10 @@ a {
 
     color: var(--text-secondary);
 
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
-/* BOTÕES PRINCIPAIS */
+/* BOTÕES */
 
 .primary-button {
     display: inline-flex;
@@ -374,62 +327,58 @@ a {
     color: var(--text);
 
     font-weight: 600;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
 }
 
 .secondary-button:hover {
     background: #f8fafc;
 }
 
-/* CARD PRINCIPAL */
+/* CARD */
 
 .content-card {
     overflow: hidden;
 
-    background: var(--surface);
-
     border: 1px solid var(--border);
     border-radius: 12px;
+
+    background: var(--surface);
 
     box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
 
-/* BARRA DE FERRAMENTAS */
+/* FILTROS */
 
 .toolbar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-end;
     gap: 16px;
+    flex-wrap: wrap;
 
     padding: 20px;
 
     border-bottom: 1px solid var(--border);
 }
 
-.search-container {
-    position: relative;
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-    flex: 1;
-    max-width: 500px;
+    min-width: 190px;
 }
 
-.search-icon {
-    position: absolute;
-    top: 50%;
-    left: 14px;
+.filter-group label {
+    color: var(--text-secondary);
 
-    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
-.search-container input {
+.filter-group select {
     width: 100%;
     height: 44px;
 
-    padding: 0 14px 0 42px;
+    padding: 0 14px;
 
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -439,7 +388,7 @@ a {
     outline: none;
 }
 
-.search-container input:focus {
+.filter-group select:focus {
     border-color: var(--primary);
 
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -535,6 +484,7 @@ td {
     border-bottom: 1px solid var(--border);
 
     text-align: left;
+    vertical-align: top;
 
     font-size: 0.85rem;
 }
@@ -558,26 +508,19 @@ tbody tr:hover {
     background: #f8fafc;
 }
 
-.loading-row {
-    padding: 28px;
-
-    color: var(--text-secondary);
-
-    text-align: center;
-}
-
-.client-name {
-    color: var(--text);
-
-    font-weight: 600;
-}
-
-.client-email,
-.client-phone,
-.client-address {
+.ticket-title {
     display: block;
 
-    margin-top: 4px;
+    color: var(--text);
+
+    font-weight: 700;
+}
+
+.ticket-description {
+    display: block;
+
+    max-width: 280px;
+    margin-top: 5px;
 
     color: var(--text-secondary);
 
@@ -585,9 +528,10 @@ tbody tr:hover {
     line-height: 1.5;
 }
 
-/* STATUS */
+/* STATUS E PRIORIDADE */
 
-.status {
+.status,
+.priority {
     display: inline-flex;
     align-items: center;
 
@@ -599,36 +543,61 @@ tbody tr:hover {
     font-weight: 600;
 }
 
-.status.active,
-.status-ativo {
+.status-open {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-progress {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-completed {
     background: #dcfce7;
     color: #166534;
 }
 
-.status.inactive,
-.status-inativo {
+.status-cancelled {
     background: #fee2e2;
     color: #991b1b;
 }
 
-/* AÇÕES DA TABELA */
+.priority-low {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.priority-medium {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.priority-high {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.priority-critical {
+    background: #7f1d1d;
+    color: #ffffff;
+}
+
+/* AÇÕES */
 
 .actions-column {
-    width: 180px;
-
-    text-align: right;
+    width: 220px;
 }
 
 .table-actions {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 7px;
 }
 
 .action-button {
     min-height: 34px;
-    padding: 0 11px;
+    padding: 0 10px;
 
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -648,6 +617,12 @@ tbody tr:hover {
     background: #f8fafc;
 }
 
+.action-button.primary {
+    border-color: #bfdbfe;
+
+    color: var(--primary);
+}
+
 .action-button.danger {
     border-color: #fecaca;
 
@@ -659,6 +634,7 @@ tbody tr:hover {
 
     color: var(--success);
 }
+
 /* ESTADO VAZIO */
 
 .empty-state {
@@ -704,10 +680,6 @@ tbody tr:hover {
     padding: 18px 20px;
 }
 
-.pagination.hidden {
-    display: none;
-}
-
 .pagination p {
     color: var(--text-secondary);
 
@@ -738,10 +710,9 @@ tbody tr:hover {
     background: #f8fafc;
 }
 
-/* MODAIS */
+/* MODAL */
 
-.modal-overlay,
-.confirmation-overlay {
+.modal-overlay {
     position: fixed;
     inset: 0;
     z-index: 2000;
@@ -755,14 +726,13 @@ tbody tr:hover {
     background: rgba(15, 23, 42, 0.65);
 }
 
-.modal-overlay.visible,
-.confirmation-overlay.visible {
+.modal-overlay.visible {
     display: flex;
 }
 
 .modal {
     width: 100%;
-    max-width: 660px;
+    max-width: 720px;
     max-height: calc(100vh - 40px);
 
     overflow-y: auto;
@@ -820,7 +790,7 @@ tbody tr:hover {
 
 /* FORMULÁRIO */
 
-.client-form {
+.ticket-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
@@ -833,7 +803,7 @@ tbody tr:hover {
     flex-direction: column;
 }
 
-.form-group.full-width {
+.full-width {
     grid-column: 1 / -1;
 }
 
@@ -844,11 +814,12 @@ tbody tr:hover {
     font-weight: 600;
 }
 
-.form-group input {
+.form-group input,
+.form-group select,
+.form-group textarea {
     width: 100%;
-    height: 44px;
 
-    padding: 0 13px;
+    padding: 11px 13px;
 
     border: 1px solid #cbd5e1;
     border-radius: 8px;
@@ -858,14 +829,25 @@ tbody tr:hover {
     outline: none;
 }
 
-.form-group input:focus {
+.form-group input,
+.form-group select {
+    min-height: 44px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
     border-color: var(--primary);
 
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.form-group input.input-error {
-    border-color: var(--danger);
+.input-error {
+    border-color: var(--danger) !important;
 }
 
 .field-error {
@@ -895,8 +877,7 @@ tbody tr:hover {
 }
 
 .cancel-button,
-.save-button,
-.confirm-button {
+.save-button {
     min-height: 42px;
 
     border-radius: 8px;
@@ -932,72 +913,6 @@ tbody tr:hover {
     background: var(--primary-hover);
 }
 
-/* MODAL DE CONFIRMAÇÃO */
-
-.confirmation-modal {
-    width: 100%;
-    max-width: 410px;
-    padding: 28px;
-
-    border-radius: 12px;
-
-    background: #ffffff;
-
-    text-align: center;
-
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
-}
-
-.confirmation-icon {
-    margin-bottom: 15px;
-
-    font-size: 2.2rem;
-}
-
-.confirmation-modal h2 {
-    font-size: 1.2rem;
-}
-
-.confirmation-modal p {
-    margin-top: 10px;
-
-    color: var(--text-secondary);
-
-    font-size: 0.85rem;
-    line-height: 1.6;
-}
-
-.confirmation-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-
-    margin-top: 24px;
-}
-
-.confirm-button {
-    padding: 0 18px;
-
-    border: none;
-
-    background: var(--danger);
-    color: #ffffff;
-
-    transition: background 0.2s ease;
-}
-
-.confirm-button:hover {
-    background: #b91c1c;
-}
-
-.confirm-button.reactivate {
-    background: var(--success);
-}
-
-.confirm-button.reactivate:hover {
-    background: #15803d;
-}
-
 /* RESPONSIVO */
 
 @media (max-width: 1100px) {
@@ -1015,29 +930,9 @@ tbody tr:hover {
         transform: translateX(0);
     }
 
-    .close-sidebar {
-        display: block;
-    }
-
-    .sidebar-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 900;
-
-        background: rgba(15, 23, 42, 0.55);
-    }
-
-    .sidebar-overlay.active {
-        display: block;
-    }
-
     .main-content {
         width: 100%;
         margin-left: 0;
-    }
-
-    .menu-button {
-        display: block;
     }
 
     .topbar {
@@ -1057,8 +952,9 @@ tbody tr:hover {
         flex-direction: column;
     }
 
-    .search-container {
-        max-width: none;
+    .filter-group {
+        width: 100%;
+        min-width: 0;
     }
 
     .secondary-button {
@@ -1080,11 +976,11 @@ tbody tr:hover {
         width: 100%;
     }
 
-    .client-form {
+    .ticket-form {
         grid-template-columns: 1fr;
     }
 
-    .form-group.full-width,
+    .full-width,
     .modal-footer {
         grid-column: auto;
     }
@@ -1108,6 +1004,6 @@ tbody tr:hover {
     }
 
     table {
-        min-width: 850px;
+        min-width: 980px;
     }
 }

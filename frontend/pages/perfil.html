@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minha Conta | ServiceFlow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../css/perfil.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+
+                <a href="dashboard.html" class="logo">
+                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-text">ServiceFlow</span>
+                </a>
+
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="dashboard.html" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="clientes.html" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a href="funcionarios.html" class="menu-item">
+                    <span class="menu-icon">🧑‍💼</span>
+                    <span>Funcionários</span>
+                </a>
+
+                <a href="chamados.html" class="menu-item">
+                    <span class="menu-icon">🎫</span>
+                    <span>Chamados</span>
+                </a>
+
+                <a href="ordens-servico.html" class="menu-item">
+                    <span class="menu-icon">🛠️</span>
+                    <span>Ordens de serviço</span>
+                </a>
+
+                <a href="perfil.html" class="menu-item active">
+                    <span class="menu-icon">👤</span>
+                    <span>Minha conta</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logout-button"
+                >
+                    <span>🚪</span>
+                    <span>Sair</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <div>
+                        <h1>Minha Conta</h1>
+
+                        <p>
+                            Consulte seus dados e atualize suas informações.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="topbar-user">
+
+                    <div class="topbar-user-information">
+
+                        <strong id="topbar-user-name">
+                            Usuário
+                        </strong>
+
+                        <span id="topbar-user-role">
+                            Minha conta
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="topbar-avatar"
+                        id="topbar-user-avatar"
+                    >
+                        U
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="page-content">
+
+                <div class="page-header">
+
+                    <div>
+                        <h2>Configurações pessoais</h2>
+
+                        <p>
+                            Gerencie seus dados pessoais e sua senha de acesso.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div
+                    class="page-message"
+                    id="page-message"
+                    role="alert"
+                ></div>
+
+                <div
+                    class="loading-container"
+                    id="loading-container"
+                >
+                    <div class="spinner"></div>
+
+                    <p>
+                        Carregando seus dados...
+                    </p>
+                </div>
+
+                <section
+                    class="profile-content"
+                    id="profile-content"
+                >
+
+                    <article class="profile-card">
+
+                        <div class="profile-header">
+
+                            <div
+                                class="profile-avatar"
+                                id="profile-avatar"
+                            >
+                                U
+                            </div>
+
+                            <div class="profile-heading">
+
+                                <h2 id="profile-name">
+                                    Usuário
+                                </h2>
+
+                                <p id="profile-email">
+                                    usuario@email.com
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="profile-information">
+
+                            <div class="information-item">
+
+                                <span class="information-label">
+                                    Cargo
+                                </span>
+
+                                <strong id="profile-role">
+                                    -
+                                </strong>
+
+                            </div>
+
+                            <div class="information-item">
+
+                                <span class="information-label">
+                                    Status
+                                </span>
+
+                                <span
+                                    class="status-badge"
+                                    id="profile-status"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                            <div class="information-item">
+
+                                <span class="information-label">
+                                    Empresa
+                                </span>
+
+                                <strong id="profile-company">
+                                    -
+                                </strong>
+
+                            </div>
+
+                            <div class="information-item">
+
+                                <span class="information-label">
+                                    ID do usuário
+                                </span>
+
+                                <strong id="profile-id">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                    <div class="forms-column">
+
+                        <article class="form-card">
+
+                            <header class="card-header">
+
+                                <div>
+                                    <h2>Dados pessoais</h2>
+
+                                    <p>
+                                        Atualize o nome exibido no sistema.
+                                    </p>
+                                </div>
+
+                            </header>
+
+                            <div
+                                class="form-message"
+                                id="profile-form-message"
+                                role="alert"
+                            ></div>
+
+                            <form
+                                id="profile-form"
+                                novalidate
+                            >
+
+                                <div class="form-group">
+
+                                    <label for="profile-name-input">
+                                        Nome completo *
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="profile-name-input"
+                                        placeholder="Digite seu nome completo"
+                                        autocomplete="name"
+                                    >
+
+                                    <small
+                                        class="field-error"
+                                        id="profile-name-error"
+                                    ></small>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="profile-email-input">
+                                        E-mail
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        id="profile-email-input"
+                                        disabled
+                                    >
+
+                                    <small class="field-help">
+                                        O e-mail não pode ser alterado.
+                                    </small>
+
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="primary-button"
+                                    id="save-profile-button"
+                                >
+                                    Salvar alterações
+                                </button>
+
+                            </form>
+
+                        </article>
+
+                        <article class="form-card">
+
+                            <header class="card-header">
+
+                                <div>
+                                    <h2>Alterar senha</h2>
+
+                                    <p>
+                                        Informe sua senha atual e escolha uma nova senha.
+                                    </p>
+                                </div>
+
+                            </header>
+
+                            <div
+                                class="form-message"
+                                id="password-form-message"
+                                role="alert"
+                            ></div>
+
+                            <form
+                                id="password-form"
+                                novalidate
+                            >
+
+                                <div class="form-group">
+
+                                    <label for="current-password">
+                                        Senha atual *
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        id="current-password"
+                                        placeholder="Digite sua senha atual"
+                                        autocomplete="current-password"
+                                    >
+
+                                    <small
+                                        class="field-error"
+                                        id="current-password-error"
+                                    ></small>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="new-password">
+                                        Nova senha *
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        id="new-password"
+                                        placeholder="Digite a nova senha"
+                                        autocomplete="new-password"
+                                    >
+
+                                    <small
+                                        class="field-error"
+                                        id="new-password-error"
+                                    ></small>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="confirm-password">
+                                        Confirmar nova senha *
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        id="confirm-password"
+                                        placeholder="Digite novamente a nova senha"
+                                        autocomplete="new-password"
+                                    >
+
+                                    <small
+                                        class="field-error"
+                                        id="confirm-password-error"
+                                    ></small>
+
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="primary-button"
+                                    id="save-password-button"
+                                >
+                                    Alterar senha
+                                </button>
+
+                            </form>
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="../js/perfil.js"></script>
+
+</body>
+
+</html>

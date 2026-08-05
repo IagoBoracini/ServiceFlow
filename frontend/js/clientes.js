@@ -49,6 +49,16 @@ const nextPageButton =
     document.getElementById("next-page-button");
 
 
+const userName =
+    document.getElementById("user-name");
+
+const userRole =
+    document.getElementById("user-role");
+
+const userAvatar =
+    document.getElementById("user-avatar");
+
+
 const clientModal =
     document.getElementById("client-modal");
 
@@ -199,57 +209,175 @@ document.addEventListener(
 
 
 function iniciarPagina() {
-
-    const token = obterToken();
+    const token =
+        obterToken();
 
     if (!token) {
-
         redirecionarParaLogin();
-
         return;
     }
 
+    carregarUsuarioSalvo();
     carregarClientes();
 }
 
 
 function obterToken() {
-
-    return (
-        localStorage.getItem("token") ||
-        localStorage.getItem("accessToken") ||
-        localStorage.getItem("jwt")
+    return localStorage.getItem(
+        "serviceflow_token"
     );
 }
 
 
-function obterCabecalhosAutenticados() {
+function carregarUsuarioSalvo() {
+    const usuarioSalvo =
+        localStorage.getItem(
+            "serviceflow_usuario"
+        );
 
+    if (!usuarioSalvo) {
+        definirUsuarioPadrao();
+        return;
+    }
+
+    try {
+        const usuario =
+            JSON.parse(usuarioSalvo);
+
+        const nome =
+            usuario.nome || "Usuário";
+
+        const cargo =
+            formatarCargoUsuario(
+                usuario.cargo
+            );
+
+        if (userName) {
+            userName.textContent =
+                nome;
+        }
+
+        if (userRole) {
+            userRole.textContent =
+                cargo;
+        }
+
+        if (userAvatar) {
+            userAvatar.textContent =
+                obterInicialUsuario(nome);
+        }
+
+    } catch (erro) {
+        console.error(
+            "Erro ao carregar usuário salvo:",
+            erro
+        );
+
+        localStorage.removeItem(
+            "serviceflow_usuario"
+        );
+
+        definirUsuarioPadrao();
+    }
+}
+
+
+function definirUsuarioPadrao() {
+    if (userName) {
+        userName.textContent =
+            "Usuário";
+    }
+
+    if (userRole) {
+        userRole.textContent =
+            "ServiceFlow";
+    }
+
+    if (userAvatar) {
+        userAvatar.textContent =
+            "U";
+    }
+}
+
+
+function formatarCargoUsuario(cargo) {
+    const cargos = {
+        ADMIN: "Administrador",
+        ATENDENTE: "Atendente",
+        TECNICO: "Técnico"
+    };
+
+    if (!cargo) {
+        return "ServiceFlow";
+    }
+
+    return cargos[cargo] ||
+        formatarTexto(cargo);
+}
+
+
+function obterInicialUsuario(nome) {
+    const nomeNormalizado =
+        String(nome || "").trim();
+
+    if (!nomeNormalizado) {
+        return "U";
+    }
+
+    return nomeNormalizado
+        .charAt(0)
+        .toUpperCase();
+}
+
+
+function formatarTexto(valor) {
+    if (!valor) {
+        return "";
+    }
+
+    return String(valor)
+        .toLowerCase()
+        .replaceAll("_", " ")
+        .replace(
+            /\b\w/g,
+            letra =>
+                letra.toUpperCase()
+        );
+}
+
+
+function obterCabecalhosAutenticados() {
     return {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${obterToken()}`
+        "Content-Type":
+            "application/json",
+
+        "Accept":
+            "application/json",
+
+        "Authorization":
+            `Bearer ${obterToken()}`
     };
 }
 
 
 async function carregarClientes() {
-
     esconderMensagemPagina();
     mostrarCarregamento();
 
     try {
-
         const resposta = await fetch(
             `${API_URL}/clientes?pagina=${currentPage}&tamanho=${PAGE_SIZE}`,
             {
                 method: "GET",
-                headers: obterCabecalhosAutenticados()
+                headers:
+                    obterCabecalhosAutenticados()
             }
         );
 
         const dados =
-            await processarResposta(resposta);
+            await processarResposta(
+                resposta
+            );
 
         const clientes =
             Array.isArray(dados.content)
@@ -257,79 +385,117 @@ async function carregarClientes() {
                 : [];
 
         totalPages =
-            Number(dados.totalPages) || 0;
+            Number(
+                dados.totalPages
+            ) || 0;
 
-        renderizarClientes(clientes);
+        renderizarClientes(
+            clientes
+        );
 
         atualizarPaginacao(
-            dados.number ?? currentPage,
+            dados.number ??
+                currentPage,
+
             totalPages,
-            dados.totalElements ?? clientes.length
+
+            dados.totalElements ??
+                clientes.length
         );
 
     } catch (erro) {
-
-        tratarErroDaPagina(erro);
+        tratarErroDaPagina(
+            erro
+        );
 
     } finally {
-
         esconderCarregamento();
     }
 }
 
 
 function renderizarClientes(clientes) {
-
     clientsTableBody.innerHTML = "";
 
     if (clientes.length === 0) {
+        tableContainer.style.display =
+            "none";
 
-        tableContainer.style.display = "none";
-
-        emptyState.classList.add("visible");
+        emptyState.classList.add(
+            "visible"
+        );
 
         return;
     }
 
-    tableContainer.style.display = "block";
+    tableContainer.style.display =
+        "block";
 
-    emptyState.classList.remove("visible");
+    emptyState.classList.remove(
+        "visible"
+    );
 
-    clientes.forEach((cliente) => {
-
+    clientes.forEach(cliente => {
         const linha =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
 
         linha.innerHTML = `
             <td>
                 <span class="client-name">
-                    ${escaparHtml(cliente.nome)}
+                    ${escaparHtml(
+                        cliente.nome
+                    )}
                 </span>
             </td>
 
             <td>
-                ${formatarDocumento(cliente.documento)}
+                ${formatarDocumento(
+                    cliente.documento
+                )}
             </td>
 
             <td>
                 <span class="client-email">
-                    ${escaparHtml(cliente.email || "Sem e-mail")}
+                    ${escaparHtml(
+                        cliente.email ||
+                        "Sem e-mail"
+                    )}
                 </span>
 
                 <span class="client-phone">
-                    ${formatarTelefone(cliente.telefone)}
+                    ${formatarTelefone(
+                        cliente.telefone
+                    )}
                 </span>
             </td>
 
             <td>
                 <span class="client-address">
-                    ${escaparHtml(cliente.endereco || "Não informado")}
+                    ${escaparHtml(
+                        cliente.endereco ||
+                        "Não informado"
+                    )}
                 </span>
             </td>
 
             <td>
-                <span class="status ${cliente.ativo ? "active" : "inactive"}">
-                    ${cliente.ativo ? "Ativo" : "Inativo"}
+                <span
+                    class="
+                        status
+                        ${
+                            cliente.ativo
+                                ? "active"
+                                : "inactive"
+                        }
+                    "
+                >
+                    ${
+                        cliente.ativo
+                            ? "Ativo"
+                            : "Inativo"
+                    }
                 </span>
             </td>
 
@@ -353,7 +519,9 @@ function renderizarClientes(clientes) {
                                     class="action-button danger"
                                     data-action="deactivate"
                                     data-client-id="${cliente.id}"
-                                    data-client-name="${escaparAtributo(cliente.nome)}"
+                                    data-client-name="${escaparAtributo(
+                                        cliente.nome
+                                    )}"
                                 >
                                     Inativar
                                 </button>
@@ -364,7 +532,9 @@ function renderizarClientes(clientes) {
                                     class="action-button success"
                                     data-action="reactivate"
                                     data-client-id="${cliente.id}"
-                                    data-client-name="${escaparAtributo(cliente.nome)}"
+                                    data-client-name="${escaparAtributo(
+                                        cliente.nome
+                                    )}"
                                 >
                                     Reativar
                                 </button>
@@ -375,7 +545,9 @@ function renderizarClientes(clientes) {
             </td>
         `;
 
-        clientsTableBody.appendChild(linha);
+        clientsTableBody.appendChild(
+            linha
+        );
     });
 
     adicionarEventosAosBotoesDaTabela();
@@ -383,14 +555,13 @@ function renderizarClientes(clientes) {
 
 
 function adicionarEventosAosBotoesDaTabela() {
-
     const botoes =
-        clientsTableBody.querySelectorAll(
-            "[data-action]"
-        );
+        clientsTableBody
+            .querySelectorAll(
+                "[data-action]"
+            );
 
-    botoes.forEach((botao) => {
-
+    botoes.forEach(botao => {
         botao.addEventListener(
             "click",
             tratarAcaoDaTabela
@@ -400,7 +571,6 @@ function adicionarEventosAosBotoesDaTabela() {
 
 
 function tratarAcaoDaTabela(evento) {
-
     const botao =
         evento.currentTarget;
 
@@ -408,20 +578,23 @@ function tratarAcaoDaTabela(evento) {
         botao.dataset.action;
 
     const clienteId =
-        Number(botao.dataset.clientId);
+        Number(
+            botao.dataset.clientId
+        );
 
     const clienteNome =
-        botao.dataset.clientName || "";
+        botao.dataset.clientName ||
+        "";
 
     if (acao === "edit") {
-
-        abrirModalEdicao(clienteId);
+        abrirModalEdicao(
+            clienteId
+        );
 
         return;
     }
 
     if (acao === "deactivate") {
-
         abrirConfirmacaoInativacao(
             clienteId,
             clienteNome
@@ -431,7 +604,6 @@ function tratarAcaoDaTabela(evento) {
     }
 
     if (acao === "reactivate") {
-
         abrirConfirmacaoReativacao(
             clienteId,
             clienteNome
@@ -445,7 +617,6 @@ function atualizarPaginacao(
     quantidadePaginas,
     totalClientes
 ) {
-
     currentPage = pagina;
 
     paginationContainer.classList.remove(
@@ -465,12 +636,12 @@ function atualizarPaginacao(
 
     nextPageButton.disabled =
         quantidadePaginas === 0 ||
-        pagina >= quantidadePaginas - 1;
+        pagina >=
+            quantidadePaginas - 1;
 }
 
 
 function carregarPaginaAnterior() {
-
     if (currentPage <= 0) {
         return;
     }
@@ -482,7 +653,6 @@ function carregarPaginaAnterior() {
 
 
 function carregarProximaPagina() {
-
     if (
         totalPages === 0 ||
         currentPage >= totalPages - 1
@@ -497,8 +667,9 @@ function carregarProximaPagina() {
 
 
 function pesquisarComAtraso() {
-
-    clearTimeout(searchTimer);
+    clearTimeout(
+        searchTimer
+    );
 
     searchTimer = setTimeout(
         pesquisarClientes,
@@ -508,16 +679,13 @@ function pesquisarComAtraso() {
 
 
 async function pesquisarClientes() {
-
     const nome =
         searchInput.value.trim();
 
     esconderMensagemPagina();
 
     if (nome === "") {
-
         currentPage = 0;
-
         carregarClientes();
 
         return;
@@ -530,17 +698,21 @@ async function pesquisarClientes() {
     );
 
     try {
-
         const resposta = await fetch(
-            `${API_URL}/clientes/buscar?nome=${encodeURIComponent(nome)}`,
+            `${API_URL}/clientes/buscar?nome=${encodeURIComponent(
+                nome
+            )}`,
             {
                 method: "GET",
-                headers: obterCabecalhosAutenticados()
+                headers:
+                    obterCabecalhosAutenticados()
             }
         );
 
         const clientes =
-            await processarResposta(resposta);
+            await processarResposta(
+                resposta
+            );
 
         renderizarClientes(
             Array.isArray(clientes)
@@ -549,18 +721,17 @@ async function pesquisarClientes() {
         );
 
     } catch (erro) {
-
-        tratarErroDaPagina(erro);
+        tratarErroDaPagina(
+            erro
+        );
 
     } finally {
-
         esconderCarregamento();
     }
 }
 
 
 function atualizarListagem() {
-
     searchInput.value = "";
 
     currentPage = 0;
@@ -570,7 +741,6 @@ function atualizarListagem() {
 
 
 function abrirModalCadastro() {
-
     selectedClientId = null;
 
     limparFormulario();
@@ -587,11 +757,13 @@ function abrirModalCadastro() {
 }
 
 
-async function abrirModalEdicao(clienteId) {
-
+async function abrirModalEdicao(
+    clienteId
+) {
     limparFormulario();
 
-    selectedClientId = clienteId;
+    selectedClientId =
+        clienteId;
 
     modalTitle.textContent =
         "Editar cliente";
@@ -606,20 +778,24 @@ async function abrirModalEdicao(clienteId) {
         "success"
     );
 
-    desabilitarFormulario(true);
+    desabilitarFormulario(
+        true
+    );
 
     try {
-
         const resposta = await fetch(
             `${API_URL}/clientes/${clienteId}`,
             {
                 method: "GET",
-                headers: obterCabecalhosAutenticados()
+                headers:
+                    obterCabecalhosAutenticados()
             }
         );
 
         const cliente =
-            await processarResposta(resposta);
+            await processarResposta(
+                resposta
+            );
 
         clientIdInput.value =
             cliente.id;
@@ -649,21 +825,20 @@ async function abrirModalEdicao(clienteId) {
         clientNameInput.focus();
 
     } catch (erro) {
-
         mostrarMensagemModal(
             erro.message,
             "error"
         );
 
     } finally {
-
-        desabilitarFormulario(false);
+        desabilitarFormulario(
+            false
+        );
     }
 }
 
 
 async function salvarCliente(evento) {
-
     evento.preventDefault();
 
     limparErrosFormulario();
@@ -673,7 +848,6 @@ async function salvarCliente(evento) {
         obterDadosFormulario();
 
     if (!validarFormulario(dados)) {
-
         mostrarMensagemModal(
             "Verifique os campos destacados.",
             "error"
@@ -691,12 +865,15 @@ async function salvarCliente(evento) {
             : `${API_URL}/clientes`;
 
     const metodo =
-        editando ? "PUT" : "POST";
+        editando
+            ? "PUT"
+            : "POST";
 
-    alterarEstadoBotaoSalvar(true);
+    alterarEstadoBotaoSalvar(
+        true
+    );
 
     try {
-
         const resposta = await fetch(
             url,
             {
@@ -706,16 +883,30 @@ async function salvarCliente(evento) {
                     obterCabecalhosAutenticados(),
 
                 body: JSON.stringify({
-                    nome: dados.nome,
-                    documento: dados.documento,
-                    email: dados.email || null,
-                    telefone: dados.telefone || null,
-                    endereco: dados.endereco || null
+                    nome:
+                        dados.nome,
+
+                    documento:
+                        dados.documento,
+
+                    email:
+                        dados.email ||
+                        null,
+
+                    telefone:
+                        dados.telefone ||
+                        null,
+
+                    endereco:
+                        dados.endereco ||
+                        null
                 })
             }
         );
 
-        await processarResposta(resposta);
+        await processarResposta(
+            resposta
+        );
 
         fecharModalCliente();
 
@@ -727,30 +918,29 @@ async function salvarCliente(evento) {
         );
 
         currentPage = 0;
-
         searchInput.value = "";
 
         await carregarClientes();
 
     } catch (erro) {
-
         mostrarMensagemModal(
             erro.message,
             "error"
         );
 
     } finally {
-
-        alterarEstadoBotaoSalvar(false);
+        alterarEstadoBotaoSalvar(
+            false
+        );
     }
 }
 
 
 function obterDadosFormulario() {
-
     return {
         nome:
-            clientNameInput.value.trim(),
+            clientNameInput.value
+                .trim(),
 
         documento:
             obterSomenteNumeros(
@@ -768,76 +958,79 @@ function obterDadosFormulario() {
                 .toLowerCase(),
 
         endereco:
-            clientAddressInput.value.trim()
+            clientAddressInput.value
+                .trim()
     };
 }
 
 
 function validarFormulario(dados) {
-
-    let formularioValido = true;
+    let formularioValido =
+        true;
 
     if (dados.nome === "") {
-
         definirErro(
             clientNameInput,
             "client-name-error",
             "O nome do cliente é obrigatório."
         );
 
-        formularioValido = false;
+        formularioValido =
+            false;
     }
 
     if (dados.documento === "") {
-
         definirErro(
             clientDocumentInput,
             "client-document-error",
             "O CPF ou CNPJ é obrigatório."
         );
 
-        formularioValido = false;
+        formularioValido =
+            false;
 
     } else if (
         dados.documento.length !== 11 &&
         dados.documento.length !== 14
     ) {
-
         definirErro(
             clientDocumentInput,
             "client-document-error",
             "Digite um CPF com 11 números ou um CNPJ com 14 números."
         );
 
-        formularioValido = false;
+        formularioValido =
+            false;
     }
 
     if (
         dados.email !== "" &&
-        !validarEmail(dados.email)
+        !validarEmail(
+            dados.email
+        )
     ) {
-
         definirErro(
             clientEmailInput,
             "client-email-error",
             "Digite um e-mail válido."
         );
 
-        formularioValido = false;
+        formularioValido =
+            false;
     }
 
     if (
         dados.telefone !== "" &&
         dados.telefone.length < 10
     ) {
-
         definirErro(
             clientPhoneInput,
             "client-phone-error",
             "Digite um telefone válido."
         );
 
-        formularioValido = false;
+        formularioValido =
+            false;
     }
 
     return formularioValido;
@@ -849,30 +1042,38 @@ function definirErro(
     errorId,
     mensagem
 ) {
+    input.classList.add(
+        "input-error"
+    );
 
-    input.classList.add("input-error");
+    const elementoErro =
+        document.getElementById(
+            errorId
+        );
 
-    document.getElementById(
-        errorId
-    ).textContent = mensagem;
+    if (elementoErro) {
+        elementoErro.textContent =
+            mensagem;
+    }
 }
 
 
 function limparErrosFormulario() {
-
     document
-        .querySelectorAll(".input-error")
-        .forEach((input) => {
-
+        .querySelectorAll(
+            ".input-error"
+        )
+        .forEach(input => {
             input.classList.remove(
                 "input-error"
             );
         });
 
     document
-        .querySelectorAll(".field-error")
-        .forEach((erro) => {
-
+        .querySelectorAll(
+            ".field-error"
+        )
+        .forEach(erro => {
             erro.textContent = "";
         });
 }
@@ -882,12 +1083,14 @@ function abrirConfirmacaoInativacao(
     clienteId,
     clienteNome
 ) {
+    selectedClientId =
+        clienteId;
 
-    selectedClientId = clienteId;
+    confirmationAction =
+        "deactivate";
 
-    confirmationAction = "deactivate";
-
-    confirmationIcon.textContent = "⚠️";
+    confirmationIcon.textContent =
+        "⚠️";
 
     confirmationTitle.textContent =
         "Inativar cliente";
@@ -910,12 +1113,14 @@ function abrirConfirmacaoReativacao(
     clienteId,
     clienteNome
 ) {
+    selectedClientId =
+        clienteId;
 
-    selectedClientId = clienteId;
+    confirmationAction =
+        "reactivate";
 
-    confirmationAction = "reactivate";
-
-    confirmationIcon.textContent = "✅";
+    confirmationIcon.textContent =
+        "✅";
 
     confirmationTitle.textContent =
         "Reativar cliente";
@@ -935,7 +1140,6 @@ function abrirConfirmacaoReativacao(
 
 
 async function executarAcaoConfirmada() {
-
     if (
         !selectedClientId ||
         !confirmationAction
@@ -952,20 +1156,23 @@ async function executarAcaoConfirmada() {
             ? "reativar"
             : "inativar";
 
-    confirmActionButton.disabled = true;
+    confirmActionButton.disabled =
+        true;
 
     try {
-
         const resposta = await fetch(
             `${API_URL}/clientes/${selectedClientId}/${endpoint}`,
             {
                 method: "PATCH",
+
                 headers:
                     obterCabecalhosAutenticados()
             }
         );
 
-        await processarResposta(resposta);
+        await processarResposta(
+            resposta
+        );
 
         fecharModalConfirmacao();
 
@@ -977,19 +1184,17 @@ async function executarAcaoConfirmada() {
         );
 
         const pesquisando =
-            searchInput.value.trim() !== "";
+            searchInput.value
+                .trim() !== "";
 
         if (pesquisando) {
-
             await pesquisarClientes();
 
         } else {
-
             await carregarClientes();
         }
 
     } catch (erro) {
-
         fecharModalConfirmacao();
 
         mostrarMensagemPagina(
@@ -998,22 +1203,22 @@ async function executarAcaoConfirmada() {
         );
 
     } finally {
-
         confirmActionButton.disabled =
             false;
     }
 }
 
 
-async function processarResposta(resposta) {
-
+async function processarResposta(
+    resposta
+) {
     const dados =
-        await lerCorpoResposta(resposta);
+        await lerCorpoResposta(
+            resposta
+        );
 
     if (resposta.status === 401) {
-
         limparAutenticacao();
-
         redirecionarParaLogin();
 
         throw new Error(
@@ -1022,16 +1227,18 @@ async function processarResposta(resposta) {
     }
 
     if (resposta.status === 403) {
-
         throw new Error(
+            dados.mensagem ||
+            dados.message ||
             "Você não possui permissão para realizar esta ação."
         );
     }
 
     if (!resposta.ok) {
-
         throw new Error(
-            obterMensagemErro(dados)
+            obterMensagemErro(
+                dados
+            )
         );
     }
 
@@ -1039,8 +1246,9 @@ async function processarResposta(resposta) {
 }
 
 
-async function lerCorpoResposta(resposta) {
-
+async function lerCorpoResposta(
+    resposta
+) {
     const contentType =
         resposta.headers.get(
             "content-type"
@@ -1052,7 +1260,6 @@ async function lerCorpoResposta(resposta) {
             "application/json"
         )
     ) {
-
         return await resposta.json();
     }
 
@@ -1066,42 +1273,35 @@ async function lerCorpoResposta(resposta) {
 
 
 function obterMensagemErro(dados) {
-
     if (!dados) {
-
         return "Não foi possível concluir a operação.";
     }
 
     if (typeof dados === "string") {
-
         return dados;
     }
 
     if (dados.mensagem) {
-
         return dados.mensagem;
     }
 
     if (dados.message) {
-
         return dados.message;
     }
 
     if (dados.erro) {
-
         return dados.erro;
     }
 
     if (dados.error) {
-
         return dados.error;
     }
 
     if (
         dados.erros &&
-        typeof dados.erros === "object"
+        typeof dados.erros ===
+            "object"
     ) {
-
         return Object.values(
             dados.erros
         ).join(" ");
@@ -1112,7 +1312,6 @@ function obterMensagemErro(dados) {
 
 
 function mostrarCarregamento() {
-
     loadingContainer.classList.add(
         "visible"
     );
@@ -1127,7 +1326,6 @@ function mostrarCarregamento() {
 
 
 function esconderCarregamento() {
-
     loadingContainer.classList.remove(
         "visible"
     );
@@ -1138,7 +1336,6 @@ function mostrarMensagemPagina(
     mensagem,
     tipo
 ) {
-
     pageMessage.textContent =
         mensagem;
 
@@ -1146,7 +1343,6 @@ function mostrarMensagemPagina(
         `message ${tipo}`;
 
     if (tipo === "success") {
-
         setTimeout(
             esconderMensagemPagina,
             4000
@@ -1156,10 +1352,10 @@ function mostrarMensagemPagina(
 
 
 function esconderMensagemPagina() {
-
     pageMessage.textContent = "";
 
-    pageMessage.className = "message";
+    pageMessage.className =
+        "message";
 }
 
 
@@ -1167,7 +1363,6 @@ function mostrarMensagemModal(
     mensagem,
     tipo
 ) {
-
     modalMessage.textContent =
         mensagem;
 
@@ -1177,7 +1372,6 @@ function mostrarMensagemModal(
 
 
 function esconderMensagemModal() {
-
     modalMessage.textContent = "";
 
     modalMessage.className =
@@ -1186,7 +1380,6 @@ function esconderMensagemModal() {
 
 
 function tratarErroDaPagina(erro) {
-
     console.error(
         "Erro na página de clientes:",
         erro
@@ -1199,6 +1392,15 @@ function tratarErroDaPagina(erro) {
         "visible"
     );
 
+    paginationInformation.textContent =
+        "Página 0 de 0 · 0 cliente(s)";
+
+    previousPageButton.disabled =
+        true;
+
+    nextPageButton.disabled =
+        true;
+
     mostrarMensagemPagina(
         erro.message ||
         "Não foi possível carregar os clientes.",
@@ -1208,7 +1410,6 @@ function tratarErroDaPagina(erro) {
 
 
 function abrirModalCliente() {
-
     clientModal.classList.add(
         "visible"
     );
@@ -1224,7 +1425,6 @@ function abrirModalCliente() {
 
 
 function fecharModalCliente() {
-
     clientModal.classList.remove(
         "visible"
     );
@@ -1234,7 +1434,8 @@ function fecharModalCliente() {
         "true"
     );
 
-    document.body.style.overflow = "";
+    document.body.style.overflow =
+        "";
 
     selectedClientId = null;
 
@@ -1243,7 +1444,6 @@ function fecharModalCliente() {
 
 
 function abrirModalConfirmacao() {
-
     confirmationModal.classList.add(
         "visible"
     );
@@ -1259,7 +1459,6 @@ function abrirModalConfirmacao() {
 
 
 function fecharModalConfirmacao() {
-
     confirmationModal.classList.remove(
         "visible"
     );
@@ -1269,18 +1468,21 @@ function fecharModalConfirmacao() {
         "true"
     );
 
-    document.body.style.overflow = "";
+    document.body.style.overflow =
+        "";
 
     selectedClientId = null;
-
     confirmationAction = null;
 }
 
 
-function fecharModalAoClicarFora(evento) {
-
-    if (evento.target === clientModal) {
-
+function fecharModalAoClicarFora(
+    evento
+) {
+    if (
+        evento.target ===
+        clientModal
+    ) {
         fecharModalCliente();
     }
 }
@@ -1289,53 +1491,46 @@ function fecharModalAoClicarFora(evento) {
 function fecharConfirmacaoAoClicarFora(
     evento
 ) {
-
     if (
         evento.target ===
         confirmationModal
     ) {
-
         fecharModalConfirmacao();
     }
 }
 
 
-function fecharModaisComEscape(evento) {
-
+function fecharModaisComEscape(
+    evento
+) {
     if (evento.key !== "Escape") {
         return;
     }
 
     if (
-        confirmationModal.classList.contains(
-            "visible"
-        )
+        confirmationModal.classList
+            .contains("visible")
     ) {
-
         fecharModalConfirmacao();
 
         return;
     }
 
     if (
-        clientModal.classList.contains(
-            "visible"
-        )
+        clientModal.classList
+            .contains("visible")
     ) {
-
         fecharModalCliente();
     }
 }
 
 
 function limparFormulario() {
-
     clientForm.reset();
 
     clientIdInput.value = "";
 
     esconderMensagemModal();
-
     limparErrosFormulario();
 }
 
@@ -1343,13 +1538,11 @@ function limparFormulario() {
 function desabilitarFormulario(
     desabilitado
 ) {
-
     clientForm
         .querySelectorAll(
             "input, button"
         )
-        .forEach((elemento) => {
-
+        .forEach(elemento => {
             elemento.disabled =
                 desabilitado;
         });
@@ -1362,8 +1555,8 @@ function desabilitarFormulario(
 function alterarEstadoBotaoSalvar(
     carregando
 ) {
-
-    saveButton.disabled = carregando;
+    saveButton.disabled =
+        carregando;
 
     saveButton.textContent =
         carregando
@@ -1377,26 +1570,27 @@ function alterarEstadoBotaoSalvar(
 function aplicarMascaraDocumento(
     evento
 ) {
-
     const numeros =
         obterSomenteNumeros(
             evento.target.value
         ).slice(0, 14);
 
     evento.target.value =
-        formatarDocumento(numeros);
+        formatarDocumento(
+            numeros
+        );
 }
 
 
-function formatarDocumento(documento) {
-
+function formatarDocumento(
+    documento
+) {
     const numeros =
         obterSomenteNumeros(
             documento || ""
         );
 
     if (numeros.length <= 11) {
-
         return numeros
             .replace(
                 /(\d{3})(\d)/,
@@ -1435,7 +1629,6 @@ function formatarDocumento(documento) {
 function aplicarMascaraTelefone(
     evento
 ) {
-
     const numeros =
         obterSomenteNumeros(
             evento.target.value
@@ -1453,21 +1646,18 @@ function formatarTelefone(
     telefone,
     valorPadrao = true
 ) {
-
     const numeros =
         obterSomenteNumeros(
             telefone || ""
         );
 
     if (numeros === "") {
-
         return valorPadrao
             ? "Não informado"
             : "";
     }
 
     if (numeros.length <= 10) {
-
         return numeros
             .replace(
                 /^(\d{2})(\d)/,
@@ -1491,26 +1681,32 @@ function formatarTelefone(
 }
 
 
-function obterSomenteNumeros(valor) {
-
+function obterSomenteNumeros(
+    valor
+) {
     return String(valor || "")
-        .replace(/\D/g, "");
+        .replace(
+            /\D/g,
+            ""
+        );
 }
 
 
 function validarEmail(email) {
-
     const formatoEmail =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    return formatoEmail.test(email);
+    return formatoEmail.test(
+        email
+    );
 }
 
 
 function escaparHtml(valor) {
-
     const elemento =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     elemento.textContent =
         valor == null
@@ -1522,24 +1718,30 @@ function escaparHtml(valor) {
 
 
 function escaparAtributo(valor) {
-
     return escaparHtml(valor)
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
 function limparAutenticacao() {
+    localStorage.removeItem(
+        "serviceflow_token"
+    );
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("usuario");
+    localStorage.removeItem(
+        "serviceflow_usuario"
+    );
 }
 
 
 function realizarLogout() {
-
     limparAutenticacao();
 
     redirecionarParaLogin();
@@ -1547,7 +1749,6 @@ function realizarLogout() {
 
 
 function redirecionarParaLogin() {
-
     window.location.href =
-        "../../login.html";
+        "../login.html";
 }

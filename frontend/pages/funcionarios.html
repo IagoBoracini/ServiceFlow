@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Funcionários | ServiceFlow
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/funcionarios.css"
+    >
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-header">
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+                <span class="logo-icon">
+                    ⚙️
+                </span>
+
+                <span class="logo-text">
+                    ServiceFlow
+                </span>
+
+            </a>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a
+                href="clientes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Clientes</span>
+            </a>
+
+            <a
+                href="funcionarios.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">🧑‍💼</span>
+                <span>Funcionários</span>
+            </a>
+
+            <a
+                href="chamados.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🎫</span>
+                <span>Chamados</span>
+            </a>
+
+            <a
+                href="ordens-servico.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛠️</span>
+                <span>Ordens de serviço</span>
+            </a>
+
+            <a
+                href="perfil.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👤</span>
+                <span>Minha conta</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button
+                type="button"
+                class="logout-button"
+                id="botaoSair"
+            >
+                <span>🚪</span>
+                <span>Sair</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <div>
+
+                    <h1>
+                        Funcionários
+                    </h1>
+
+                    <p>
+                        Gerencie toda a equipe da empresa
+                    </p>
+
+                </div>
+
+            </div>
+
+            <a
+                href="perfil.html"
+                class="user-area user-profile-link"
+            >
+
+                <div class="user-information">
+
+                    <strong id="user-name">
+                        Usuário
+                    </strong>
+
+                    <span id="user-role">
+                        Carregando...
+                    </span>
+
+                </div>
+
+                <div
+                    class="user-avatar"
+                    id="user-avatar"
+                >
+                    U
+                </div>
+
+            </a>
+
+        </header>
+
+        <section class="page-content">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Funcionários
+                    </h2>
+
+                    <p>
+                        Gerencie os funcionários da empresa.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="botaoPendentes"
+                >
+                    Solicitações Pendentes
+                </button>
+
+            </div>
+
+            <div class="content-card">
+
+                <div class="filters">
+
+                    <div class="search-box">
+
+                        <label for="pesquisaFuncionario">
+                            Pesquisar
+                        </label>
+
+                        <input
+                            type="search"
+                            id="pesquisaFuncionario"
+                            placeholder="Pesquisar nome, e-mail, cargo..."
+                        >
+
+                    </div>
+
+                    <div class="filter-box">
+
+                        <label for="filtroStatus">
+                            Status
+                        </label>
+
+                        <select id="filtroStatus">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="ATIVO">
+                                Ativos
+                            </option>
+
+                            <option value="INATIVO">
+                                Inativos
+                            </option>
+
+                            <option value="PENDENTE">
+                                Pendentes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="botaoLimparFiltros"
+                    >
+                        Limpar filtros
+                    </button>
+
+                </div>
+
+                <div class="table-header">
+
+                    <strong id="quantidadeFuncionarios">
+                        0 funcionário(s)
+                    </strong>
+
+                </div>
+                                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    E-mail
+                                </th>
+
+                                <th>
+                                    Cargo
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="actions-column">
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tabelaFuncionarios">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="loading-row"
+                                >
+                                    Carregando funcionários...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="pagination">
+
+                    <button
+                        type="button"
+                        class="pagination-button"
+                        id="paginaAnterior"
+                    >
+                        ← Anterior
+                    </button>
+
+                    <span id="informacaoPagina">
+                        Página 1 de 1
+                    </span>
+
+                    <button
+                        type="button"
+                        class="pagination-button"
+                        id="proximaPagina"
+                    >
+                        Próxima →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/funcionarios.js"></script>
+
+</body>
+
+</html>

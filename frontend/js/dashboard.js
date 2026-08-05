@@ -1,11 +1,15 @@
-const token = localStorage.getItem("serviceflow_token");
+const API_URL = "http://localhost:8080";
+const URL_DASHBOARD = `${API_URL}/dashboard`;
 
-const URL_DASHBOARD = "http://localhost:8080/dashboard";
+const sidebar =
+    document.getElementById("sidebar");
 
-const sidebar = document.getElementById("sidebar");
-const sidebarOverlay = document.getElementById("sidebar-overlay");
+const sidebarOverlay =
+    document.getElementById("sidebar-overlay");
 
-const menuButton = document.getElementById("menu-button");
+const menuButton =
+    document.getElementById("menu-button");
+
 const closeSidebarButton =
     document.getElementById("close-sidebar");
 
@@ -46,82 +50,134 @@ const dashboardMessage =
     document.getElementById("dashboard-message");
 
 
-iniciarDashboard();
+document.addEventListener(
+    "DOMContentLoaded",
+    iniciarDashboard
+);
 
 
 function iniciarDashboard() {
+    const token =
+        obterToken();
 
-    protegerPagina();
+    if (!token) {
+        redirecionarParaLogin();
+        return;
+    }
 
     configurarEventos();
-
     carregarUsuarioSalvo();
-
     carregarDashboard();
 }
 
 
-function protegerPagina() {
-
-    if (!token) {
-
-        window.location.href =
-            "../../login.html";
-    }
+function obterToken() {
+    return localStorage.getItem(
+        "serviceflow_token"
+    );
 }
 
 
 function configurarEventos() {
+    if (menuButton) {
+        menuButton.addEventListener(
+            "click",
+            abrirMenu
+        );
+    }
 
-    menuButton.addEventListener(
-        "click",
-        abrirMenu
+    if (closeSidebarButton) {
+        closeSidebarButton.addEventListener(
+            "click",
+            fecharMenu
+        );
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener(
+            "click",
+            fecharMenu
+        );
+    }
+
+    if (logoutButton) {
+        logoutButton.addEventListener(
+            "click",
+            realizarLogout
+        );
+    }
+
+    window.addEventListener(
+        "resize",
+        verificarTamanhoTela
     );
 
-    closeSidebarButton.addEventListener(
-        "click",
-        fecharMenu
-    );
-
-    sidebarOverlay.addEventListener(
-        "click",
-        fecharMenu
-    );
-
-    logoutButton.addEventListener(
-        "click",
-        realizarLogout
+    document.addEventListener(
+        "keydown",
+        fecharMenuComEscape
     );
 }
 
 
 function abrirMenu() {
+    if (sidebar) {
+        sidebar.classList.add(
+            "open"
+        );
+    }
 
-    sidebar.classList.add("open");
+    if (sidebarOverlay) {
+        sidebarOverlay.classList.add(
+            "active"
+        );
+    }
 
-    sidebarOverlay.classList.add("active");
+    document.body.style.overflow =
+        "hidden";
 }
 
 
 function fecharMenu() {
+    if (sidebar) {
+        sidebar.classList.remove(
+            "open"
+        );
+    }
 
-    sidebar.classList.remove("open");
+    if (sidebarOverlay) {
+        sidebarOverlay.classList.remove(
+            "active"
+        );
+    }
 
-    sidebarOverlay.classList.remove("active");
+    document.body.style.overflow =
+        "";
+}
+
+
+function verificarTamanhoTela() {
+    if (window.innerWidth > 800) {
+        fecharMenu();
+    }
+}
+
+
+function fecharMenuComEscape(evento) {
+    if (evento.key !== "Escape") {
+        return;
+    }
+
+    fecharMenu();
 }
 
 
 function realizarLogout() {
-
     limparDadosDeAutenticacao();
-
-    window.location.href =
-        "../../login.html";
+    redirecionarParaLogin();
 }
 
 
 function limparDadosDeAutenticacao() {
-
     localStorage.removeItem(
         "serviceflow_token"
     );
@@ -132,121 +188,200 @@ function limparDadosDeAutenticacao() {
 }
 
 
-function carregarUsuarioSalvo() {
+function redirecionarParaLogin() {
+    window.location.href =
+        "../login.html";
+}
 
+
+function carregarUsuarioSalvo() {
     const usuarioSalvo =
         localStorage.getItem(
             "serviceflow_usuario"
         );
 
     if (!usuarioSalvo) {
-
-        userName.textContent = "Usuário";
-
-        userRole.textContent = "ServiceFlow";
-
-        userAvatar.textContent = "U";
-
+        definirUsuarioPadrao();
         return;
     }
 
     try {
-
         const usuario =
             JSON.parse(usuarioSalvo);
 
         const nome =
-            usuario.nome || "Usuário";
+            usuario.nome ||
+            "Usuário";
 
         const cargo =
-            usuario.cargo
-                ? formatarTexto(usuario.cargo)
-                : "ServiceFlow";
+            formatarCargo(
+                usuario.cargo
+            );
 
-        userName.textContent = nome;
-
-        userRole.textContent = cargo;
-
-        userAvatar.textContent =
-            nome.charAt(0).toUpperCase();
-
-        welcomeTitle.textContent =
-            `Bem-vindo, ${obterPrimeiroNome(nome)}!`;
+        atualizarInformacoesUsuario(
+            nome,
+            cargo
+        );
 
     } catch (erro) {
+        console.error(
+            "Erro ao carregar usuário salvo:",
+            erro
+        );
 
         localStorage.removeItem(
             "serviceflow_usuario"
         );
+
+        definirUsuarioPadrao();
     }
 }
 
 
+function definirUsuarioPadrao() {
+    atualizarInformacoesUsuario(
+        "Usuário",
+        "ServiceFlow"
+    );
+}
+
+
+function atualizarInformacoesUsuario(
+    nome,
+    cargo
+) {
+    const nomeValido =
+        String(
+            nome || "Usuário"
+        ).trim() || "Usuário";
+
+    if (userName) {
+        userName.textContent =
+            nomeValido;
+    }
+
+    if (userRole) {
+        userRole.textContent =
+            cargo || "ServiceFlow";
+    }
+
+    if (userAvatar) {
+        userAvatar.textContent =
+            obterInicialUsuario(
+                nomeValido
+            );
+    }
+
+    if (welcomeTitle) {
+        welcomeTitle.textContent =
+            `Bem-vindo, ${obterPrimeiroNome(nomeValido)}!`;
+    }
+}
+
+
+function obterInicialUsuario(nome) {
+    const nomeNormalizado =
+        String(nome || "")
+            .trim();
+
+    if (!nomeNormalizado) {
+        return "U";
+    }
+
+    return nomeNormalizado
+        .charAt(0)
+        .toUpperCase();
+}
+
+
+function formatarCargo(cargo) {
+    const cargos = {
+        ADMIN: "Administrador",
+        ATENDENTE: "Atendente",
+        TECNICO: "Técnico"
+    };
+
+    if (!cargo) {
+        return "ServiceFlow";
+    }
+
+    return cargos[cargo] ||
+        formatarTexto(cargo);
+}
+
+
 async function carregarDashboard() {
-
     limparMensagem();
-
     mostrarCarregamento();
 
-    try {
+    const token =
+        obterToken();
 
+    try {
         const resposta = await fetch(
             URL_DASHBOARD,
             {
                 method: "GET",
 
                 headers: {
-                    "Authorization":
-                        `Bearer ${token}`,
-
                     "Accept":
-                        "application/json"
+                        "application/json",
+
+                    "Authorization":
+                        `Bearer ${token}`
                 }
             }
         );
 
-        if (
-            resposta.status === 401 ||
-            resposta.status === 403
-        ) {
+        const dados =
+            await lerResposta(
+                resposta
+            );
 
+        if (resposta.status === 401) {
             limparDadosDeAutenticacao();
-
-            window.location.href =
-                "../../login.html";
-
+            redirecionarParaLogin();
             return;
         }
 
-        const dados =
-            await lerResposta(resposta);
-
-        if (!resposta.ok) {
-
-            const mensagemErro =
+        if (resposta.status === 403) {
+            throw new Error(
                 dados.mensagem ||
-                dados.erro ||
-                "Não foi possível carregar o dashboard.";
-
-            throw new Error(mensagemErro);
+                dados.message ||
+                "Você não possui permissão para acessar o dashboard."
+            );
         }
 
-        atualizarResumo(dados);
+        if (!resposta.ok) {
+            throw new Error(
+                obterMensagemErro(
+                    dados
+                )
+            );
+        }
+
+        atualizarResumo(
+            dados
+        );
 
         renderizarChamados(
-            dados.ultimosChamados || []
+            dados.ultimosChamados ||
+            []
         );
 
         renderizarOrdens(
-            dados.ultimasOrdens || []
+            dados.ultimasOrdens ||
+            []
         );
 
     } catch (erro) {
+        console.error(
+            "Erro ao carregar dashboard:",
+            erro
+        );
 
         zerarResumo();
-
         renderizarChamados([]);
-
         renderizarOrdens([]);
 
         mostrarErro(
@@ -258,71 +393,122 @@ async function carregarDashboard() {
 
 
 function atualizarResumo(dados) {
+    atualizarTextoElemento(
+        totalClientes,
+        dados.clientes ??
+        dados.totalClientes ??
+        0
+    );
 
-    totalClientes.textContent =
-        dados.clientes ?? 0;
+    atualizarTextoElemento(
+        chamadosAbertos,
+        dados.chamadosAbertos ??
+        0
+    );
 
-    chamadosAbertos.textContent =
-        dados.chamadosAbertos ?? 0;
+    atualizarTextoElemento(
+        chamadosAndamento,
+        dados.chamadosEmAndamento ??
+        0
+    );
 
-    chamadosAndamento.textContent =
-        dados.chamadosEmAndamento ?? 0;
-
-    ordensFinalizadas.textContent =
-        dados.ordensFinalizadas ?? 0;
+    atualizarTextoElemento(
+        ordensFinalizadas,
+        dados.ordensFinalizadas ??
+        0
+    );
 }
 
 
 function zerarResumo() {
+    atualizarTextoElemento(
+        totalClientes,
+        0
+    );
 
-    totalClientes.textContent = "0";
+    atualizarTextoElemento(
+        chamadosAbertos,
+        0
+    );
 
-    chamadosAbertos.textContent = "0";
+    atualizarTextoElemento(
+        chamadosAndamento,
+        0
+    );
 
-    chamadosAndamento.textContent = "0";
-
-    ordensFinalizadas.textContent = "0";
+    atualizarTextoElemento(
+        ordensFinalizadas,
+        0
+    );
 }
 
 
 function mostrarCarregamento() {
+    atualizarTextoElemento(
+        totalClientes,
+        "..."
+    );
 
-    totalClientes.textContent = "...";
+    atualizarTextoElemento(
+        chamadosAbertos,
+        "..."
+    );
 
-    chamadosAbertos.textContent = "...";
+    atualizarTextoElemento(
+        chamadosAndamento,
+        "..."
+    );
 
-    chamadosAndamento.textContent = "...";
+    atualizarTextoElemento(
+        ordensFinalizadas,
+        "..."
+    );
 
-    ordensFinalizadas.textContent = "...";
+    if (recentTickets) {
+        recentTickets.innerHTML = `
+            <tr>
+                <td
+                    colspan="4"
+                    class="empty-table"
+                >
+                    Carregando chamados...
+                </td>
+            </tr>
+        `;
+    }
 
-    recentTickets.innerHTML = `
-        <tr>
-            <td
-                colspan="4"
-                class="empty-table"
-            >
-                Carregando chamados...
-            </td>
-        </tr>
-    `;
+    if (recentOrders) {
+        recentOrders.innerHTML = `
+            <div class="empty-list">
+                Carregando ordens...
+            </div>
+        `;
+    }
+}
 
-    recentOrders.innerHTML = `
-        <div class="empty-list">
-            Carregando ordens...
-        </div>
-    `;
+
+function atualizarTextoElemento(
+    elemento,
+    valor
+) {
+    if (elemento) {
+        elemento.textContent =
+            valor;
+    }
 }
 
 
 function renderizarChamados(chamados) {
-
-    if (!Array.isArray(chamados)) {
-
-        chamados = [];
+    if (!recentTickets) {
+        return;
     }
 
-    if (chamados.length === 0) {
+    const listaChamados =
+        Array.isArray(chamados)
+            ? chamados
+            : [];
 
+    if (listaChamados.length === 0) {
         recentTickets.innerHTML = `
             <tr>
                 <td
@@ -338,9 +524,8 @@ function renderizarChamados(chamados) {
     }
 
     recentTickets.innerHTML =
-        chamados
-            .map((chamado) => {
-
+        listaChamados
+            .map(chamado => {
                 const titulo =
                     chamado.titulo ||
                     "Sem título";
@@ -359,11 +544,30 @@ function renderizarChamados(chamados) {
                     chamado.status ||
                     "ABERTO";
 
+                const tecnico =
+                    chamado.tecnicoNome ||
+                    chamado.tecnicoResponsavelNome ||
+                    "Não atribuído";
+
+                const data =
+                    formatarData(
+                        chamado.dataAbertura
+                    );
+
+                const informacoes =
+                    `${tecnico} · ${data}`;
+
                 return `
                     <tr>
 
                         <td>
-                            ${escaparHtml(titulo)}
+                            <strong>
+                                ${escaparHtml(titulo)}
+                            </strong>
+
+                            <div class="secondary-information">
+                                ${escaparHtml(informacoes)}
+                            </div>
                         </td>
 
                         <td>
@@ -371,7 +575,6 @@ function renderizarChamados(chamados) {
                         </td>
 
                         <td>
-
                             <span
                                 class="
                                     priority-badge
@@ -380,22 +583,29 @@ function renderizarChamados(chamados) {
                                     )}
                                 "
                             >
-                                ${formatarTexto(prioridade)}
+                                ${escaparHtml(
+                                    formatarTexto(
+                                        prioridade
+                                    )
+                                )}
                             </span>
-
                         </td>
 
                         <td>
-
                             <span
                                 class="
                                     status-badge
-                                    ${obterClasseStatus(status)}
+                                    ${obterClasseStatus(
+                                        status
+                                    )}
                                 "
                             >
-                                ${formatarTexto(status)}
+                                ${escaparHtml(
+                                    formatarTexto(
+                                        status
+                                    )
+                                )}
                             </span>
-
                         </td>
 
                     </tr>
@@ -406,14 +616,16 @@ function renderizarChamados(chamados) {
 
 
 function renderizarOrdens(ordens) {
-
-    if (!Array.isArray(ordens)) {
-
-        ordens = [];
+    if (!recentOrders) {
+        return;
     }
 
-    if (ordens.length === 0) {
+    const listaOrdens =
+        Array.isArray(ordens)
+            ? ordens
+            : [];
 
+    if (listaOrdens.length === 0) {
         recentOrders.innerHTML = `
             <div class="empty-list">
                 Nenhuma ordem encontrada.
@@ -424,9 +636,8 @@ function renderizarOrdens(ordens) {
     }
 
     recentOrders.innerHTML =
-        ordens
-            .map((ordem) => {
-
+        listaOrdens
+            .map(ordem => {
                 const numero =
                     ordem.numero ||
                     "Número não informado";
@@ -437,9 +648,23 @@ function renderizarOrdens(ordens) {
                     ordem.cliente ||
                     "Cliente não informado";
 
+                const chamado =
+                    ordem.chamadoTitulo ||
+                    "Chamado não informado";
+
+                const tecnico =
+                    ordem.tecnicoNome ||
+                    ordem.tecnicoResponsavelNome ||
+                    "Técnico não informado";
+
                 const status =
                     ordem.status ||
                     "ABERTA";
+
+                const data =
+                    formatarData(
+                        ordem.dataCriacao
+                    );
 
                 return `
                     <div class="order-item">
@@ -453,16 +678,32 @@ function renderizarOrdens(ordens) {
                             <span
                                 class="
                                     status-badge
-                                    ${obterClasseStatus(status)}
+                                    ${obterClasseStatus(
+                                        status
+                                    )}
                                 "
                             >
-                                ${formatarTexto(status)}
+                                ${escaparHtml(
+                                    formatarTexto(
+                                        status
+                                    )
+                                )}
                             </span>
 
                         </div>
 
                         <p class="order-client">
                             ${escaparHtml(cliente)}
+                        </p>
+
+                        <p class="order-client">
+                            ${escaparHtml(chamado)}
+                        </p>
+
+                        <p class="order-client">
+                            ${escaparHtml(
+                                `${tecnico} · ${data}`
+                            )}
                         </p>
 
                     </div>
@@ -473,10 +714,12 @@ function renderizarOrdens(ordens) {
 
 
 function obterClasseStatus(status) {
-
     const classes = {
-        ABERTO: "status-open",
-        ABERTA: "status-open",
+        ABERTO:
+            "status-open",
+
+        ABERTA:
+            "status-open",
 
         EM_ANDAMENTO:
             "status-progress",
@@ -508,12 +751,21 @@ function obterClasseStatus(status) {
 function obterClassePrioridade(
     prioridade
 ) {
-
     const classes = {
-        BAIXA: "priority-low",
-        MEDIA: "priority-medium",
-        ALTA: "priority-high",
-        URGENTE: "priority-high"
+        BAIXA:
+            "priority-low",
+
+        MEDIA:
+            "priority-medium",
+
+        ALTA:
+            "priority-high",
+
+        CRITICA:
+            "priority-critical",
+
+        URGENTE:
+            "priority-critical"
     };
 
     return classes[prioridade] ||
@@ -522,33 +774,68 @@ function obterClassePrioridade(
 
 
 function formatarTexto(texto) {
-
     if (!texto) {
-        return "";
+        return "-";
     }
 
     return String(texto)
         .toLowerCase()
-        .replaceAll("_", " ")
+        .replaceAll(
+            "_",
+            " "
+        )
         .replace(
             /\b\w/g,
-            (letra) =>
+            letra =>
                 letra.toUpperCase()
         );
+}
+
+
+function formatarData(valor) {
+    if (!valor) {
+        return "Data não informada";
+    }
+
+    const data =
+        new Date(valor);
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+        return "Data não informada";
+    }
+
+    return data.toLocaleString(
+        "pt-BR"
+    );
 }
 
 
 function obterPrimeiroNome(
     nomeCompleto
 ) {
+    const nome =
+        String(
+            nomeCompleto || ""
+        ).trim();
 
-    return nomeCompleto
-        .trim()
-        .split(" ")[0];
+    if (!nome) {
+        return "Usuário";
+    }
+
+    return nome.split(
+        /\s+/
+    )[0];
 }
 
 
 function mostrarErro(mensagem) {
+    if (!dashboardMessage) {
+        return;
+    }
 
     dashboardMessage.textContent =
         mensagem;
@@ -559,16 +846,62 @@ function mostrarErro(mensagem) {
 
 
 function limparMensagem() {
+    if (!dashboardMessage) {
+        return;
+    }
 
-    dashboardMessage.textContent = "";
+    dashboardMessage.textContent =
+        "";
 
     dashboardMessage.className =
         "dashboard-message";
 }
 
 
-async function lerResposta(resposta) {
+function obterMensagemErro(dados) {
+    if (!dados) {
+        return "Não foi possível carregar o dashboard.";
+    }
 
+    if (
+        typeof dados === "string"
+    ) {
+        return dados;
+    }
+
+    if (dados.mensagem) {
+        return dados.mensagem;
+    }
+
+    if (dados.message) {
+        return dados.message;
+    }
+
+    if (dados.erro) {
+        return dados.erro;
+    }
+
+    if (dados.error) {
+        return dados.error;
+    }
+
+    if (
+        dados.erros &&
+        typeof dados.erros ===
+            "object"
+    ) {
+        return Object.values(
+            dados.erros
+        ).join(" ");
+    }
+
+    return "Não foi possível carregar o dashboard.";
+}
+
+
+async function lerResposta(
+    resposta
+) {
     const tipoConteudo =
         resposta.headers.get(
             "content-type"
@@ -580,8 +913,12 @@ async function lerResposta(resposta) {
             "application/json"
         )
     ) {
+        try {
+            return await resposta.json();
 
-        return await resposta.json();
+        } catch (erro) {
+            return {};
+        }
     }
 
     const texto =
@@ -598,9 +935,10 @@ async function lerResposta(resposta) {
 
 
 function escaparHtml(texto) {
-
     const elemento =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     elemento.textContent =
         String(texto ?? "");

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chamados | ServiceFlow</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/chamados.css"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="dashboard.html"
+                    class="logo"
+                >
+                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-text">ServiceFlow</span>
+                </a>
+
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a
+                    href="dashboard.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a
+                    href="clientes.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">👥</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a
+                    href="funcionarios.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">🧑‍💼</span>
+                    <span>Funcionários</span>
+                </a>
+
+                <a
+                    href="chamados.html"
+                    class="menu-item active"
+                >
+                    <span class="menu-icon">🎫</span>
+                    <span>Chamados</span>
+                </a>
+
+                <a
+                    href="ordens-servico.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">🛠️</span>
+                    <span>Ordens de serviço</span>
+                </a>
+
+                <a
+                    href="perfil.html"
+                    class="menu-item"
+                >
+                    <span class="menu-icon">👤</span>
+                    <span>Minha conta</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logout-button"
+                >
+                    <span>🚪</span>
+                    <span>Sair</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <div>
+                        <h1>Chamados</h1>
+
+                        <p>
+                            Cadastre, acompanhe e atribua chamados técnicos.
+                        </p>
+                    </div>
+
+                </div>
+
+                <a
+                    href="perfil.html"
+                    class="user-area user-profile-link"
+                    aria-label="Acessar minha conta"
+                >
+
+                    <div class="user-information">
+
+                        <strong id="user-name">
+                            Usuário
+                        </strong>
+
+                        <span id="user-role">
+                            Carregando...
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="user-avatar"
+                        id="user-avatar"
+                    >
+                        U
+                    </div>
+
+                </a>
+
+            </header>
+
+            <section class="page-content">
+
+                <div class="page-header">
+
+                    <div>
+                        <h2>Chamados</h2>
+
+                        <p>
+                            Gerencie os chamados técnicos da empresa.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="new-ticket-button"
+                    >
+                        + Novo chamado
+                    </button>
+
+                </div>
+
+                <section class="content-card">
+
+                    <div class="toolbar">
+
+                        <div class="filter-group">
+
+                            <label for="status-filter">
+                                Status
+                            </label>
+
+                            <select id="status-filter">
+                                <option value="">Todos</option>
+                                <option value="ABERTO">Aberto</option>
+
+                                <option value="EM_ANDAMENTO">
+                                    Em andamento
+                                </option>
+
+                                <option value="CONCLUIDO">
+                                    Concluído
+                                </option>
+
+                                <option value="CANCELADO">
+                                    Cancelado
+                                </option>
+                            </select>
+
+                        </div>
+
+                        <div class="filter-group">
+
+                            <label for="priority-filter">
+                                Prioridade
+                            </label>
+
+                            <select id="priority-filter">
+                                <option value="">Todas</option>
+                                <option value="BAIXA">Baixa</option>
+                                <option value="MEDIA">Média</option>
+                                <option value="ALTA">Alta</option>
+                                <option value="CRITICA">Crítica</option>
+                            </select>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="clear-filters-button"
+                        >
+                            Limpar filtros
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="refresh-button"
+                        >
+                            Atualizar
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="message"
+                        id="page-message"
+                        role="alert"
+                    ></div>
+
+                    <div
+                        class="loading-container"
+                        id="loading-container"
+                    >
+                        <div class="spinner"></div>
+
+                        <p>
+                            Carregando chamados...
+                        </p>
+                    </div>
+
+                    <div
+                        class="table-container"
+                        id="table-container"
+                    >
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Chamado</th>
+                                    <th>Cliente</th>
+                                    <th>Técnico</th>
+                                    <th>Prioridade</th>
+                                    <th>Status</th>
+                                    <th>Abertura</th>
+                                    <th class="actions-column">
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tickets-table-body"></tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div
+                        class="empty-state"
+                        id="empty-state"
+                    >
+                        <div class="empty-icon">
+                            🎫
+                        </div>
+
+                        <h2>
+                            Nenhum chamado encontrado
+                        </h2>
+
+                        <p>
+                            Cadastre um chamado ou altere os filtros.
+                        </p>
+                    </div>
+
+                    <footer
+                        class="pagination"
+                        id="pagination-container"
+                    >
+
+                        <p id="pagination-information">
+                            Página 1 de 1
+                        </p>
+
+                        <div class="pagination-actions">
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="previous-page-button"
+                            >
+                                ← Anterior
+                            </button>
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="next-page-button"
+                            >
+                                Próxima →
+                            </button>
+
+                        </div>
+
+                    </footer>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <div
+        class="modal-overlay"
+        id="ticket-modal"
+        aria-hidden="true"
+    >
+
+        <section
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+        >
+
+            <header class="modal-header">
+
+                <div>
+                    <h2 id="modal-title">
+                        Novo chamado
+                    </h2>
+
+                    <p>
+                        Preencha os dados do chamado.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="close-modal-button"
+                    id="close-modal-button"
+                    aria-label="Fechar formulário"
+                >
+                    ×
+                </button>
+
+            </header>
+
+            <div
+                class="modal-message"
+                id="modal-message"
+                role="alert"
+            ></div>
+
+            <form
+                id="ticket-form"
+                class="ticket-form"
+                novalidate
+            >
+
+                <input
+                    type="hidden"
+                    id="ticket-id"
+                >
+
+                <div class="form-group full-width">
+
+                    <label for="ticket-title">
+                        Título *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ticket-title"
+                        placeholder="Ex.: Máquina não está aquecendo"
+                    >
+
+                    <small
+                        class="field-error"
+                        id="ticket-title-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group full-width">
+
+                    <label for="ticket-description">
+                        Descrição *
+                    </label>
+
+                    <textarea
+                        id="ticket-description"
+                        rows="5"
+                        placeholder="Descreva o problema apresentado"
+                    ></textarea>
+
+                    <small
+                        class="field-error"
+                        id="ticket-description-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="ticket-client">
+                        Cliente *
+                    </label>
+
+                    <select id="ticket-client">
+                        <option value="">
+                            Selecione um cliente
+                        </option>
+                    </select>
+
+                    <small
+                        class="field-error"
+                        id="ticket-client-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="ticket-priority">
+                        Prioridade *
+                    </label>
+
+                    <select id="ticket-priority">
+                        <option value="">Selecione</option>
+                        <option value="BAIXA">Baixa</option>
+                        <option value="MEDIA">Média</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="CRITICA">Crítica</option>
+                    </select>
+
+                    <small
+                        class="field-error"
+                        id="ticket-priority-error"
+                    ></small>
+
+                </div>
+
+                <div class="form-group full-width">
+
+                    <label for="ticket-technician">
+                        Técnico responsável
+                    </label>
+
+                    <select id="ticket-technician">
+                        <option value="">
+                            Nenhum técnico atribuído
+                        </option>
+                    </select>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        id="cancel-button"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                        id="save-button"
+                    >
+                        Salvar chamado
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </section>
+
+    </div>
+
+    <script src="../js/chamados.js"></script>
+
+</body>
+
+</html>

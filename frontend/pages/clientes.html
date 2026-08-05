@@ -2,6 +2,7 @@
 <html lang="pt-br">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,7 +10,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Clientes | ServiceFlow</title>
+    <title>
+        Clientes | ServiceFlow
+    </title>
 
     <link
         rel="preconnect"
@@ -31,91 +34,165 @@
         rel="stylesheet"
         href="../css/clientes.css"
     >
+
 </head>
 
 <body>
 
-    <div class="app-layout">
+<div class="app-container">
 
-        <aside class="sidebar">
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-header">
 
             <a
                 href="dashboard.html"
                 class="logo"
             >
-                <span class="logo-icon">⚙️</span>
-                <span>ServiceFlow</span>
+                <span class="logo-icon">
+                    ⚙️
+                </span>
+
+                <span class="logo-text">
+                    ServiceFlow
+                </span>
+
             </a>
 
-            <nav class="sidebar-menu">
+        </div>
 
-                <a
-                    href="dashboard.html"
-                    class="menu-item"
-                >
-                    <span>▦</span>
-                    Dashboard
-                </a>
+        <nav class="sidebar-menu">
 
-                <a
-                    href="clientes.html"
-                    class="menu-item active"
-                >
-                    <span>👥</span>
-                    Clientes
-                </a>
+            <a
+                href="dashboard.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
 
-                <a
-                    href="chamados.html"
-                    class="menu-item"
-                >
-                    <span>📞</span>
-                    Chamados
-                </a>
+            <a
+                href="clientes.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Clientes</span>
+            </a>
 
-                <a
-                    href="ordens-servico.html"
-                    class="menu-item"
-                >
-                    <span>🛠️</span>
-                    Ordens de serviço
-                </a>
+            <a
+                href="funcionarios.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🧑‍💼</span>
+                <span>Funcionários</span>
+            </a>
 
-                <a
-                    href="funcionarios.html"
-                    class="menu-item"
-                >
-                    <span>🧑‍💼</span>
-                    Funcionários
-                </a>
+            <a
+                href="chamados.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🎫</span>
+                <span>Chamados</span>
+            </a>
 
-            </nav>
+            <a
+                href="ordens-servico.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛠️</span>
+                <span>Ordens de serviço</span>
+            </a>
+
+            <a
+                href="perfil.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👤</span>
+                <span>Minha conta</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
 
             <button
                 type="button"
                 class="logout-button"
                 id="logout-button"
             >
-                <span>↪</span>
-                Sair
+                <span>🚪</span>
+                <span>Sair</span>
             </button>
 
-        </aside>
+        </div>
 
-        <main class="main-content">
+    </aside>
 
-            <header class="page-header">
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
 
                 <div>
-                    <p class="page-subtitle">
-                        Gerenciamento
+
+                    <h1>
+                        Clientes
+                    </h1>
+
+                    <p>
+                        Cadastre e gerencie os clientes da empresa.
                     </p>
 
-                    <h1>Clientes</h1>
+                </div>
 
-                    <p class="page-description">
-                        Cadastre e gerencie os clientes da sua empresa.
+            </div>
+
+            <a
+                href="perfil.html"
+                class="user-area user-profile-link"
+            >
+
+                <div class="user-information">
+
+                    <strong id="user-name">
+                        Usuário
+                    </strong>
+
+                    <span id="user-role">
+                        Carregando...
+                    </span>
+
+                </div>
+
+                <div
+                    class="user-avatar"
+                    id="user-avatar"
+                >
+                    U
+                </div>
+
+            </a>
+
+        </header>
+
+        <section class="page-content">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Clientes
+                    </h2>
+
+                    <p>
+                        Cadastre e gerencie os clientes da empresa.
                     </p>
+
                 </div>
 
                 <button
@@ -123,13 +200,12 @@
                     class="primary-button"
                     id="new-client-button"
                 >
-                    <span>+</span>
-                    Novo cliente
+                    + Novo cliente
                 </button>
 
-            </header>
+            </div>
 
-            <section class="content-card">
+            <div class="content-card">
 
                 <div class="toolbar">
 
@@ -142,7 +218,7 @@
                         <input
                             type="search"
                             id="search-input"
-                            placeholder="Pesquisar cliente por nome..."
+                            placeholder="Pesquisar cliente..."
                             autocomplete="off"
                         >
 
@@ -168,9 +244,13 @@
                     class="loading-container"
                     id="loading-container"
                 >
+
                     <div class="spinner"></div>
 
-                    <p>Carregando clientes...</p>
+                    <p>
+                        Carregando clientes...
+                    </p>
+
                 </div>
 
                 <div
@@ -183,19 +263,38 @@
                         <thead>
 
                             <tr>
+
                                 <th>Cliente</th>
+
                                 <th>CPF/CNPJ</th>
+
                                 <th>Contato</th>
+
                                 <th>Endereço</th>
+
                                 <th>Status</th>
+
                                 <th class="actions-column">
                                     Ações
                                 </th>
+
                             </tr>
 
                         </thead>
 
-                        <tbody id="clients-table-body"></tbody>
+                        <tbody id="clients-table-body">
+                                                        <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="loading-row"
+                                >
+                                    Carregando clientes...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
 
                     </table>
 
@@ -205,15 +304,19 @@
                     class="empty-state"
                     id="empty-state"
                 >
+
                     <div class="empty-icon">
                         👥
                     </div>
 
-                    <h2>Nenhum cliente encontrado</h2>
+                    <h2>
+                        Nenhum cliente encontrado
+                    </h2>
 
                     <p>
                         Cadastre um cliente ou altere a pesquisa.
                     </p>
+
                 </div>
 
                 <footer
@@ -232,7 +335,7 @@
                             class="pagination-button"
                             id="previous-page-button"
                         >
-                            Anterior
+                            ← Anterior
                         </button>
 
                         <button
@@ -240,248 +343,250 @@
                             class="pagination-button"
                             id="next-page-button"
                         >
-                            Próxima
+                            Próxima →
                         </button>
 
                     </div>
 
                 </footer>
 
-            </section>
-
-        </main>
-
-    </div>
-
-    <div
-        class="modal-overlay"
-        id="client-modal"
-        aria-hidden="true"
-    >
-
-        <section
-            class="modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-        >
-
-            <header class="modal-header">
-
-                <div>
-                    <h2 id="modal-title">
-                        Novo cliente
-                    </h2>
-
-                    <p>
-                        Preencha os dados do cliente.
-                    </p>
-                </div>
-
-                <button
-                    type="button"
-                    class="close-modal-button"
-                    id="close-modal-button"
-                    aria-label="Fechar formulário"
-                >
-                    ×
-                </button>
-
-            </header>
-
-            <div
-                class="modal-message"
-                id="modal-message"
-                role="alert"
-            ></div>
-
-            <form
-                id="client-form"
-                class="client-form"
-                novalidate
-            >
-
-                <input
-                    type="hidden"
-                    id="client-id"
-                >
-
-                <div class="form-group full-width">
-
-                    <label for="client-name">
-                        Nome do cliente *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="client-name"
-                        placeholder="Digite o nome do cliente"
-                        autocomplete="name"
-                    >
-
-                    <small
-                        class="field-error"
-                        id="client-name-error"
-                    ></small>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="client-document">
-                        CPF ou CNPJ *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="client-document"
-                        placeholder="Digite o CPF ou CNPJ"
-                        inputmode="numeric"
-                        maxlength="18"
-                    >
-
-                    <small
-                        class="field-error"
-                        id="client-document-error"
-                    ></small>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="client-phone">
-                        Telefone
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="client-phone"
-                        placeholder="(11) 99999-9999"
-                        maxlength="15"
-                        autocomplete="tel"
-                    >
-
-                    <small
-                        class="field-error"
-                        id="client-phone-error"
-                    ></small>
-
-                </div>
-
-                <div class="form-group full-width">
-
-                    <label for="client-email">
-                        E-mail
-                    </label>
-
-                    <input
-                        type="email"
-                        id="client-email"
-                        placeholder="cliente@email.com"
-                        autocomplete="email"
-                    >
-
-                    <small
-                        class="field-error"
-                        id="client-email-error"
-                    ></small>
-
-                </div>
-
-                <div class="form-group full-width">
-
-                    <label for="client-address">
-                        Endereço
-                    </label>
-
-                    <input
-                        type="text"
-                        id="client-address"
-                        placeholder="Rua, número, bairro e cidade"
-                        autocomplete="street-address"
-                    >
-
-                    <small
-                        class="field-error"
-                        id="client-address-error"
-                    ></small>
-
-                </div>
-
-                <footer class="modal-footer">
-
-                    <button
-                        type="button"
-                        class="cancel-button"
-                        id="cancel-button"
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="save-button"
-                        id="save-button"
-                    >
-                        Salvar cliente
-                    </button>
-
-                </footer>
-
-            </form>
+            </div>
 
         </section>
 
-    </div>
+    </main>
 
-    <div
-        class="confirmation-overlay"
-        id="confirmation-modal"
-        aria-hidden="true"
+</div>
+
+<!-- MODAL DE CLIENTE -->
+
+<div
+    class="modal-overlay"
+    id="client-modal"
+    aria-hidden="true"
+>
+
+    <section
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
     >
 
-        <section class="confirmation-modal">
+        <header class="modal-header">
 
-            <div
-                class="confirmation-icon"
-                id="confirmation-icon"
-            >
-                ⚠️
+            <div>
+
+                <h2 id="modal-title">
+                    Novo cliente
+                </h2>
+
+                <p>
+                    Preencha os dados do cliente.
+                </p>
+
             </div>
 
-            <h2 id="confirmation-title">
-                Inativar cliente
-            </h2>
+            <button
+                type="button"
+                class="close-modal-button"
+                id="close-modal-button"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
 
-            <p id="confirmation-text">
-                Tem certeza de que deseja realizar esta ação?
-            </p>
+        </header>
 
-            <div class="confirmation-actions">
+        <div
+            class="modal-message"
+            id="modal-message"
+            role="alert"
+        ></div>
+
+        <form
+            id="client-form"
+            class="client-form"
+            novalidate
+        >
+
+            <input
+                type="hidden"
+                id="client-id"
+            >
+
+            <div class="form-group full-width">
+
+                <label for="client-name">
+                    Nome do cliente *
+                </label>
+
+                <input
+                    type="text"
+                    id="client-name"
+                    placeholder="Digite o nome do cliente"
+                >
+
+                <small
+                    class="field-error"
+                    id="client-name-error"
+                ></small>
+
+            </div>
+                        <div class="form-group">
+
+                <label for="client-document">
+                    CPF ou CNPJ *
+                </label>
+
+                <input
+                    type="text"
+                    id="client-document"
+                    placeholder="Digite o CPF ou CNPJ"
+                    inputmode="numeric"
+                    maxlength="18"
+                >
+
+                <small
+                    class="field-error"
+                    id="client-document-error"
+                ></small>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="client-phone">
+                    Telefone
+                </label>
+
+                <input
+                    type="tel"
+                    id="client-phone"
+                    placeholder="(11) 99999-9999"
+                    maxlength="15"
+                >
+
+                <small
+                    class="field-error"
+                    id="client-phone-error"
+                ></small>
+
+            </div>
+
+            <div class="form-group full-width">
+
+                <label for="client-email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="client-email"
+                    placeholder="cliente@email.com"
+                >
+
+                <small
+                    class="field-error"
+                    id="client-email-error"
+                ></small>
+
+            </div>
+
+            <div class="form-group full-width">
+
+                <label for="client-address">
+                    Endereço
+                </label>
+
+                <input
+                    type="text"
+                    id="client-address"
+                    placeholder="Rua, número, bairro e cidade"
+                >
+
+                <small
+                    class="field-error"
+                    id="client-address-error"
+                ></small>
+
+            </div>
+
+            <footer class="modal-footer">
 
                 <button
                     type="button"
                     class="cancel-button"
-                    id="cancel-confirmation-button"
+                    id="cancel-button"
                 >
                     Cancelar
                 </button>
 
                 <button
-                    type="button"
-                    class="confirm-button"
-                    id="confirm-action-button"
+                    type="submit"
+                    class="save-button"
+                    id="save-button"
                 >
-                    Confirmar
+                    Salvar cliente
                 </button>
 
-            </div>
+            </footer>
 
-        </section>
+        </form>
 
-    </div>
+    </section>
 
-    <script src="../js/clientes.js"></script>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO -->
+
+<div
+    class="confirmation-overlay"
+    id="confirmation-modal"
+    aria-hidden="true"
+>
+
+    <section class="confirmation-modal">
+
+        <div
+            class="confirmation-icon"
+            id="confirmation-icon"
+        >
+            ⚠️
+        </div>
+
+        <h2 id="confirmation-title">
+            Inativar cliente
+        </h2>
+
+        <p id="confirmation-text">
+            Tem certeza de que deseja realizar esta ação?
+        </p>
+
+        <div class="confirmation-actions">
+                        <button
+                type="button"
+                class="cancel-button"
+                id="cancel-confirmation-button"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="confirm-button"
+                id="confirm-action-button"
+            >
+                Confirmar
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="../js/clientes.js"></script>
 
 </body>
 

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Solicitações Pendentes | ServiceFlow
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/funcionarios.css"
+    >
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+                <span class="logo-icon">
+                    ⚙️
+                </span>
+
+                <span class="logo-text">
+                    ServiceFlow
+                </span>
+
+            </a>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a
+                href="clientes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Clientes</span>
+            </a>
+
+            <a
+                href="funcionarios.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">🧑‍💼</span>
+                <span>Funcionários</span>
+            </a>
+
+            <a
+                href="chamados.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🎫</span>
+                <span>Chamados</span>
+            </a>
+
+            <a
+                href="ordens-servico.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛠️</span>
+                <span>Ordens de serviço</span>
+            </a>
+
+            <a
+                href="perfil.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👤</span>
+                <span>Minha conta</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button
+                type="button"
+                class="logout-button"
+                id="botaoVoltar"
+            >
+                ⬅ Voltar
+            </button>
+
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Solicitações Pendentes
+                </h1>
+
+                <p>
+                    Aprove ou rejeite novos funcionários.
+                </p>
+
+            </div>
+
+            <a
+                href="perfil.html"
+                class="user-area user-profile-link"
+            >
+
+                <div class="user-information">
+
+                    <strong id="user-name">
+                        Usuário
+                    </strong>
+
+                    <span id="user-role">
+                        Carregando...
+                    </span>
+
+                </div>
+
+                <div
+                    class="user-avatar"
+                    id="user-avatar"
+                >
+                    U
+                </div>
+
+            </a>
+
+        </header>
+
+        <section class="page-content">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Solicitações Pendentes
+                    </h2>
+
+                    <p>
+                        Aprove ou rejeite solicitações de entrada na empresa.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="botaoAtualizar"
+                >
+                    Atualizar
+                </button>
+
+            </div>
+
+            <div class="content-card">
+
+                <div class="table-header">
+
+                    <strong id="quantidadePendentes">
+                        0 solicitação(ões) pendente(s)
+                    </strong>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Nome</th>
+
+                                <th>E-mail</th>
+
+                                <th>Cargo</th>
+
+                                <th>Status</th>
+
+                                <th class="actions-column">
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tabelaPendentes">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="loading-row"
+                                >
+                                    Carregando solicitações...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/pendentes.js"></script>
+
+</body>
+
+</html>
