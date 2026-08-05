@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const tabelaPendentes =
     document.getElementById("tabelaPendentes");
