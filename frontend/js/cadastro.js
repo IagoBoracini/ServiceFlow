@@ -1,5 +1,4 @@
-const URL_CADASTRO =
-    "http://localhost:8080/empresas/cadastro";
+const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 
 const registerForm =
