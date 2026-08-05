@@ -20,12 +20,12 @@ Java + Spring Boot
 
 ### Dashboard
 
-<img width="900" height="800" alt="image" src="https://github.com/user-attachments/assets/b6fe6302-a16a-43b8-b05c-abbdb8ced257" />
+<img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/b6fe6302-a16a-43b8-b05c-abbdb8ced257" />
 
 
 ### Chamados
 
-<img width="900" height="800" alt="image" src="https://github.com/user-attachments/assets/b4163825-864b-4ce1-beb9-2e06fabe0d6c" />
+<img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/b4163825-864b-4ce1-beb9-2e06fabe0d6c" />
 
 ---
 
