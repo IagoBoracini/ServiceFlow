@@ -19,91 +19,126 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-        private final JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
 
-        public SecurityConfig(JwtFilter jwtFilter) {
-                this.jwtFilter = jwtFilter;
-        }
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(
-                        HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
 
-                http
-                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        http
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
-                                .csrf(csrf -> csrf.disable())
+                .csrf(csrf ->
+                        csrf.disable()
+                )
 
-                                .sessionManagement(session -> session.sessionCreationPolicy(
-                                                SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
 
-                                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers(
+                                        HttpMethod.OPTIONS,
+                                        "/**"
+                                )
+                                .permitAll()
 
-                                                .requestMatchers(
-                                                                HttpMethod.OPTIONS,
-                                                                "/**")
-                                                .permitAll()
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/login",
+                                        "/empresas/cadastro",
+                                        "/funcionarios/solicitacoes"
+                                )
+                                .permitAll()
 
-                                                .requestMatchers(
-                                                                HttpMethod.POST,
-                                                                "/login",
-                                                                "/empresas/cadastro",
-                                                                "/funcionarios/solicitacoes")
-                                                .permitAll()
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/",
+                                        "/empresas/publicas"
+                                )
+                                .permitAll()
 
-                                                .requestMatchers(
-                                                                HttpMethod.GET,
-                                                                "/",
-                                                                "/empresas/publicas")
-                                                .permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**"
+                                )
+                                .permitAll()
 
-                                                .requestMatchers(
-                                                                "/swagger-ui/**",
-                                                                "/swagger-ui.html",
-                                                                "/v3/api-docs/**")
-                                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                )
 
-                                                .anyRequest().authenticated())
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
-                                .addFilterBefore(
-                                                jwtFilter,
-                                                UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 
-                return http.build();
-        }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuracao =
+                new CorsConfiguration();
 
-                CorsConfiguration configuracao = new CorsConfiguration();
+        configuracao.setAllowedOrigins(
+                List.of(
+                        "http://127.0.0.1:5500",
+                        "http://localhost:5500",
+                        "https://service-flow-n9wv.vercel.app"
+                )
+        );
 
-                configuracao.setAllowedOrigins(List.of(
-                                "http://127.0.0.1:5500",
-                                "http://localhost:5500"));
+        configuracao.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
 
-                configuracao.setAllowedMethods(List.of(
-                                "GET",
-                                "POST",
-                                "PUT",
-                                "PATCH",
-                                "DELETE",
-                                "OPTIONS"));
+        configuracao.setAllowedHeaders(
+                List.of(
+                        "Authorization",
+                        "Content-Type"
+                )
+        );
 
-                configuracao.setAllowedHeaders(List.of(
-                                "Authorization",
-                                "Content-Type"));
+        configuracao.setExposedHeaders(
+                List.of(
+                        "Authorization"
+                )
+        );
 
-                configuracao.setExposedHeaders(List.of(
-                                "Authorization"));
+        configuracao.setAllowCredentials(
+                true
+        );
 
-                configuracao.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration(
+                "/**",
+                configuracao
+        );
 
-                source.registerCorsConfiguration(
-                                "/**",
-                                configuracao);
-
-                return source;
-        }
+        return source;
+    }
 }
