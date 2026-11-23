@@ -1,6 +1,9 @@
 package com.ServiceFlow.config;
 
 import com.ServiceFlow.security.JwtFilter;
+import com.ServiceFlow.security.RestAccessDeniedHandler;
+import com.ServiceFlow.security.RestAuthenticationEntryPoint;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -20,9 +24,23 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final RestAuthenticationEntryPoint entryPoint;
+    private final RestAccessDeniedHandler accessDeniedHandler;
+    private final List<String> origensPermitidas;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public SecurityConfig(
+            JwtFilter jwtFilter,
+            RestAuthenticationEntryPoint entryPoint,
+            RestAccessDeniedHandler accessDeniedHandler,
+            @Value("${app.cors.allowed-origins}") String[] origensPermitidas
+    ) {
         this.jwtFilter = jwtFilter;
+        this.entryPoint = entryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.origensPermitidas = Arrays.stream(origensPermitidas)
+                .map(String::trim)
+                .filter(origem -> !origem.isEmpty())
+                .toList();
     }
 
     @Bean
@@ -45,6 +63,11 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
+                )
+
+                .exceptionHandling(erros -> erros
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
 
                 .authorizeHttpRequests(auth ->
@@ -95,13 +118,7 @@ public class SecurityConfig {
         CorsConfiguration configuracao =
                 new CorsConfiguration();
 
-        configuracao.setAllowedOrigins(
-                List.of(
-                        "http://127.0.0.1:5500",
-                        "http://localhost:5500",
-                        "https://service-flow-n9wv.vercel.app"
-                )
-        );
+        configuracao.setAllowedOrigins(origensPermitidas);
 
         configuracao.setAllowedMethods(
                 List.of(
@@ -127,8 +144,9 @@ public class SecurityConfig {
                 )
         );
 
+        // O frontend envia o JWT no cabeçalho Authorization, não em cookies.
         configuracao.setAllowCredentials(
-                true
+                false
         );
 
         UrlBasedCorsConfigurationSource source =

@@ -1,0 +1,194 @@
+/* =========================================================
+   Telas de entrada (login e cadastro) — identidade "Flux".
+   Carregado depois de login.css / cadastro.css / flux.css.
+   ========================================================= */
+
+html, body { min-height: 100%; }
+body { overflow-x: hidden; }
+
+#sf-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* a cena 3D substitui as decorações antigas */
+.orb, .grid-bg, .hero-visual,
+.presentation-section::before, .presentation-section::after { display: none !important; }
+
+.container, .register-page {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+}
+.presentation-section { background: transparent !important; }
+
+/* ---------- lado esquerdo: apresentação ---------- */
+.title, .logo {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+}
+.title { font-size: 1.5rem; }
+.logo-mark { filter: drop-shadow(0 0 16px rgba(79, 140, 255, 0.8)); }
+
+.hero-text { margin-bottom: 44px; }
+
+.hero-text p:first-child,
+.presentation-text h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 4.2vw, 3.7rem);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    background: linear-gradient(180deg, #ffffff 25%, #9db7e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-text p:last-child,
+.presentation-text > p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; max-width: 460px; }
+
+.topics { display: grid; gap: 12px; max-width: 460px; }
+.topic,
+.benefit {
+    padding: 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgba(148, 170, 220, 0.045);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.35s var(--ease), border-color 0.35s ease, background 0.35s ease;
+}
+.topic:hover, .benefit:hover {
+    transform: translateX(6px);
+    border-color: var(--primary-line);
+    background: rgba(79, 140, 255, 0.09);
+}
+.topic h3 { font-family: var(--font-display); font-size: 0.98rem; }
+.topic-icon { color: var(--cyan); filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.6)); }
+.topic p, .benefit p { color: var(--text-secondary); }
+
+.presentation-badge {
+    border: 1px solid var(--primary-line);
+    background: var(--primary-soft);
+    color: var(--primary-text);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.benefit-icon {
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--grad-soft);
+    color: var(--cyan);
+    box-shadow: inset 0 0 0 1px rgba(79, 140, 255, 0.3);
+}
+.benefit-icon svg { width: 20px; height: 20px; }
+.benefit h2 { font-family: var(--font-display); font-size: 1rem; }
+
+/* ---------- cartão do formulário: vidro 3D ---------- */
+.form-container,
+.register-card {
+    --px: 50%;
+    --py: 0%;
+    position: relative;
+    border: 1px solid transparent !important;
+    border-radius: 28px !important;
+    background:
+        linear-gradient(var(--glass-strong), var(--glass-strong)) padding-box,
+        linear-gradient(140deg, rgba(120, 165, 255, 0.55), rgba(255, 255, 255, 0.05) 40%, rgba(34, 211, 238, 0.3)) border-box !important;
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    box-shadow: 0 40px 90px -34px rgba(0, 0, 0, 0.95), 0 0 90px -34px rgba(56, 130, 255, 0.6) !important;
+    transform-style: preserve-3d;
+    animation: sf-card-in 0.9s var(--ease) both;
+}
+.sf-tilt { transition: transform 0.25s var(--ease); will-change: transform; }
+
+.form-container::before,
+.register-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(420px circle at var(--px) var(--py), rgba(110, 170, 255, 0.16), transparent 62%);
+}
+.form-container > *, .register-card > * { position: relative; }
+
+@keyframes sf-card-in {
+    from { opacity: 0; transform: translateY(30px) rotateX(8deg) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+}
+
+.form-header p:first-child,
+.register-header h2 { font-family: var(--font-display); letter-spacing: -0.02em; }
+.form-header p:last-child,
+.register-header p { color: var(--text-secondary); }
+
+/* botões de entrada (o login usa .sign-up) */
+.sign-up {
+    position: relative;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 14px !important;
+    background: var(--grad) !important;
+    color: #04101f !important;
+    font-family: var(--font-display);
+    font-weight: 600;
+    box-shadow: 0 10px 28px -10px rgba(34, 160, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    transition: transform 0.25s var(--ease), box-shadow 0.25s ease, filter 0.25s ease;
+}
+.sign-up::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+}
+.sign-up:hover:not(:disabled) { transform: translateY(-2px); filter: saturate(1.15); box-shadow: 0 16px 36px -10px rgba(34, 190, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important; }
+.sign-up:hover:not(:disabled)::after { left: 130%; transition: left 0.75s var(--ease); }
+.sign-up:active:not(:disabled) { transform: scale(0.98); }
+
+.form-login a, .register-footer a { color: var(--primary-text); font-weight: 600; }
+
+.login-message.error, .register-message.error { background: var(--danger-soft); color: var(--danger-text); border: 1px solid var(--danger-line); }
+.login-message.success, .register-message.success { background: var(--success-soft); color: var(--success-text); border: 1px solid var(--success-line); }
+
+/* botão de mostrar senha (SVG no lugar do emoji) */
+.show-password { display: grid; place-items: center; color: var(--text-secondary); }
+.show-password:hover { color: var(--text); }
+.show-password svg { width: 20px; height: 20px; }
+
+/* entrada escalonada do conteúdo da esquerda */
+.hero > *, .presentation-content > * { animation: sf-rise 0.8s var(--ease) both; }
+.hero > *:nth-child(2), .presentation-content > *:nth-child(2) { animation-delay: 0.12s; }
+.hero .topic:nth-child(1), .benefit:nth-child(1) { animation: sf-rise 0.8s var(--ease) 0.3s both; }
+.hero .topic:nth-child(2), .benefit:nth-child(2) { animation: sf-rise 0.8s var(--ease) 0.4s both; }
+.hero .topic:nth-child(3), .benefit:nth-child(3) { animation: sf-rise 0.8s var(--ease) 0.5s both; }
+@keyframes sf-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 900px) {
+    .hero-text p:first-child, .presentation-text h1 { font-size: 2.1rem; }
+    .topic:hover, .benefit:hover { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero > *, .presentation-content > *, .form-container, .register-card, .topic, .benefit { animation: none !important; }
+}
+
+/* cadastro: o painel direito deixa a cena aparecer e o cartão ganha respiro */
+.form-section { background: transparent !important; border: 0 !important; }
+.register-card { padding: 34px 34px 30px !important; }
+.form-container { overflow: visible; }
+
+@media (max-width: 900px) {
+    .register-card { padding: 26px 20px 22px !important; }
+}

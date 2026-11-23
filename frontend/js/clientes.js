@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const PAGE_SIZE = 10;
 
@@ -1089,8 +1088,8 @@ function abrirConfirmacaoInativacao(
     confirmationAction =
         "deactivate";
 
-    confirmationIcon.textContent =
-        "⚠️";
+    confirmationIcon.innerHTML =
+        `<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 3 20h18z"/><path d="M12 10v4M12 17.2v.1"/></svg>`;
 
     confirmationTitle.textContent =
         "Inativar cliente";
@@ -1119,8 +1118,8 @@ function abrirConfirmacaoReativacao(
     confirmationAction =
         "reactivate";
 
-    confirmationIcon.textContent =
-        "✅";
+    confirmationIcon.innerHTML =
+        `<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.8"/></svg>`;
 
     confirmationTitle.textContent =
         "Reativar cliente";

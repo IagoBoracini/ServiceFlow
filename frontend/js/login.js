@@ -9,7 +9,6 @@ const erroSenha = document.getElementById("erro-senha");
 const mensagemLogin = document.getElementById("mensagem-login");
 const botaoLogin = document.getElementById("botao-login");
 
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const URL_LOGIN = `${API_URL}/login`;
 const URL_CADASTRO = `${API_URL}/empresas/cadastro`;
@@ -81,6 +80,8 @@ async function realizarLogin(evento) {
                 JSON.stringify(dados.usuario)
             );
         }
+
+        await salvarPerfilDoUsuario(token);
 
         mostrarMensagem(
             "Login realizado com sucesso.",
@@ -200,5 +201,30 @@ function verificarUsuarioLogado() {
 
     if (token) {
         window.location.href = "./pages/dashboard.html";
+    }
+}
+
+// O endpoint de login devolve apenas o token. Buscamos o perfil para que
+// o menu lateral mostre o nome e o cargo corretos já na primeira tela.
+async function salvarPerfilDoUsuario(token) {
+    try {
+        const resposta = await fetch(`${API_URL}/usuarios/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!resposta.ok) {
+            return;
+        }
+
+        const perfil = await resposta.json();
+
+        localStorage.setItem(
+            "serviceflow_usuario",
+            JSON.stringify(perfil)
+        );
+    } catch (erro) {
+        // Falha ao buscar o perfil não deve impedir o login.
     }
 }

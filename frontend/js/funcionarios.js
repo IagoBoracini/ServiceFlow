@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const tabelaFuncionarios =
     document.getElementById("tabelaFuncionarios");
@@ -327,6 +326,9 @@ function formatarStatus(status) {
 
 
 function formatarTexto(texto) {
+    const rotuloSf = typeof sfRotulo === "function" ? sfRotulo(texto) : null;
+    if (rotuloSf) return rotuloSf;
+
     return String(texto)
         .toLowerCase()
         .replaceAll("_", " ")

@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const PROFILE_URL =
     `${API_URL}/usuarios/me`;
@@ -1182,6 +1181,9 @@ function formatRole(role) {
 
 
 function formatText(value) {
+    const rotuloSf = typeof sfRotulo === "function" ? sfRotulo(value) : null;
+    if (rotuloSf) return rotuloSf;
+
     if (!value) {
         return "-";
     }

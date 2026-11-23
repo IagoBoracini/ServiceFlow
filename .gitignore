@@ -1,0 +1,18 @@
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Build / dependências
+target/
+node_modules/
+
+# Segredos e ambiente local
+.env
+*.env.local
+application-local.properties
+
+# Sistema
+.DS_Store
+Thumbs.db
+HELP.md

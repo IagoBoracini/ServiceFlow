@@ -9,6 +9,8 @@ import com.ServiceFlow.model.StatusUsuario;
 import com.ServiceFlow.model.Usuario;
 import com.ServiceFlow.repository.EmpresaRepository;
 import com.ServiceFlow.repository.UsuarioRepository;
+import com.ServiceFlow.util.CnpjValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +23,19 @@ public class EmpresaService {
     private final EmpresaRepository empresaRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final boolean validarDigitosCnpj;
 
     public EmpresaService(
             EmpresaRepository empresaRepository,
             UsuarioRepository usuarioRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            @Value("${app.cnpj.validar-digitos:true}")
+            boolean validarDigitosCnpj
     ) {
         this.empresaRepository = empresaRepository;
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.validarDigitosCnpj = validarDigitosCnpj;
     }
 
     @Transactional
@@ -131,6 +137,12 @@ public class EmpresaService {
         if (cnpj.length() != 14) {
             throw new IllegalArgumentException(
                     "O CNPJ deve possuir 14 números."
+            );
+        }
+
+        if (validarDigitosCnpj && !CnpjValidator.valido(cnpj)) {
+            throw new IllegalArgumentException(
+                    "O CNPJ informado é inválido."
             );
         }
     }

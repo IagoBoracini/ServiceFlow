@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 const PAGE_SIZE = 10;
 
 let currentPage = 0;
@@ -431,6 +430,9 @@ function getUserInitial(name) {
 
 
 function formatText(value) {
+    const rotuloSf = typeof sfRotulo === "function" ? sfRotulo(value) : null;
+    if (rotuloSf) return rotuloSf;
+
     if (!value) {
         return "";
     }

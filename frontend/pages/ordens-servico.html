@@ -23,13 +23,18 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
         rel="stylesheet"
     >
 
     <link
         rel="stylesheet"
         href="../css/ordens-servico.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/flux.css"
     >
 </head>
 
@@ -48,7 +53,7 @@
                     href="dashboard.html"
                     class="logo"
                 >
-                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-icon"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="sf-logo-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#sf-logo-g)"/><path d="M8 11h9a3 3 0 0 1 0 6H12a3 3 0 0 0 0 6h12" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.5 20.5 24 23l-2.5 2.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                     <span class="logo-text">ServiceFlow</span>
                 </a>
 
@@ -60,7 +65,7 @@
                     href="dashboard.html"
                     class="menu-item"
                 >
-                    <span class="menu-icon">📊</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
                     <span>Dashboard</span>
                 </a>
 
@@ -68,7 +73,7 @@
                     href="clientes.html"
                     class="menu-item"
                 >
-                    <span class="menu-icon">👥</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5a3 3 0 0 1 0 6M18.5 14.8c1.5.8 2.5 2.4 2.5 5.2"/></svg></span>
                     <span>Clientes</span>
                 </a>
 
@@ -76,7 +81,7 @@
                     href="funcionarios.html"
                     class="menu-item"
                 >
-                    <span class="menu-icon">🧑‍💼</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>
                     <span>Funcionários</span>
                 </a>
 
@@ -84,7 +89,7 @@
                     href="chamados.html"
                     class="menu-item"
                 >
-                    <span class="menu-icon">🎫</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 0 0 6v3h18v-3a2 2 0 0 1 0-6V6H3z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg></span>
                     <span>Chamados</span>
                 </a>
 
@@ -92,7 +97,7 @@
                     href="ordens-servico.html"
                     class="menu-item active"
                 >
-                    <span class="menu-icon">🛠️</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span>
                     <span>Ordens de serviço</span>
                 </a>
 
@@ -100,7 +105,7 @@
                     href="perfil.html"
                     class="menu-item"
                 >
-                    <span class="menu-icon">👤</span>
+                    <span class="menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg></span>
                     <span>Minha conta</span>
                 </a>
 
@@ -113,7 +118,7 @@
                     class="logout-button"
                     id="logout-button"
                 >
-                    <span>🚪</span>
+                    <span class="sf-ico"></span>
                     <span>Sair</span>
                 </button>
 
@@ -203,9 +208,7 @@
 
                         <div class="search-container">
 
-                            <span class="search-icon">
-                                🔎
-                            </span>
+                            <span class="search-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></span>
 
                             <input
                                 type="search"
@@ -321,7 +324,7 @@
                     >
 
                         <div class="empty-icon">
-                            🛠️
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>
                         </div>
 
                         <h2>
@@ -798,6 +801,10 @@
         </section>
 
     </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/shell.js"></script>
+    <script src="../js/effects.js"></script>
 
     <script src="../js/ordens-servico.js"></script>
 

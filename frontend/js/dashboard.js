@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 const URL_DASHBOARD = `${API_URL}/dashboard`;
 
 const sidebar =
@@ -363,6 +362,10 @@ async function carregarDashboard() {
         atualizarResumo(
             dados
         );
+
+        if (window.ServiceFlowCharts) {
+            window.ServiceFlowCharts.renderizar(dados);
+        }
 
         renderizarChamados(
             dados.ultimosChamados ||
@@ -774,6 +777,9 @@ function obterClassePrioridade(
 
 
 function formatarTexto(texto) {
+    const rotuloSf = typeof sfRotulo === "function" ? sfRotulo(texto) : null;
+    if (rotuloSf) return rotuloSf;
+
     if (!texto) {
         return "-";
     }

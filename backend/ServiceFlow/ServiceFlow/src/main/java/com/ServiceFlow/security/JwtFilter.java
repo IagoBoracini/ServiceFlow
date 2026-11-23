@@ -1,5 +1,6 @@
 package com.ServiceFlow.security;
 
+import com.ServiceFlow.model.StatusUsuario;
 import com.ServiceFlow.model.Usuario;
 import com.ServiceFlow.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
@@ -67,6 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (
                 usuario != null &&
+                usuario.getStatus() == StatusUsuario.ATIVO &&
                 SecurityContextHolder
                         .getContext()
                         .getAuthentication() == null

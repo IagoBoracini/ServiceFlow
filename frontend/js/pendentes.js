@@ -1,4 +1,3 @@
-const API_URL = "https://serviceflow-production-a083.up.railway.app";
 
 const tabelaPendentes =
     document.getElementById("tabelaPendentes");
@@ -103,7 +102,7 @@ function mostrarMensagemTabela(mensagem) {
     tabelaPendentes.innerHTML = `
         <tr>
             <td colspan="5">
-                ${mensagem}
+                ${escaparHtml(mensagem)}
             </td>
         </tr>
     `;
@@ -128,20 +127,20 @@ function mostrarPendentes(lista) {
 
         linha.innerHTML = `
             <td>
-                ${funcionario.nome ?? "-"}
+                ${escaparHtml(funcionario.nome ?? "-")}
             </td>
 
             <td>
-                ${funcionario.email ?? "-"}
+                ${escaparHtml(funcionario.email ?? "-")}
             </td>
 
             <td>
-                ${formatarCargo(funcionario.cargo)}
+                ${escaparHtml(formatarCargo(funcionario.cargo))}
             </td>
 
             <td>
                 <span class="status status-pendente">
-                    ${funcionario.status ?? "PENDENTE"}
+                    ${escaparHtml(funcionario.status ?? "PENDENTE")}
                 </span>
             </td>
 
@@ -149,7 +148,7 @@ function mostrarPendentes(lista) {
                 <button
                     type="button"
                     class="botao-aprovar"
-                    data-id="${funcionario.id}"
+                    data-id="${Number(funcionario.id)}"
                 >
                     Aprovar
                 </button>
@@ -157,7 +156,7 @@ function mostrarPendentes(lista) {
                 <button
                     type="button"
                     class="botao-rejeitar"
-                    data-id="${funcionario.id}"
+                    data-id="${Number(funcionario.id)}"
                 >
                     Rejeitar
                 </button>
@@ -444,3 +443,14 @@ botaoVoltar.addEventListener(
 );
 
 listarPendentes();
+
+// Impede que texto vindo do servidor (ex.: nome digitado por quem solicitou
+// acesso) seja interpretado como HTML/JavaScript.
+function escaparHtml(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
