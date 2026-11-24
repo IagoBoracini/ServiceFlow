@@ -1,84 +1,109 @@
-
 # ServiceFlow
 
-Sistema web para gestão de serviços técnicos. O ServiceFlow centraliza clientes, funcionários, chamados e ordens de serviço em uma única plataforma, acompanhando o atendimento desde a abertura até a conclusão.
+**Plataforma web para gerenciamento de serviços técnicos, clientes e ordens de serviço.**
+
+O ServiceFlow é um sistema Full Stack desenvolvido para centralizar a operação de empresas de assistência técnica e manutenção. A aplicação organiza o fluxo de atendimento, desde o gerenciamento de clientes e abertura de chamados até a atribuição de técnicos e acompanhamento das ordens de serviço.
 
 <p align="center">
   <a href="https://service-flow-n9wv.vercel.app/login.html">
-    <strong>Acessar demonstração online</strong>
+    <strong>Conheça a demonstração do ServiceFlow</strong>
   </a>
 </p>
 
-## Sobre o projeto
+---
 
-O ServiceFlow foi desenvolvido para representar a rotina de uma empresa de serviços e manutenção técnica, organizando informações e facilitando o acompanhamento dos atendimentos.
+## Visão geral
+
+Empresas que trabalham com atendimento técnico precisam acompanhar clientes, funcionários, solicitações e serviços em andamento. O ServiceFlow reúne essas informações em uma única aplicação, facilitando a organização das atividades e o acompanhamento dos atendimentos.
+
+O sistema foi desenvolvido com uma arquitetura Full Stack, utilizando Java e Spring Boot no back-end e tecnologias web no front-end.
 
 ## Funcionalidades
 
+**Gestão de acesso**
 - Cadastro de empresas com validação de CNPJ.
-- Autenticação de usuários com JWT.
-- Perfis de acesso: administrador, técnico e atendente.
-- Gerenciamento de funcionários.
-- Cadastro, consulta, edição e inativação de clientes.
+- Autenticação utilizando JWT.
+- Controle de acesso por perfil: administrador, técnico e atendente.
+- Solicitação de acesso de funcionários, com fluxo de aprovação e rejeição.
+
+**Gestão operacional**
+- Cadastro e gerenciamento de clientes.
 - Abertura e acompanhamento de chamados.
-- Atribuição de técnicos e definição de prioridades.
+- Definição de prioridades e atribuição de técnicos.
 - Criação e gerenciamento de ordens de serviço.
-- Dashboard com indicadores, gráficos e atividades recentes.
-- Gerenciamento de perfil do usuário.
-- Separação de dados por empresa.
+- Acompanhamento das atividades por meio de dashboard.
+- Visualização e gerenciamento do perfil do usuário.
 
-## Modo demonstração
+**Organização e segurança**
+- Separação dos dados por empresa.
+- Controle de permissões conforme o perfil do usuário.
+- Integração entre front-end e API REST.
 
-O projeto possui um botão **Ver demonstração** na tela de login, permitindo acessar o sistema sem depender de um back-end hospedado.
+## Demonstração
 
-O modo de demonstração:
+A aplicação possui uma versão demonstrativa publicada na Vercel, acessível pela tela de login através da opção **Ver demonstração**.
 
-- Utiliza dados fictícios.
-- Simula respostas da API diretamente no front-end.
-- Permite navegar pelas páginas e consultar registros.
-- Bloqueia operações de escrita.
-- Não exige autenticação no back-end.
+Nesse modo, é possível navegar pelas principais telas e consultar registros utilizando dados fictícios.
 
-**Observação:** a demonstração funciona em modo somente leitura. Os dados são fictícios e não são persistidos no banco de dados.
-
-## Tecnologias utilizadas
-
-| Camada | Tecnologias |
+| Recurso | Comportamento |
 |---|---|
-| Front-end | HTML5, CSS3 e JavaScript |
-| Back-end | Java 25 e Spring Boot 4.1 |
-| API | Spring Web MVC |
-| Segurança | Spring Security e JWT |
-| Persistência | Spring Data JPA |
+| Acesso | Disponível sem autenticação no back-end |
+| Dados | Fictícios |
+| Consultas | Simuladas no front-end |
+| Alterações | Bloqueadas |
+| Persistência | Não utiliza o banco de dados |
+
+**Importante:** a demonstração tem finalidade de apresentação e não representa uma instância de produção conectada ao back-end.
+
+## Tecnologias
+
+| Área | Tecnologias |
+|---|---|
+| Back-end | Java 25, Spring Boot 4.1 |
+| API | Spring Web MVC, REST |
+| Segurança | Spring Security, JWT |
+| Persistência | Spring Data JPA, Hibernate |
 | Banco de dados | MySQL |
-| Documentação | Swagger / OpenAPI |
-| Testes | JUnit 5, Mockito e H2 |
-| Hospedagem Front-end | Vercel |
+| Front-end | HTML5, CSS3, JavaScript |
+| Documentação da API | Swagger / OpenAPI |
+| Testes | JUnit 5, Mockito, H2 |
+| Hospedagem | Vercel |
 
 ## Arquitetura
 
-O sistema utiliza uma arquitetura baseada em API REST, com separação de responsabilidades no back-end.
+O back-end segue uma organização em camadas, separando as responsabilidades de cada parte da aplicação.
 
 ```text
-Front-end (HTML, CSS e JavaScript)
-              |
-              | HTTP / JSON + JWT
-              v
-           API REST
-         (Spring Boot)
-              |
-          Controller
-              |
-            Service
-              |
-          Repository
-              |
-       Spring Data JPA
-              |
-             MySQL
+                 FRONT-END
+             HTML, CSS e JavaScript
+                       |
+                       | HTTP / JSON
+                       | Autenticação JWT
+                       v
+                  API REST
+                 Spring Boot
+                       |
+                +------+------+
+                |             |
+                v             v
+           Controller      Security
+                |
+                v
+             Service
+                |
+                v
+            Repository
+                |
+                v
+          Spring Data JPA
+                |
+                v
+              MySQL
 ```
 
-## Estrutura do projeto
+Essa separação facilita a manutenção, a organização das regras de negócio e a comunicação entre as camadas da aplicação.
+
+## Organização do projeto
 
 ```text
 ServiceFlow/
@@ -101,107 +126,75 @@ ServiceFlow/
     └── login.html
 ```
 
-## Executar localmente
+## Ambiente de desenvolvimento
 
-### Pré-requisitos
+Para executar a aplicação localmente, são necessários:
 
-- Java 25
-- MySQL 8 ou superior
-- Maven
-- Servidor local para o front-end (Live Server, por exemplo)
+- Java 25.
+- MySQL 8 ou superior.
+- Maven.
+- Um servidor local para o front-end, como o Live Server.
 
-### 1. Criar o banco de dados
+**Back-end**
 
-```sql
-CREATE DATABASE serviceflow CHARACTER SET utf8mb4;
-```
-
-### 2. Configurar o back-end
-
-Acesse a pasta:
+Entre na pasta do projeto Java:
 
 ```bash
 cd backend/ServiceFlow/ServiceFlow
 ```
 
-Configure as variáveis de ambiente necessárias para conexão com o MySQL e autenticação JWT, utilizando o arquivo `.env.example` como referência.
+Configure as variáveis de ambiente para conexão com o MySQL e autenticação JWT.
 
-Não compartilhe credenciais ou segredos reais.
+Crie o banco de dados:
 
-### 3. Iniciar o back-end
+```sql
+CREATE DATABASE serviceflow CHARACTER SET utf8mb4;
+```
 
-Windows:
+Inicie a aplicação:
 
 ```powershell
+# Windows
 .\mvnw.cmd spring-boot:run
 ```
 
-Linux ou macOS:
-
 ```bash
+# Linux / macOS
 ./mvnw spring-boot:run
 ```
 
-A API ficará disponível em:
+**Front-end**
 
-```text
-http://localhost:8080
-```
+Abra a pasta `frontend` com um servidor local e utilize o endereço da API configurado em `frontend/js/config.js`.
 
-### 4. Iniciar o front-end
-
-Abra a pasta `frontend` utilizando um servidor local, como o Live Server.
-
-O arquivo `frontend/js/config.js` configura a URL da API para o ambiente local.
-
-### 5. Executar os testes
-
-Windows:
+**Testes**
 
 ```powershell
+# Windows
 .\mvnw.cmd test
 ```
 
-Linux ou macOS:
-
 ```bash
+# Linux / macOS
 ./mvnw test
 ```
 
-## Demonstração online
+A documentação interativa da API, quando o back-end estiver em execução, pode ser acessada pelo Swagger UI:
 
-O front-end está publicado na Vercel:
+`http://localhost:8080/swagger-ui.html`
 
-**https://service-flow-n9wv.vercel.app/login.html**
+## Considerações técnicas
 
-A versão de demonstração utiliza dados fictícios e não depende do back-end para as consultas simuladas.
+O desenvolvimento do ServiceFlow envolve conceitos e práticas utilizados na construção de aplicações Full Stack, como:
 
-O login convencional e as operações reais dependem da API e do banco de dados.
-
-## Documentação da API
-
-Com o back-end em execução, acesse:
-
-Swagger UI:
-
-```text
-http://localhost:8080/swagger-ui.html
-```
-
-OpenAPI:
-
-```text
-http://localhost:8080/v3/api-docs
-```
-
-## Melhorias futuras
-
-- Ampliar a cobertura de testes.
-- Implementar migrations com Flyway.
-- Adicionar filtros e buscas avançadas.
-- Desenvolver relatórios exportáveis.
-- Ampliar o histórico de atividades das ordens de serviço.
+- Desenvolvimento de APIs REST com Spring Boot.
+- Organização de código em camadas.
+- Persistência de dados com Spring Data JPA.
+- Autenticação e autorização com Spring Security e JWT.
+- Integração entre front-end e back-end.
+- Modelagem e relacionamento de dados em banco relacional.
+- Testes automatizados.
 
 ---
 
-Desenvolvido como projeto de estudo e portfólio, com foco no desenvolvimento Full Stack utilizando Java e tecnologias web.
+**ServiceFlow** — Projeto Full Stack desenvolvido para estudo e portfólio, com foco em Java, Spring Boot e desenvolvimento de aplicações web.
