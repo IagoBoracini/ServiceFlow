@@ -1,6 +1,9 @@
 // Configuração única do frontend.
-// Para apontar para outro backend (ex.: ambiente local), altere apenas esta linha.
-const API_URL = "http://localhost:8080";
+// Local (localhost / 127.0.0.1 / arquivo): usa o back-end da sua máquina.
+// Publicado (Vercel): usa o back-end do Railway. Para trocar, altere a URL abaixo.
+const API_URL = ["localhost", "127.0.0.1", ""].includes(window.location.hostname)
+    ? "http://localhost:8080"
+    : "https://serviceflow-production-a083.up.railway.app";
 
 
 // Rótulos legíveis (com acentos) para valores vindos da API.

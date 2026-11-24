@@ -81,6 +81,7 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/login",
+                                        "/login/demo",
                                         "/empresas/cadastro",
                                         "/funcionarios/solicitacoes"
                                 )

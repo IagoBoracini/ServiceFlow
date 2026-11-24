@@ -17,6 +17,24 @@ verificarUsuarioLogado();
 
 formLogin.addEventListener("submit", realizarLogin);
 
+const botaoDemo = document.getElementById("botao-demo");
+botaoDemo.addEventListener("click", entrarNaDemonstracao);
+
+async function entrarNaDemonstracao() {
+    limparErros();
+
+    botaoDemo.disabled = true;
+    botaoLogin.disabled = true;
+    botaoDemo.textContent = "Abrindo demonstração...";
+
+    // Modo demonstração roda só no front-end (js/demo.js): não usa o back-end.
+    SF_DEMO.entrar();
+
+    await salvarPerfilDoUsuario(SF_DEMO.TOKEN);
+
+    window.location.href = "./pages/dashboard.html";
+}
+
 async function realizarLogin(evento) {
     evento.preventDefault();
 
@@ -94,9 +112,13 @@ async function realizarLogin(evento) {
         }, 700);
 
     } catch (erro) {
+        const semConexao = erro instanceof TypeError;
+
         mostrarMensagem(
-            erro.message ||
-            "Não foi possível entrar no sistema.",
+            semConexao
+                ? "Não foi possível conectar ao servidor. " +
+                  "Clique em \"Ver demonstração\" para explorar o projeto."
+                : (erro.message || "Não foi possível entrar no sistema."),
             "error"
         );
 
@@ -196,12 +218,37 @@ async function lerResposta(resposta) {
     };
 }
 
-function verificarUsuarioLogado() {
+async function verificarUsuarioLogado() {
     const token = localStorage.getItem("serviceflow_token");
 
-    if (token) {
-        window.location.href = "./pages/dashboard.html";
+    if (!token) {
+        return;
     }
+
+    if (window.SF_DEMO && SF_DEMO.ativo()) {
+        window.location.href = "./pages/dashboard.html";
+        return;
+    }
+
+    // Só redireciona se o token ainda for aceito pelo servidor. Token
+    // vencido (ou servidor fora do ar) não pode esconder a tela de login.
+    try {
+        const resposta = await fetch(`${API_URL}/usuarios/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (resposta.ok) {
+            window.location.href = "./pages/dashboard.html";
+            return;
+        }
+    } catch (erro) {
+        // sem conexão: cai na limpeza abaixo e mostra o login
+    }
+
+    localStorage.removeItem("serviceflow_token");
+    localStorage.removeItem("serviceflow_usuario");
 }
 
 // O endpoint de login devolve apenas o token. Buscamos o perfil para que
